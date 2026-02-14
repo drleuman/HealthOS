@@ -49,7 +49,7 @@ async function bootstrap() {
       if (!ok) logger.warn({ origin: normalized }, 'CORS blocked origin');
       return cb(null, ok);
     },
-    credentials: false, // Using Authorization Bearer tokens, not cross-site cookies
+    credentials: true, // Frontend uses credentials: 'include'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: [
       'Content-Type',
