@@ -10,11 +10,16 @@ export class AuthService {
   ) { }
 
   private getPlanForEmail(email: string): string {
+    const lowerEmail = email.toLowerCase();
+
+    // Hardcoded SuperAdmin
+    if (lowerEmail === 'doctorleuman@gmail.com') return 'admin';
+
     const allowlistEnv = process.env.BETA_ALLOWLIST || "";
     if (!allowlistEnv) return 'member'; // No allowlist, default behavior
 
     const allowlist = allowlistEnv.split(',').map(e => e.trim().toLowerCase());
-    return allowlist.includes(email.toLowerCase()) ? 'member' : 'free';
+    return allowlist.includes(lowerEmail) ? 'member' : 'free';
   }
 
   async createSsoToken(email: string, tool: string) {
