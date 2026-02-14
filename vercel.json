@@ -1,0 +1,6 @@
+{
+    "version": 2,
+    "buildCommand": "pnpm -F @healthos/web build",
+    "outputDirectory": "apps/web/.next",
+    "framework": "nextjs"
+}
