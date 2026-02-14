@@ -56,6 +56,7 @@ export class SubscriptionGuard implements CanActivate {
             free: 0,
             member: 1,
             premium: 2,
+            admin: 100, // SuperAdmin has access to everything
         };
 
         const userPlanLevel = planHierarchy[dbUser.plan] ?? 0;
