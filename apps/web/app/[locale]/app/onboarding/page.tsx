@@ -118,131 +118,173 @@ export default function OnboardingPage() {
     };
 
     return (
-        <Page>
-            <Shell>
-                <div style={{ marginBottom: '32px' }}>
-                    <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginBottom: '12px' }}>
-                        <div style={{ height: '100%', background: 'var(--primary)', width: `${(step / 5) * 100}%`, transition: 'width 0.3s ease' }} />
-                    </div>
-                    <Badge>Configuración: Nivel {step} de 5</Badge>
+        <main className="layout-container justify-center pb-20">
+            <div className="animate-fade space-y-8">
+                {/* Header Section */}
+                <div className="space-y-1">
+                    <h1 className="text-2xl font-semibold tracking-tight text-primary">Calibración del Sistema</h1>
+                    <p className="text-sm text-secondary">Estableciendo línea base de observación.</p>
                 </div>
 
-                <Card>
+                {/* Progress bar (hardware style) */}
+                <div className="w-full h-[2px] bg-border rounded-full overflow-hidden">
+                    <div
+                        className="h-full bg-primary transition-all duration-500 ease-out"
+                        style={{ width: `${(step / 5) * 100}%` }}
+                    />
+                </div>
+
+                <section className="card space-y-6">
                     {step === 1 && (
-                        <>
-                            <h2 style={{ marginBottom: '24px' }}>Flujo de datos principal</h2>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                                {GOALS.map((goal) => (
-                                    <button
-                                        key={goal.value}
-                                        onClick={() => setData({ ...data, primary_goal: goal.value })}
-                                        className={`list-item ${data.primary_goal === goal.value ? 'active' : ''}`}
-                                        style={{
-                                            flexDirection: 'column',
-                                            padding: '20px',
-                                            textAlign: 'center',
-                                            borderColor: data.primary_goal === goal.value ? 'var(--primary)' : 'transparent',
-                                            background: data.primary_goal === goal.value ? 'rgba(124, 92, 255, 0.1)' : 'rgba(255,255,255,0.03)'
-                                        }}
-                                    >
-                                        <span style={{ fontSize: '32px', marginBottom: '8px' }}>{goal.emoji}</span>
-                                        <span style={{ fontSize: '14px', fontWeight: 600 }}>{goal.label}</span>
-                                    </button>
-                                ))}
+                        <div className="space-y-4">
+                            <h2 className="text-xl font-medium text-primary">Calibración de atención</h2>
+                            <p className="text-sm text-secondary leading-relaxed">
+                                Este sistema requiere momentos de observación desinteresada. No espere resultados rápidos. La eficacia reside en la persistencia del registro.
+                            </p>
+
+                            <div className="pt-4 space-y-3">
+                                <label className="label">Seleccionar Dataset de Enfoque</label>
+                                <div className="grid grid-cols-1 gap-2">
+                                    {GOALS.map((goal) => (
+                                        <button
+                                            key={goal.value}
+                                            onClick={() => setData({ ...data, primary_goal: goal.value })}
+                                            className={`px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.primary_goal === goal.value
+                                                    ? 'border-secondary bg-secondary/10 text-primary'
+                                                    : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                                }`}
+                                        >
+                                            <span className="font-mono mr-2">[{goal.emoji}]</span>
+                                            {goal.label}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                        </>
+                        </div>
                     )}
 
                     {step === 2 && (
-                        <>
-                            <h2 style={{ marginBottom: '8px' }}>¿Qué problemas de sueño tienes?</h2>
-                            <p style={{ marginBottom: '24px', opacity: 0.7 }}>Opcional - selecciona los que apliquen</p>
-                            <div className="list">
+                        <div className="space-y-4">
+                            <h2 className="text-xl font-medium text-primary">Estado del Sueño</h2>
+                            <p className="text-sm text-secondary">Opcional - Identificadores de fricción</p>
+                            <div className="space-y-2">
                                 {SLEEP_ISSUES.map((issue) => (
-                                    <div
+                                    <button
                                         key={issue}
-                                        className={`list-item ${data.sleep_issue_type.includes(issue) ? 'completed' : ''}`}
                                         onClick={() => setData({ ...data, sleep_issue_type: toggleArrayItem(data.sleep_issue_type, issue) })}
+                                        className={`w-full px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.sleep_issue_type.includes(issue)
+                                                ? 'border-secondary bg-secondary/10 text-primary'
+                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                            }`}
                                     >
-                                        <div className="checkbox"></div>
-                                        <span>{issue}</span>
-                                    </div>
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-3 h-3 border ${data.sleep_issue_type.includes(issue) ? 'bg-secondary border-secondary' : 'border-tertiary'}`} />
+                                            <span>{issue}</span>
+                                        </div>
+                                    </button>
                                 ))}
                             </div>
-                        </>
+                        </div>
                     )}
 
                     {step === 3 && (
-                        <>
-                            <h2 style={{ marginBottom: '24px' }}>Tus horarios habituales</h2>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                                <Input label="¿A qué hora te acuestas?" type="time" value={data.bedtime} onChange={(v) => setData({ ...data, bedtime: v })} />
-                                <Input label="¿A qué hora tomas cafeína?" type="time" value={data.caffeine_time} onChange={(v) => setData({ ...data, caffeine_time: v })} />
-                                <Input label="¿A qué hora cenas?" type="time" value={data.dinner_time} onChange={(v) => setData({ ...data, dinner_time: v })} />
+                        <div className="space-y-6">
+                            <h2 className="text-xl font-medium text-primary">Cronometría Habitual</h2>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="label">Descanso (hora objetivo)</label>
+                                    <input type="time" value={data.bedtime} onChange={(e) => setData({ ...data, bedtime: e.target.value })} className="input" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="label">Última ingesta estimulante</label>
+                                    <input type="time" value={data.caffeine_time} onChange={(e) => setData({ ...data, caffeine_time: e.target.value })} className="input" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="label">Cena habitual</label>
+                                    <input type="time" value={data.dinner_time} onChange={(e) => setData({ ...data, dinner_time: e.target.value })} className="input" />
+                                </div>
                             </div>
-                        </>
+                        </div>
                     )}
 
                     {step === 4 && (
-                        <>
-                            <h2 style={{ marginBottom: '8px' }}>¿Qué síntomas experimentas?</h2>
-                            <p style={{ marginBottom: '24px', opacity: 0.7 }}>Opcional - selecciona los que apliquen</p>
-                            <div className="list">
+                        <div className="space-y-4">
+                            <h2 className="text-xl font-medium text-primary">Sintomatología</h2>
+                            <p className="text-sm text-secondary">Opcional - Observaciones presentes</p>
+                            <div className="space-y-2">
                                 {SYMPTOMS.map((symptom) => (
-                                    <div
+                                    <button
                                         key={symptom}
-                                        className={`list-item ${data.symptoms.includes(symptom) ? 'completed' : ''}`}
                                         onClick={() => setData({ ...data, symptoms: toggleArrayItem(data.symptoms, symptom) })}
+                                        className={`w-full px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.symptoms.includes(symptom)
+                                                ? 'border-secondary bg-secondary/10 text-primary'
+                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                            }`}
                                     >
-                                        <div className="checkbox"></div>
-                                        <span>{symptom}</span>
-                                    </div>
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-3 h-3 border ${data.symptoms.includes(symptom) ? 'bg-secondary border-secondary' : 'border-tertiary'}`} />
+                                            <span>{symptom}</span>
+                                        </div>
+                                    </button>
                                 ))}
                             </div>
-                        </>
+                        </div>
                     )}
 
                     {step === 5 && (
-                        <>
-                            <h2 style={{ marginBottom: '8px' }}>Limitaciones de estilo de vida</h2>
-                            <p style={{ marginBottom: '24px', opacity: 0.7 }}>Opcional</p>
-                            <div className="list">
+                        <div className="space-y-4">
+                            <h2 className="text-xl font-medium text-primary">Entorno Dinámico</h2>
+                            <p className="text-sm text-secondary">Opcional - Limitaciones de diseño</p>
+                            <div className="space-y-2">
                                 {CONSTRAINTS.map((constraint) => (
-                                    <div
+                                    <button
                                         key={constraint}
-                                        className={`list-item ${data.constraints.includes(constraint) ? 'completed' : ''}`}
                                         onClick={() => setData({ ...data, constraints: toggleArrayItem(data.constraints, constraint) })}
+                                        className={`w-full px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.constraints.includes(constraint)
+                                                ? 'border-secondary bg-secondary/10 text-primary'
+                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                            }`}
                                     >
-                                        <div className="checkbox"></div>
-                                        <span>{constraint}</span>
-                                    </div>
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-3 h-3 border ${data.constraints.includes(constraint) ? 'bg-secondary border-secondary' : 'border-tertiary'}`} />
+                                            <span>{constraint}</span>
+                                        </div>
+                                    </button>
                                 ))}
                             </div>
-                        </>
+                        </div>
                     )}
 
                     {error && (
-                        <div style={{ marginTop: '20px', color: 'var(--danger)', fontSize: '14px', textAlign: 'center' }}>
+                        <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-xs text-center rounded-lg">
                             {error}
                         </div>
                     )}
-                </Card>
+                </section>
 
-                <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+                <div className="flex gap-3">
                     {step > 1 && (
-                        <Button variant="ghost" onClick={() => setStep(step - 1)} disabled={loading}>
-                            Atrás
-                        </Button>
+                        <button
+                            onClick={() => setStep(step - 1)}
+                            disabled={loading}
+                            className="flex-1 btn border-border bg-transparent text-secondary hover:border-tertiary py-3"
+                        >
+                            Retroceder
+                        </button>
                     )}
-                    <Button
+                    <button
                         onClick={step < 5 ? () => setStep(step + 1) : handleSubmit}
                         disabled={!canContinue() || loading}
-                        style={{ flex: 1 }}
+                        className="flex-[2] btn btn-primary py-3"
                     >
-                        {loading ? 'Inicializando...' : (step < 5 ? 'Siguiente' : 'Abrir entorno')}
-                    </Button>
+                        {loading ? 'Inicializando...' : (step < 5 ? 'Siguiente fase' : 'Abrir entorno')}
+                    </button>
                 </div>
-            </Shell>
-        </Page>
+
+                <div className="text-center">
+                    <small className="meta opacity-20">FASE FINAL DE CALIBRACIÓN</small>
+                </div>
+            </div>
+        </main>
     );
 }

@@ -14,24 +14,27 @@ export const Page = ({ children }: { children: React.ReactNode }) => (
  * Topbar - Global navigation
  */
 export const Topbar = ({
-    title,
     onLogout,
     currentPath
 }: {
-    title?: string;
     onLogout?: () => void;
     currentPath: string;
 }) => {
-    const t = useTranslations('Components.Topbar');
+    const t = useTranslations('Dashboard');
     const links = [
-        { label: t('events'), path: '/today' },
-        { label: t('history'), path: '/route' },
+        { label: t('active_protocols'), path: '/app/today' },
+        { label: t('history'), path: '/app/route' },
     ];
 
     return (
         <header className="topbar">
             <div className="container topbar-content">
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm font-semibold tracking-tight text-primary">HealthOS</div>
+                    <div className="text-[10px] text-secondary font-mono tracking-wider opacity-60">SISTEMA DISPONIBLE</div>
+                </div>
+
+                <nav className="flex items-center gap-2">
                     {links.map(link => (
                         <a
                             key={link.path}
@@ -41,18 +44,16 @@ export const Topbar = ({
                             {link.label}
                         </a>
                     ))}
-                </div>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                     {onLogout && (
                         <button
                             onClick={onLogout}
-                            className="nav-link"
+                            className="nav-link opacity-60 hover:opacity-100"
                             style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
                         >
                             {t('logout')}
                         </button>
                     )}
-                </div>
+                </nav>
             </div>
         </header>
     );

@@ -24,61 +24,54 @@ export default function AccessScreen() {
   };
 
   return (
-    <main className="layout-container justify-center">
-      <div className="spacer" />
-
-      <div className="w-full animate-fade">
-        {/* 1. Nombre sistema */}
-        <div className="mb-4">
-          <small className="meta">{t('system_id_label')}</small>
-          <h1 className="mt-1" style={{ fontSize: '24px', letterSpacing: '0.1em', color: 'var(--text-secondary)' }}>
-            {t('title')}
-          </h1>
+    <main className="layout-container justify-center pb-20">
+      <div className="animate-fade space-y-6">
+        {/* Header Section */}
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-primary">{t('title')}</h1>
+          <p className="text-sm text-secondary">
+            Conexión segura. El sistema no requiere uso continuo.
+          </p>
         </div>
 
-        {/* 2. Propiedades técnicas */}
-        <div className="mb-8 p-4 border border-[var(--border)] rounded-[var(--radius-md)]"
-          style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'var(--border)' }}>
-          <div className="flex justify-between mb-2">
-            <span className="meta">{t('mode_label')}</span>
-            <span className="meta text-primary">{t('mode_value')}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="meta">{t('feedback_label')}</span>
-            <span className="meta text-primary">{t('feedback_value')}</span>
-          </div>
-        </div>
-
-        {/* 3. Acceso */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <div>
-            <label className="meta mb-2 block">{t('user_identifier_label')}</label>
+        {/* Access Panel */}
+        <section className="card">
+          <form onSubmit={handleLogin}>
+            <label className="label">{t('user_identifier_label')}</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t('email_placeholder')}
+              className="mt-2 input"
               autoComplete="email"
-              spellCheck={false}
+              disabled={isLoading}
             />
-          </div>
 
-          <div className="mt-4">
             <button
               type="submit"
-              className="btn btn-primary w-full"
               disabled={isLoading}
+              className="mt-6 btn btn-primary w-full transition-colors duration-150"
             >
               {isLoading ? t('initializing') : t('open_environment')}
             </button>
+          </form>
+
+          {/* Technical Metadata (Hardware-style tags) */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            <span className="px-2 py-1 text-[10px] font-mono border border-border text-tertiary rounded-sm">
+              {t('mode_label')}: {t('mode_value')}
+            </span>
+            <span className="px-2 py-1 text-[10px] font-mono border border-border text-tertiary rounded-sm">
+              {t('feedback_label')}: {t('feedback_value')}
+            </span>
           </div>
-        </form>
-      </div>
+        </section>
 
-      <div className="spacer" />
-
-      <div className="text-center pb-4">
-        <small className="meta" style={{ opacity: 0.4 }}>{t('secure_connection')}</small>
+        {/* System Version */}
+        <div className="text-center">
+          <small className="meta opacity-30">{t('system_id_label')}</small>
+        </div>
       </div>
     </main>
   );

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { ProtectedRoute } from '../ProtectedRoute';
 import { AmbientAnchor } from '../../components/AmbientAnchor';
+import { Topbar } from '../../components/ui';
 
 interface RouteDay {
     day: number;
@@ -64,17 +65,16 @@ export default function RoutePage() {
 
     return (
         <ProtectedRoute>
-            <div className="layout-container">
-                {/* Header: Minimal logout and title */}
-                <div className="flex justify-between items-center mb-12">
-                    <button onClick={() => router.push('/app/today')} className="meta opacity-40 hover:opacity-100 transition-all" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-                        ← Atrás
-                    </button>
-                    <span className="meta opacity-20" style={{ fontSize: '10px', letterSpacing: '0.1em' }}>HISTORIAL</span>
-                </div>
+            <div className="layout-container pb-12">
+                <Topbar currentPath="/app/route" onLogout={() => { api.logout(); router.push('/'); }} />
 
-                <div className="section">
-                    <div className="flex flex-col gap-16">
+                <div className="animate-fade space-y-6">
+                    <div className="space-y-1">
+                        <h1 className="text-2xl font-semibold tracking-tight text-primary">Historial</h1>
+                        <p className="text-sm text-secondary">Registro cronológico. Sin evaluación.</p>
+                    </div>
+
+                    <div className="space-y-8 pt-4">
                         {['Hoy', 'Ayer', 'Anteriormente'].map((group) => {
                             const groupDays = data.days.filter(d => {
                                 if (group === 'Hoy') return d.day === data.current_day;
@@ -85,53 +85,31 @@ export default function RoutePage() {
                             if (groupDays.length === 0) return null;
 
                             return (
-                                <div key={group} className="flex flex-col gap-8">
-                                    <small className="meta opacity-20 px-4" style={{ fontSize: '10px', letterSpacing: '0.1em' }}>{group.toUpperCase()}</small>
-                                    <div className="flex flex-col">
+                                <div key={group} className="space-y-3">
+                                    <small className="meta opacity-40 px-1" style={{ fontSize: '10px' }}>{group.toUpperCase()}</small>
+                                    <div className="space-y-3">
                                         {groupDays.map((day) => {
-                                            const isCurrent = day.status === 'current';
                                             const isDone = day.status === 'done';
+                                            const isLocked = day.status === 'locked';
 
                                             return (
-                                                <div
+                                                <article
                                                     key={day.day}
-                                                    onClick={() => !isCurrent && day.status !== 'locked' && handleNavigate(day)}
-                                                    className={`
-                                                        px-4 py-5 flex justify-between items-center group transition-all duration-300 border-b border-white/[0.03]
-                                                        ${day.status === 'locked' ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer hover:bg-white/[0.02]'}
-                                                    `}
+                                                    onClick={() => !isLocked && router.push('/app/today')}
+                                                    className={`card p-4 transition-all duration-150 ${isLocked ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer hover:border-secondary'}`}
                                                 >
-                                                    <div className="flex items-center gap-6">
-                                                        <span className="meta opacity-20 group-hover:opacity-100 transition-all font-mono" style={{ fontSize: '9px', minWidth: '12px' }}>
-                                                            {day.day.toString().padStart(2, '0')}
-                                                        </span>
-                                                        <div className="flex flex-col gap-1">
-                                                            <span style={{
-                                                                fontSize: '15px',
-                                                                color: isCurrent ? 'var(--text-primary)' : 'var(--text-secondary)',
-                                                                opacity: isDone ? 0.5 : 1,
-                                                                fontWeight: isCurrent ? '500' : '400'
-                                                            }}>
-                                                                {day.title}
-                                                            </span>
-                                                            {isCurrent && (
-                                                                <small className="meta" style={{ fontSize: '8px', color: 'var(--accent)', textTransform: 'lowercase' }}>
-                                                                    en curso
-                                                                </small>
-                                                            )}
+                                                    <div className="flex items-start justify-between">
+                                                        <div>
+                                                            <div className="text-sm font-medium text-primary">{day.title}</div>
+                                                            <div className="mt-1 text-[11px] text-secondary opacity-60">
+                                                                {group} · {isDone ? 'Registrado' : '—'}
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-[10px] font-mono text-tertiary">
+                                                            {isDone ? 'OBSERVADO' : (isLocked ? 'BLOQUEADO' : 'PENDIENTE')}
                                                         </div>
                                                     </div>
-
-                                                    <div className="text-right">
-                                                        <small className="meta group-hover:opacity-100 transition-all" style={{
-                                                            fontSize: '9px',
-                                                            opacity: 0.2,
-                                                            textTransform: 'lowercase'
-                                                        }}>
-                                                            {isDone ? 'completado' : ''}
-                                                        </small>
-                                                    </div>
-                                                </div>
+                                                </article>
                                             );
                                         })}
                                     </div>
@@ -141,7 +119,7 @@ export default function RoutePage() {
                     </div>
                 </div>
 
-                <div className="mt-auto pt-12 pb-8 text-center opacity-10">
+                <div className="mt-auto pt-12 pb-4 text-center opacity-20">
                     <small className="meta" style={{ fontSize: '9px' }}>
                         Dataset: {data.program_id.toUpperCase()} · Records: {data.duration_days}
                     </small>

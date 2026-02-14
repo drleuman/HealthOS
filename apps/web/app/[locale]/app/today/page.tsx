@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import { ProtectedRoute } from '../ProtectedRoute';
 import { AmbientAnchor } from '../../components/AmbientAnchor';
 import { useTranslations } from 'next-intl';
+import { Topbar } from '../../components/ui';
 
 interface TodayData {
   day: number;
@@ -142,134 +143,97 @@ export default function TodayPage() {
 
   return (
     <ProtectedRoute>
-      <div className="layout-container">
-        {/* Minimal logout fix right */}
-        <div className="flex justify-end pt-2 pb-8">
-          <button onClick={handleLogout} className="meta opacity-40 hover:opacity-100 transition-all" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-            {t('terminate_session')}
-          </button>
-        </div>
+      <div className="layout-container pb-12">
+        <Topbar currentPath="/app/today" onLogout={handleLogout} />
 
-        {/* 1. Centro de Gravedad: Jerarquía Clínica */}
-        <div className="section flex-grow flex flex-col justify-center items-center gap-20" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
-
-          {/* Tier 1: Dominant Question */}
-          <div className="text-center">
-            <h1 className="text-primary mb-4" style={{ fontSize: '24px', fontWeight: '500', letterSpacing: '-0.02em', textTransform: 'none' }}>
+        <div className="animate-fade space-y-8">
+          {/* Header Section: Orienting Question */}
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold tracking-tight text-primary">
               ¿Qué está pasando ahora?
             </h1>
-            <p className="text-secondary" style={{ fontSize: '14px', opacity: 0.8 }}>
-              {t('instrument_ready')}
+            <p className="text-sm text-secondary">
+              Registro puntual. Sin recordatorios.
             </p>
           </div>
 
-          {/* Tier 2: Clear Action */}
-          <div className="w-full max-w-[280px]">
+          {/* Primary Action Panel */}
+          <section className="card">
+            <div className="flex items-center justify-between transition-opacity duration-300">
+              <div className="text-sm font-medium text-primary">Registrar observación</div>
+              <div className="text-xs font-mono text-tertiary">DISPONIBLE</div>
+            </div>
+
             <button
               onClick={handleComplete}
               disabled={completing}
-              className="w-full py-5 rounded-md transition-all duration-300 group"
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                color: 'var(--text-primary)',
-                fontSize: '15px',
-                cursor: completing ? 'not-allowed' : 'pointer',
-                boxShadow: 'var(--shadow-sm)'
-              }}
+              className="mt-4 w-full btn border-[#2A2F3A] py-6 text-sm hover:border-secondary transition-colors duration-150"
             >
-              <span className={completing ? 'opacity-50' : ''}>
-                {completing ? t('transmitting') : t('record_variant_0')}
-              </span>
-            </button>
-            <div className="text-center mt-6">
-              <small className="meta" style={{ color: 'var(--text-tertiary)', fontSize: '10px' }}>
-                {getTimeAgo()}
-              </small>
-            </div>
-          </div>
-
-          {/* Tier 3: Passive Context */}
-          <div className="max-w-[300px] text-center">
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--text-tertiary)' }}>
-              No es necesario registrar nada. Los periodos sin actividad también son parte del estudio conductual.
-            </p>
-          </div>
-
-          {/* Tier 4: Technical Metadata (Collapsed) */}
-          <div className="w-full border-t border-white/5 pt-8 opacity-40 hover:opacity-100 transition-all">
-            <details className="group">
-              <summary
-                className="meta cursor-pointer text-center list-none flex items-center justify-center gap-2"
-                style={{ fontSize: '10px', opacity: 0.6 }}
-                onClick={() => api.trackEvent('details_expanded')}
-              >
-                {t('technical_details')}
-              </summary>
-              <div className="mt-8 grid grid-cols-1 gap-8 text-left max-w-[320px] mx-auto px-4">
-                <p className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                  {t('technical_details_content')}
-                </p>
-
-                <div className="flex flex-col gap-4 border-t border-white/5 pt-6">
-                  <div className="flex justify-between items-baseline">
-                    <small className="meta">{t('active_protocols')}</small>
-                    <span className="meta">{data.tasks && data.tasks.length}</span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {data.tasks && data.tasks.length > 0 ? (
-                      data.tasks.map((task, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <div className="w-1 h-1 rounded-full bg-accent"></div>
-                          <span className="meta" style={{ textTransform: 'none', fontSize: '11px', color: 'var(--text-secondary)' }}>{task}</span>
-                        </div>
-                      ))
-                    ) : (
-                      <span className="meta">{t('no_active_protocols')}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-6 opacity-60">
-                  <div className="flex flex-col gap-1">
-                    <small className="meta" style={{ fontSize: '9px' }}>{t('system_version')}</small>
-                    <small className="meta" style={{ fontSize: '9px' }}>{t('dataset_label')}: {data.program_id.toUpperCase()}</small>
-                  </div>
-                  <div className="flex flex-col gap-1 text-right">
-                    <small className="meta" style={{ fontSize: '9px' }}>{t('event_ref_label')}: {data.day}</small>
-                    <small className="meta" style={{ fontSize: '9px' }}>{t('freq_label')}</small>
-                  </div>
-                </div>
-
-                <div className="border-t border-white/5 pt-6 pb-4">
-                  <p className="text-[10px] italic leading-relaxed text-tertiary">
-                    {t('system_law_label')}: {t('system_law_content')}
-                  </p>
-                </div>
+              <div className="flex flex-col items-center">
+                <span>{completing ? t('transmitting') : "Registrar ahora"}</span>
+                {!completing && <span className="text-[10px] font-mono opacity-20 mt-1">[ {recordLabel} ]</span>}
               </div>
-            </details>
-          </div>
-        </div>
+            </button>
 
-        {/* Footer: Navigational Memory */}
-        <div className="mt-auto pt-8 pb-4 flex justify-center gap-8">
-          <button
-            onClick={() => router.push('/app/route' as any)}
-            className="meta opacity-40 hover:opacity-100 transition-all"
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.1em' }}
-          >
-            {t('history').toUpperCase()}
-          </button>
-        </div>
-
-        {/* Footnote Contextual */}
-        {interventionBanner && (
-          <div className="pb-8 animate-fade opacity-30 text-center">
-            <p className="text-[10px] italic leading-relaxed text-secondary max-w-[280px] mx-auto">
-              {interventionBanner.message}
+            <p className="mt-4 text-xs text-secondary leading-relaxed">
+              No es necesario registrar nada. Los periodos sin registros también forman parte del estudio conductual.
             </p>
-          </div>
-        )}
+          </section>
+
+          {/* Active Protocols Panel (Conditional) */}
+          {(data.tasks && data.tasks.length > 0) && (
+            <section className="card">
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-sm font-medium text-primary">Protocolos activos</div>
+                <div className="text-[10px] font-mono text-tertiary">HOY</div>
+              </div>
+              <ul className="space-y-2">
+                {data.tasks.map((task, i) => (
+                  <li key={i} className="rounded-lg border border-border px-3 py-2 text-sm text-secondary">
+                    {task}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {/* Context Panel (Treatment/Control Blinded) */}
+          <section className="card">
+            <div className="text-sm font-medium text-primary mb-2">Contexto</div>
+            <div className="text-sm text-secondary">
+              {interventionBanner ? (
+                <p className="italic leading-relaxed opacity-70">
+                  {interventionBanner.message}
+                </p>
+              ) : (
+                <p className="opacity-50">Sin datos contextuales.</p>
+              )}
+            </div>
+          </section>
+
+          {/* Technical Details (Collapsed) */}
+          <details className="card p-0 overflow-hidden group">
+            <summary className="p-4 cursor-pointer text-sm font-medium text-secondary hover:text-primary transition-colors flex justify-between items-center group-open:border-b border-border">
+              <span>Detalles técnicos</span>
+              <span className="text-[10px] font-mono opacity-40 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div className="p-4 space-y-4 animate-fade">
+              <div className="grid gap-2 text-xs font-mono text-tertiary">
+                <div className="flex justify-between"><span>Dataset</span><span>{data.program_id.toUpperCase()}</span></div>
+                <div className="flex justify-between"><span>Frecuencia</span><span>ESPONTÁNEA</span></div>
+                <div className="flex justify-between"><span>Ref evento</span><span>000{data.day}</span></div>
+              </div>
+              <div className="pt-4 border-t border-border">
+                <p className="text-[10px] italic leading-relaxed text-tertiary">
+                  {t('system_law_label')}: {t('system_law_content')}
+                </p>
+              </div>
+              <div className="text-[10px] text-tertiary opacity-40 text-center">
+                {getTimeAgo()}
+              </div>
+            </div>
+          </details>
+        </div>
 
         <AmbientAnchor />
       </div>
