@@ -55,7 +55,7 @@ export default function RoutePage() {
     if (loading) {
         return (
             <div className="layout-container justify-center items-center">
-                <small className="meta animate-fade">LOADING_SEQUENCE...</small>
+                <small className="meta animate-fade" style={{ opacity: 0.5 }}>Inicializando historial...</small>
             </div>
         );
     }
@@ -65,56 +65,67 @@ export default function RoutePage() {
     return (
         <ProtectedRoute>
             <div className="layout-container">
-                {/* Header */}
-                <div className="flex justify-between items-center mb-8 border-b border-[var(--border)] pb-4">
-                    <div className="flex flex-col gap-1">
-                        <small className="meta">PROGRAM: {data.program_id.toUpperCase()}</small>
-                        <small className="meta">TOTAL_RECORDS: {data.duration_days}</small>
-                    </div>
+                {/* Header: Minimal logout and title */}
+                <div className="flex justify-between items-center mb-12">
+                    <button onClick={() => router.push('/app/today')} className="meta opacity-40 hover:opacity-100 transition-all" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                        ← Atrás
+                    </button>
+                    <span className="meta opacity-20" style={{ fontSize: '10px', letterSpacing: '0.1em' }}>HISTORIAL</span>
                 </div>
 
                 <div className="section">
-                    <small className="meta mb-2 block">SEQUENCE_LOG</small>
+                    <div className="flex flex-col gap-12">
+                        {['Hoy', 'Ayer', 'Anteriormente'].map((group) => {
+                            const groupDays = data.days.filter(d => {
+                                if (group === 'Hoy') return d.day === data.current_day;
+                                if (group === 'Ayer') return d.day === data.current_day - 1;
+                                return d.day < data.current_day - 1;
+                            }).reverse();
 
-                    <div className="flex flex-col gap-2">
-                        {data.days.map((day) => {
-                            const isCurrent = day.status === 'current';
-                            const isLocked = day.status === 'locked';
-                            const isDone = day.status === 'done';
+                            if (groupDays.length === 0) return null;
 
                             return (
-                                <div
-                                    key={day.day}
-                                    onClick={() => !isLocked && handleNavigate(day)}
-                                    className={`
-                                        p-4 rounded-[var(--radius-sm)] border flex justify-between items-center transition-all duration-100
-                                        ${isLocked ? 'opacity-40 cursor-not-allowed border-transparent' : 'cursor-pointer'}
-                                        ${isCurrent ? 'border-[var(--accent)] bg-[var(--bg-card)]' : 'border-[var(--border)]'}
-                                        ${isDone ? 'border-transparent bg-transparent hover:bg-[var(--bg-hover)]' : ''}
-                                    `}
-                                >
-                                    <div className="flex flex-col gap-1">
-                                        <div className="flex items-center gap-2">
-                                            {isCurrent && <div className="status-dot active"></div>}
-                                            <span style={{
-                                                fontSize: '14px',
-                                                fontFamily: 'var(--font-mono)',
-                                                color: isCurrent ? 'var(--text-primary)' : 'var(--text-secondary)'
-                                            }}>
-                                                REF_{day.day.toString().padStart(4, '0')}
-                                            </span>
-                                        </div>
-                                        <span className="meta" style={{ fontSize: '10px' }}>
-                                            {day.title || 'STANDARD_PROTOCOL'}
-                                        </span>
-                                    </div>
+                                <div key={group} className="flex flex-col gap-6">
+                                    <small className="meta opacity-30 px-2" style={{ fontSize: '10px', letterSpacing: '0.05em' }}>{group.toUpperCase()}</small>
+                                    <div className="flex flex-col gap-4">
+                                        {groupDays.map((day) => {
+                                            const isCurrent = day.status === 'current';
+                                            const isDone = day.status === 'done';
 
-                                    <div className="text-right">
-                                        <small className="meta block" style={{
-                                            color: isCurrent ? 'var(--accent)' : (isDone ? 'var(--text-tertiary)' : 'var(--text-tertiary)')
-                                        }}>
-                                            [{isDone ? 'OBSERVED' : (isCurrent ? '—' : 'LOCKED')}]
-                                        </small>
+                                            return (
+                                                <div
+                                                    key={day.day}
+                                                    onClick={() => !isCurrent && day.status !== 'locked' && handleNavigate(day)}
+                                                    className={`
+                                                        px-2 py-1 flex justify-between items-baseline group transition-all duration-300
+                                                        ${day.status === 'locked' ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer'}
+                                                    `}
+                                                >
+                                                    <div className="flex items-baseline gap-4">
+                                                        <span className="meta opacity-20 group-hover:opacity-100 transition-all" style={{ fontSize: '9px', minWidth: '12px' }}>
+                                                            {day.day}
+                                                        </span>
+                                                        <span style={{
+                                                            fontSize: '14px',
+                                                            color: isCurrent ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                                            opacity: isDone ? 0.6 : 1
+                                                        }}>
+                                                            {day.title}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="text-right">
+                                                        <small className="meta group-hover:opacity-100 transition-all" style={{
+                                                            fontSize: '9px',
+                                                            opacity: 0.3,
+                                                            color: isCurrent ? 'var(--accent)' : 'inherit'
+                                                        }}>
+                                                            {isCurrent ? 'Actual' : (isDone ? 'Completado' : '')}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             );
@@ -122,9 +133,9 @@ export default function RoutePage() {
                     </div>
                 </div>
 
-                <div style={{ marginTop: 'auto', paddingTop: '40px', paddingBottom: '20px', textAlign: 'center' }}>
-                    <small className="meta" style={{ opacity: 0.3, fontSize: '10px' }}>
-                        System available. State may be captured at any moment.
+                <div className="mt-auto pt-12 pb-8 text-center opacity-10">
+                    <small className="meta" style={{ fontSize: '9px' }}>
+                        Dataset: {data.program_id.toUpperCase()} · Records: {data.duration_days}
                     </small>
                 </div>
             </div>

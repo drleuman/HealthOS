@@ -150,78 +150,79 @@ export default function TodayPage() {
           </button>
         </div>
 
-        {/* 1. Centro de Gravedad: Estado + Acción */}
-        <div className="section flex-grow flex flex-col justify-center items-center gap-12" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
-          <div className="text-center">
-            <h1 className="text-primary mb-2" style={{ fontSize: '15px', letterSpacing: '0.1em' }}>{t('instrument_ready')}</h1>
-            <small className="meta" style={{ color: 'var(--accent)' }}>{t('instrument_window')}</small>
+        {/* 1. Centro de Gravedad: Acción Principal */}
+        <div className="section flex-grow flex flex-col justify-center items-center gap-16" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+          <div className="text-center opacity-40">
+            <h1 className="meta" style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>{t('title')}</h1>
+            <small className="meta" style={{ fontSize: '9px', opacity: 0.6 }}>{t('instrument_ready').toLowerCase()}</small>
           </div>
 
-          <div className="w-full max-w-[320px]">
+          <div className="w-full max-w-[320px] text-center">
+            <h2 className="text-secondary mb-8" style={{ fontSize: '18px', fontWeight: 'linear', letterSpacing: '-0.01em' }}>
+              ¿Qué está pasando ahora?
+            </h2>
             <button
               onClick={handleComplete}
               disabled={completing}
-              className="w-full flex items-center justify-center transition-all duration-300 group"
+              className="w-full py-4 transition-all duration-500 hover:text-white"
               style={{
-                height: '48px',
                 background: 'transparent',
                 border: 'none',
                 color: 'var(--text-secondary)',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '14px',
-                cursor: completing ? 'not-allowed' : 'pointer'
+                fontSize: '13px',
+                cursor: completing ? 'not-allowed' : 'pointer',
+                opacity: 0.7
               }}
             >
-              <div className="flex items-center gap-4 w-full">
-                <div className="h-[1px] flex-grow bg-white/10 group-hover:bg-white/30 transition-all"></div>
-                <span className="whitespace-nowrap px-4 group-hover:text-white transition-all">
-                  {completing ? t('transmitting') : (recordLabel || t('record_variant_0'))}
-                </span>
-                <div className="h-[1px] flex-grow bg-white/10 group-hover:bg-white/30 transition-all"></div>
-              </div>
+              {completing ? t('transmitting') : (t('record_variant_0'))}
             </button>
-            <div className="text-center mt-6">
-              <small className="meta" style={{ opacity: 0.3 }}>{getTimeAgo()}</small>
+            <div className="mt-4">
+              <small className="meta" style={{ opacity: 0.2, fontSize: '9px' }}>{getTimeAgo()}</small>
             </div>
           </div>
 
-          <div className="text-center opacity-30 hover:opacity-100 transition-all">
+          <div className="text-center opacity-20 hover:opacity-100 transition-all">
             <details className="text-center">
               <summary
                 className="meta cursor-pointer"
-                style={{ opacity: 0.5, listStyle: 'none' }}
+                style={{ opacity: 0.5, listStyle: 'none', fontSize: '10px' }}
                 onClick={() => api.trackEvent('details_expanded')}
               >
                 {t('technical_details')}
               </summary>
-              <div className="mt-6 flex flex-col gap-6 items-center">
-                <p className="text-xs" style={{ maxWidth: '280px', margin: '0 auto', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+              <div className="mt-8 flex flex-col gap-8 items-center text-left max-w-[280px] mx-auto">
+                <p className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', opacity: 0.7 }}>
                   {t('technical_details_content')}
                 </p>
 
-                {/* Sub-metadatos: Protocolos y Leyes movidos aquí */}
-                <div className="w-full border-t border-white/5 pt-6 text-left px-4">
-                  <small className="meta mb-4 block opacity-50">{t('active_protocols')}</small>
-                  <div className="flex flex-col gap-3">
+                <div className="w-full flex flex-col gap-4 border-t border-white/5 pt-6">
+                  <div className="flex justify-between items-baseline">
+                    <small className="meta opacity-40">{t('active_protocols')}</small>
+                    <span className="meta" style={{ fontSize: '9px' }}>{data.tasks && data.tasks.length}</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
                     {data.tasks && data.tasks.length > 0 ? (
                       data.tasks.map((task, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <div className="w-1 h-1 rounded-full bg-slate-500"></div>
-                          <span className="meta" style={{ textTransform: 'none', fontSize: '11px' }}>{task}</span>
+                        <div key={i} className="flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-white/20"></div>
+                          <span className="meta" style={{ textTransform: 'none', fontSize: '11px', opacity: 0.8 }}>{task}</span>
                         </div>
                       ))
                     ) : (
                       <span className="meta">{t('no_active_protocols')}</span>
                     )}
                   </div>
+                </div>
 
-                  <div className="mt-8 border-t border-white/5 pt-6">
-                    <div className="flex gap-2 items-start">
-                      <span className="meta opacity-50" style={{ minWidth: '80px', fontSize: '10px' }}>{t('system_law_label')}</span>
-                      <span className="meta" style={{ textTransform: 'none', color: 'var(--text-secondary)', fontSize: '11px', lineHeight: '1.4' }}>
-                        {t('system_law_content')}
-                      </span>
-                    </div>
+                <div className="w-full flex flex-col gap-2 border-t border-white/5 pt-6 opacity-40">
+                  <div className="flex justify-between">
+                    <small className="meta" style={{ fontSize: '9px' }}>{t('system_version')}</small>
+                    <small className="meta" style={{ fontSize: '9px' }}>{t('dataset_label')}: {data.program_id.toUpperCase()}</small>
+                  </div>
+                  <div className="flex justify-between">
+                    <small className="meta" style={{ fontSize: '9px' }}>{t('event_ref_label')}: {data.day}</small>
+                    <small className="meta" style={{ fontSize: '9px' }}>{t('freq_label')}</small>
                   </div>
                 </div>
               </div>
@@ -229,22 +230,21 @@ export default function TodayPage() {
           </div>
         </div>
 
-        {/* 2. Footer Discreto (Metadatos Ambientales) */}
-        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-end opacity-20 hover:opacity-70 transition-all">
-          <div className="flex flex-col gap-1">
-            <small className="meta" style={{ fontSize: '9px' }}>{t('system_version')}</small>
-            <small className="meta" style={{ fontSize: '9px' }}>{t('dataset_label')}: {data.program_id.toUpperCase()}</small>
-          </div>
-          <div className="flex flex-col gap-1 text-right">
-            <small className="meta" style={{ fontSize: '9px' }}>{t('event_ref_label')}: {data.day}</small>
-            <small className="meta" style={{ fontSize: '9px' }}>{t('freq_label')}</small>
-          </div>
+        {/* 2. Footer: Historial (Muy Tenue) */}
+        <div className="mt-auto pt-8 pb-4 flex justify-center">
+          <button
+            onClick={() => router.push('/app/route' as any)}
+            className="meta opacity-10 hover:opacity-60 transition-all"
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}
+          >
+            {t('Topbar.history').toUpperCase()}
+          </button>
         </div>
 
-        {/* Contexto Externo (Footnote) */}
+        {/* Footnote Contextual */}
         {interventionBanner && (
-          <div className="mt-4 animate-fade opacity-50 border-l border-accent/30 pl-4 py-2">
-            <p className="text-xs italic leading-relaxes text-secondary" style={{ maxWidth: '340px' }}>
+          <div className="pb-8 animate-fade opacity-30 text-center">
+            <p className="text-[10px] italic leading-relaxed text-secondary max-w-[280px] mx-auto">
               {interventionBanner.message}
             </p>
           </div>
