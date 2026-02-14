@@ -21,6 +21,23 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
+  // MANUAL CORS FALLBACK (For Plesk/Passenger environments)
+  app.use((req: any, res: any, next: any) => {
+    const origin = req.headers.origin;
+    if (origin) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature, Origin, Accept');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Handle Preflight
+    if (req.method === 'OPTIONS') {
+      return res.status(204).send();
+    }
+    next();
+  });
+
   // Security: Helmet for secure headers
   app.use(helmet({
     contentSecurityPolicy: {
