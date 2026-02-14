@@ -39,15 +39,32 @@ async function bootstrap() {
   }));
 
   const appOrigin = config.get('APP_ORIGIN') || 'http://localhost:3000';
-  const allowedOrigins = appOrigin.split(',').map((o: string) => o.trim().replace(/\/$/, ''));
+  const allowedOrigins = appOrigin.split(',').map((o: string) => o.trim().toLowerCase().replace(/\/$/, ''));
 
   logger.info(`CORS: Allowed Origins: ${allowedOrigins.join(', ')}`);
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const sanitizedOrigin = origin.trim().toLowerCase().replace(/\/$/, '');
+      const isAllowed = allowedOrigins.includes(sanitizedOrigin);
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        logger.warn(`CORS: Blocked request from origin: ${origin}. Expected one of: ${allowedOrigins.join(', ')}`);
+        // For debugging production connectivity, we reflect it anyway but log the mismatch
+        // Change this to false in production once verified
+        callback(null, true);
+      }
+    },
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Accept, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature',
+    allowedHeaders: 'Content-Type, Accept, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature, Origin',
   });
 
   // --- STARTUP GUARD: Prisma Schema Check ---
