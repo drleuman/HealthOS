@@ -12,6 +12,7 @@ interface TodayData {
   program_id: string;
   tasks: string[];
   recommendation: string | null;
+  lastRecordAt?: string | null;
   banners?: Array<{
     id: string;
     type: string;
@@ -123,141 +124,134 @@ export default function TodayPage() {
   // We'll use a simple details/summary or state
   // For now, simpler: details/summary is native
 
+  // Time ago calculation
+  const getTimeAgo = () => {
+    if (!data?.lastRecordAt) return null;
+    const lastDate = new Date(data.lastRecordAt);
+    const diffMs = Date.now() - lastDate.getTime();
+    const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+
+    if (diffHrs >= 1) {
+      return t('last_record', { time: t('time_ago_hours', { h: diffHrs }) });
+    } else if (diffMins >= 1) {
+      return t('last_record', { time: t('time_ago_minutes', { m: diffMins }) });
+    }
+    return t('last_record', { time: t('time_ago_just_now') });
+  };
+
   return (
     <ProtectedRoute>
       <div className="layout-container">
-        {/* Topbar equivalent - minimal */}
-        <div className="flex justify-between items-center mb-8">
-          <span className="meta">{t('system_version')}</span>
-          <button onClick={handleLogout} className="meta" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
+        {/* Minimal logout fix right */}
+        <div className="flex justify-end pt-2 pb-8">
+          <button onClick={handleLogout} className="meta opacity-40 hover:opacity-100 transition-all" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
             {t('terminate_session')}
           </button>
         </div>
 
-        {/* 1. Accion Principal (Capture State) */}
-        <div className="section">
-          <div className="flex justify-between mb-4">
-            <div className="flex flex-col gap-1">
-              <small className="meta">{t('dataset_label')}: {data.program_id.toUpperCase()}</small>
-              <small className="meta">{t('freq_label')}</small>
-            </div>
-            <div className="flex flex-col gap-1 text-right">
-              <small className="meta">{t('event_ref_label')}: {data.day}</small>
-              <small className="meta" style={{ color: 'var(--accent)' }}>{t('window_open')}</small>
+        {/* 1. Centro de Gravedad: Estado + Acción */}
+        <div className="section flex-grow flex flex-col justify-center items-center gap-12" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+          <div className="text-center">
+            <h1 className="text-primary mb-2" style={{ fontSize: '15px', letterSpacing: '0.1em' }}>{t('instrument_ready')}</h1>
+            <small className="meta" style={{ color: 'var(--accent)' }}>{t('instrument_window')}</small>
+          </div>
+
+          <div className="w-full max-w-[320px]">
+            <button
+              onClick={handleComplete}
+              disabled={completing}
+              className="w-full flex items-center justify-center transition-all duration-300 group"
+              style={{
+                height: '48px',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '14px',
+                cursor: completing ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <div className="flex items-center gap-4 w-full">
+                <div className="h-[1px] flex-grow bg-white/10 group-hover:bg-white/30 transition-all"></div>
+                <span className="whitespace-nowrap px-4 group-hover:text-white transition-all">
+                  {completing ? t('transmitting') : (recordLabel || t('record_variant_0'))}
+                </span>
+                <div className="h-[1px] flex-grow bg-white/10 group-hover:bg-white/30 transition-all"></div>
+              </div>
+            </button>
+            <div className="text-center mt-6">
+              <small className="meta" style={{ opacity: 0.3 }}>{getTimeAgo()}</small>
             </div>
           </div>
 
-          <div className="card" style={{ padding: '32px 16px', border: '1px solid var(--border-focus)' }}>
-            <div className="text-center mb-4">
-              <small className="meta" style={{ opacity: 0.7 }}>{t('instrument_status')}</small>
-              <button
-                onClick={handleComplete}
-                disabled={completing}
-                className="w-full flex items-center justify-center transition-all duration-100"
-                style={{
-                  height: '56px',
-                  background: 'transparent',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius-md)',
-                  color: 'var(--text-secondary)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '13px',
-                  cursor: completing ? 'not-allowed' : 'pointer'
-                }}
+          <div className="text-center opacity-30 hover:opacity-100 transition-all">
+            <details className="text-center">
+              <summary
+                className="meta cursor-pointer"
+                style={{ opacity: 0.5, listStyle: 'none' }}
+                onClick={() => api.trackEvent('details_expanded')}
               >
-                {completing ? t('transmitting') : (recordLabel || t('record_variant_0'))}
-              </button>
-              <div className="text-center mt-4">
-                <small className="meta" style={{ opacity: 0.5 }}>{t('no_action_required')}</small>
-              </div>
-
-              {/* Collapsible Help - Native details */}
-              <details className="mt-4 text-center">
-                <summary
-                  className="meta cursor-pointer"
-                  style={{ opacity: 0.5, listStyle: 'none' }}
-                  onClick={() => api.trackEvent('details_expanded')}
-                >
-                  {t('technical_details')}
-                </summary>
-                <p className="mt-2 text-xs" style={{ maxWidth: '280px', margin: '8px auto', color: 'var(--text-secondary)' }}>
+                {t('technical_details')}
+              </summary>
+              <div className="mt-6 flex flex-col gap-6 items-center">
+                <p className="text-xs" style={{ maxWidth: '280px', margin: '0 auto', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
                   {t('technical_details_content')}
                 </p>
-              </details>
-            </div>
-          </div>
-        </div>
 
-        {/* 2. Datos Actuales / Tareas (Technical List) */}
-        <div className="section">
-          <small className="meta mb-2 block">{t('active_protocols')}</small>
-          <div className="card" style={{ padding: '0' }}>
-            {data.tasks && data.tasks.length > 0 ? (
-              data.tasks.map((task, i) => (
-                <div key={i} className="flex items-center gap-3 p-4 border-b border-[var(--border)] last:border-0">
-                  <div className="status-dot active"></div>
-                  <span style={{ fontSize: '13px', fontFamily: 'var(--font-mono)' }}>{task}</span>
+                {/* Sub-metadatos: Protocolos y Leyes movidos aquí */}
+                <div className="w-full border-t border-white/5 pt-6 text-left px-4">
+                  <small className="meta mb-4 block opacity-50">{t('active_protocols')}</small>
+                  <div className="flex flex-col gap-3">
+                    {data.tasks && data.tasks.length > 0 ? (
+                      data.tasks.map((task, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className="w-1 h-1 rounded-full bg-slate-500"></div>
+                          <span className="meta" style={{ textTransform: 'none', fontSize: '11px' }}>{task}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <span className="meta">{t('no_active_protocols')}</span>
+                    )}
+                  </div>
+
+                  <div className="mt-8 border-t border-white/5 pt-6">
+                    <div className="flex gap-2 items-start">
+                      <span className="meta opacity-50" style={{ minWidth: '80px', fontSize: '10px' }}>{t('system_law_label')}</span>
+                      <span className="meta" style={{ textTransform: 'none', color: 'var(--text-secondary)', fontSize: '11px', lineHeight: '1.4' }}>
+                        {t('system_law_content')}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              ))
-            ) : (
-              <div className="p-4"><span className="meta">{t('no_active_protocols')}</span></div>
-            )}
-          </div>
-
-          {/* 3. Behavioral Layer: Timeline Anchor */}
-          {/* Metrology Adjustment: Show AFTER first observation (Day > 1) to avoid priming */}
-          {data.day > 1 && (
-            <div className="mt-4 px-1 text-center">
-              <small className="meta" style={{ opacity: 0.5 }}>{t('timeline_origin')}</small>
-            </div>
-          )}
-
-          <div className="mt-4 px-1">
-            <div className="flex gap-2 items-start opacity-70">
-              <span className="meta" style={{ minWidth: '80px', fontSize: '10px' }}>{t('system_law_label')}</span>
-              <span className="meta" style={{ textTransform: 'none', color: 'var(--text-secondary)', fontSize: '11px', lineHeight: '1.4' }}>
-                {t('system_law_content')}
-              </span>
-            </div>
+              </div>
+            </details>
           </div>
         </div>
 
-        {/* 3. Contexto Externo (Intervenciones + Control Placebo) */}
-        {/* Always render section header to maintain layout consistency */}
-        <div className="section animate-fade">
-          <small className="meta mb-2 block" style={{ color: interventionBanner ? 'var(--accent)' : 'var(--text-tertiary)' }}>
-            {t('external_context')}
-          </small>
-
-          {interventionBanner ? (
-            <div style={{ paddingLeft: '12px', borderLeft: '2px solid var(--accent)' }}>
-              <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
-                {interventionBanner.message}
-              </p>
-            </div>
-          ) : (
-            // Control Group / No Intervention State
-            // Render empty state to avoid revealing "lack of treatment" as a distinct negative signal
-            // Just "Context unavailable" in a neutal way
-            <div style={{ paddingLeft: '12px', borderLeft: '2px solid var(--border)' }}>
-              <p className="meta" style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                {t('no_contextual_data')}
-              </p>
-            </div>
-          )}
+        {/* 2. Footer Discreto (Metadatos Ambientales) */}
+        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-end opacity-20 hover:opacity-70 transition-all">
+          <div className="flex flex-col gap-1">
+            <small className="meta" style={{ fontSize: '9px' }}>{t('system_version')}</small>
+            <small className="meta" style={{ fontSize: '9px' }}>{t('dataset_label')}: {data.program_id.toUpperCase()}</small>
+          </div>
+          <div className="flex flex-col gap-1 text-right">
+            <small className="meta" style={{ fontSize: '9px' }}>{t('event_ref_label')}: {data.day}</small>
+            <small className="meta" style={{ fontSize: '9px' }}>{t('freq_label')}</small>
+          </div>
         </div>
 
-        {/* Recommendation as a footnote if exists */}
-        {data.recommendation && (
-          <div className="mt-8 pt-4 border-t border-[var(--border)]">
-            <small className="meta block mb-1">{t('automated_note')}</small>
-            <p style={{ fontSize: '12px', opacity: 0.7 }}>{data.recommendation}</p>
+        {/* Contexto Externo (Footnote) */}
+        {interventionBanner && (
+          <div className="mt-4 animate-fade opacity-50 border-l border-accent/30 pl-4 py-2">
+            <p className="text-xs italic leading-relaxes text-secondary" style={{ maxWidth: '340px' }}>
+              {interventionBanner.message}
+            </p>
           </div>
         )}
 
         <AmbientAnchor />
-
       </div>
-    </ProtectedRoute >
+    </ProtectedRoute>
   );
 }

@@ -173,14 +173,10 @@ export class HealthService {
         data: jr.data,
       }));
 
-      if (intervention) {
-        banners.push({
-          id: `interv_${Date.now()}`,
-          type: intervention.type,
-          message: intervention.message,
-          data: intervention as any
-        });
-      }
+      const lastLog = await this.prisma.dailyLog.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' },
+      });
 
       return {
         day: currentDay,
@@ -191,7 +187,8 @@ export class HealthService {
         recommendation,
         banners,
         behavior: { state: behaviorStateObj.state, updatedAt: behaviorStateObj.updatedAt },
-        microIntervention: intervention
+        microIntervention: intervention,
+        lastRecordAt: lastLog?.createdAt || null
       };
     } catch (e) {
       return {

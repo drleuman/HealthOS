@@ -32,6 +32,7 @@ export interface TodayPayload {
     message: string | null;
     data: any;
   }>;
+  lastRecordAt?: Date | string | null;
 }
 
 export interface RouteDay {
