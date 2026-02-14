@@ -41,7 +41,8 @@
             "tab_courses": "Cursos",
             "tab_articles": "Artículos",
             "featured_title": "Destacado para ti",
-            "latest_title": "Lo último"
+            "latest_title": "Lo último",
+            "start_here": "Empieza por aquí"
         },
         "Products": {
             "title": "Productos",
@@ -67,7 +68,8 @@
         "Footer": {
             "rights": "HealthOS © 2024. Todos los derechos reservados.",
             "privacy": "Privacidad",
-            "terms": "Términos"
+            "terms": "Términos",
+            "all_rights_reserved": "Todos los derechos reservados."
         }
     },
     "App": {
