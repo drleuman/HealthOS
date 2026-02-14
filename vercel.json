@@ -1,5 +1,6 @@
 {
     "version": 2,
     "framework": "nextjs",
-    "rootDirectory": "apps/web"
+    "buildCommand": "pnpm -F @healthos/web build",
+    "outputDirectory": "apps/web/.next"
 }
