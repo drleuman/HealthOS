@@ -4,8 +4,11 @@
   "private": true,
   "main": "src/index.ts",
   "scripts": {
-    "dev": "echo shared",
-    "build": "echo shared",
+    "dev": "tsc -w",
+    "build": "tsc",
     "lint": "echo shared"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
   }
 }
