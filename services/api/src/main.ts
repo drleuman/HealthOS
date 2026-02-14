@@ -45,6 +45,9 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
+      // Log EVERY attempt for debugging production
+      logger.info({ origin }, `CORS Request attempt`);
+
       if (!origin) {
         callback(null, true);
         return;
@@ -56,15 +59,15 @@ async function bootstrap() {
       if (isAllowed) {
         callback(null, true);
       } else {
-        logger.warn(`CORS: Blocked request from origin: ${origin}. Expected one of: ${allowedOrigins.join(', ')}`);
-        // For debugging production connectivity, we reflect it anyway but log the mismatch
-        // Change this to false in production once verified
-        callback(null, true);
+        logger.warn(`CORS: Origin mismatch but ALLOWING anyway: ${origin}. Expected: ${allowedOrigins.join(', ')}`);
+        callback(null, true); // Still allow for production debugging
       }
     },
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature, Origin',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
 
   // --- STARTUP GUARD: Prisma Schema Check ---
