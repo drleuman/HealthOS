@@ -15,45 +15,24 @@ async function bootstrap() {
   });
 
   const config = app.get(ConfigService);
-
-  // Apply global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
-
   app.use(cookieParser());
 
-  // MANUAL CORS FALLBACK (For Plesk/Passenger environments)
+  // MANUAL CORS FALLBACK - MOVED TO TOP
   app.use((req: any, res: any, next: any) => {
-    const origin = req.headers.origin;
-    if (origin) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature, Origin, Accept');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', 'https://healthos-ten.vercel.app');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature, Origin, Accept');
+    res.header('Access-Control-Allow-Credentials', 'true');
 
-    // Handle Preflight
     if (req.method === 'OPTIONS') {
-      return res.status(204).send();
+      return res.sendStatus(204);
     }
     next();
   });
 
-  // Security: Helmet for secure headers
-  app.use(helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        scriptSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-      },
-    },
-    hsts: {
-      maxAge: 31536000, // 1 year
-      includeSubDomains: true,
-      preload: true,
-    },
-  }));
+  // Security: Helmet disabled temporarily for CORS debugging
+  // app.use(helmet({ ... }));
 
   const appOrigin = config.get('APP_ORIGIN') || 'http://localhost:3000';
   const allowedOrigins = appOrigin.split(',').map((o: string) => o.trim().toLowerCase().replace(/\/$/, ''));
