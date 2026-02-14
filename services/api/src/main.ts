@@ -39,9 +39,12 @@ async function bootstrap() {
   }));
 
   const appOrigin = config.get('APP_ORIGIN') || 'http://localhost:3000';
+  const allowedOrigins = appOrigin.split(',').map((o: string) => o.trim().replace(/\/$/, ''));
+
+  logger.info(`CORS: Allowed Origins: ${allowedOrigins.join(', ')}`);
 
   app.enableCors({
-    origin: appOrigin.split(','),
+    origin: allowedOrigins,
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature',
