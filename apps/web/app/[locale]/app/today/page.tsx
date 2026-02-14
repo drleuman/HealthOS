@@ -71,7 +71,7 @@ export default function TodayPage() {
     if (api.isAuthenticated()) {
       loadToday();
     } else {
-      router.push('/');
+      router.push('/' as any);
     }
 
     return () => { mounted = false; };
@@ -83,7 +83,7 @@ export default function TodayPage() {
     try {
       await api.logDay({ day: data.day, action_completed: true });
       api.trackEvent('day_completed', { day: data.day, program: data.program_id });
-      router.push('/app/route');
+      router.push('/app/route' as any);
     } catch (err) {
       setError(t('system_error'));
       setCompleting(false);
@@ -92,7 +92,7 @@ export default function TodayPage() {
 
   const handleLogout = () => {
     api.logout();
-    router.push('/');
+    router.push('/' as any);
   };
 
   if (loading) {

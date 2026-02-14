@@ -4,7 +4,7 @@ const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: { typedRoutes: true },
+  experimental: { typedRoutes: false },
   transpilePackages: ["@healthos/shared"]
 };
 
