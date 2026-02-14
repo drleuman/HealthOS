@@ -258,7 +258,7 @@ export default function TodayPage() {
             className="meta opacity-40 hover:opacity-100 transition-all"
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.1em' }}
           >
-            {t('Topbar.history').toUpperCase()}
+            {t('history').toUpperCase()}
           </button>
         </div>
 

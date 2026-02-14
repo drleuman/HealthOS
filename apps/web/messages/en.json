@@ -45,7 +45,9 @@
         "timeline_origin": "Timeline origin point.",
         "external_context": "Context",
         "no_contextual_data": "None",
-        "automated_note": "System note"
+        "automated_note": "System note",
+        "history": "History",
+        "logout": "Exit"
     },
     "Components": {
         "Ambient": {

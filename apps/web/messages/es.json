@@ -45,7 +45,9 @@
         "timeline_origin": "Origen de la línea temporal.",
         "external_context": "Contexto",
         "no_contextual_data": "Sin datos",
-        "automated_note": "Anotación del sistema"
+        "automated_note": "Anotación del sistema",
+        "history": "Historial",
+        "logout": "Salir"
     },
     "Components": {
         "Ambient": {
