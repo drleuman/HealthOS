@@ -87,7 +87,7 @@ export class JobsService {
             logger.info({ count: users.length }, 'Generating weekly summaries');
 
             for (const user of users) {
-                const completedDays = user.logs.filter(l => l.actionCompleted).length;
+                const completedDays = user.logs.filter((l: any) => l.actionCompleted).length;
                 const totalDays = user.logs.length;
                 const completionRate = totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0;
 

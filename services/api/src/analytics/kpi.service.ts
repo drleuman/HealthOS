@@ -21,20 +21,20 @@ export class KpiService {
             }
         });
 
-        const userIds = firstStarted.map(f => f.userId!);
+        const userIds = firstStarted.map((f: any) => f.userId!);
         const userGroups = await this.prisma.userState.findMany({
             where: { userId: { in: userIds } },
             select: { userId: true, experimentGroup: true }
         });
 
-        const groupMap = new Map(userGroups.map(g => [g.userId, g.experimentGroup]));
+        const groupMap = new Map(userGroups.map((g: any) => [g.userId, g.experimentGroup] as [string, string]));
         const cohortMap = new Map<string, { cohortDate: Date, group: string }>();
 
-        firstStarted.forEach(f => {
+        firstStarted.forEach((f: any) => {
             if (f.userId && f._min.timestamp && f._min.timestamp >= startDate && f._min.timestamp <= endDate) {
                 cohortMap.set(f.userId, {
                     cohortDate: f._min.timestamp,
-                    group: groupMap.get(f.userId) || 'treatment'
+                    group: (groupMap.get(f.userId as string) as string) || 'treatment'
                 });
             }
         });
@@ -66,7 +66,7 @@ export class KpiService {
         };
 
         const activatedUserIds = new Set<string>();
-        activations.forEach(a => {
+        activations.forEach((a: any) => {
             const data = cohortMap.get(a.userId!);
             if (data && (a.timestamp.getTime() - data.cohortDate.getTime()) <= 48 * 60 * 60 * 1000) {
                 activatedUserIds.add(a.userId!);

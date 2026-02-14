@@ -92,19 +92,19 @@ export class OpsDigestService {
         const activeUserIds7d = (await this.prisma.event.groupBy({
             by: ['userId'],
             where: { timestamp: { gte: aWeekAgo, lte: endOfTarget }, userId: { not: null } }
-        })).map(u => u.userId!);
+        })).map((u: any) => u.userId!);
 
         const activeUserIds24h = (await this.prisma.event.groupBy({
             by: ['userId'],
             where: { timestamp: { gte: startOfTarget, lte: endOfTarget }, userId: { not: null } }
-        })).map(u => u.userId!);
+        })).map((u: any) => u.userId!);
 
         const contacted48h = (await prismaAny.operatorInteraction.findMany({
             where: { createdAt: { gte: startOfYesterday, lte: endOfTarget } },
             select: { userId: true }
         }));
         const uniqueContacted48hIds = new Set(contacted48h.filter((c: any) => c.userId).map((c: any) => c.userId));
-        const contactedActiveCount = activeUserIds24h.filter(id => uniqueContacted48hIds.has(id)).length;
+        const contactedActiveCount = activeUserIds24h.filter((id: string) => uniqueContacted48hIds.has(id)).length;
 
         const hasTraffic = activeUserIds24h.length > 0;
         const biasRatio = hasTraffic ? contactedActiveCount / activeUserIds24h.length : 0;

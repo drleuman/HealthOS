@@ -166,7 +166,7 @@ export class HealthService {
         take: 3,
       });
 
-      const banners = jobResults.map(jr => ({
+      const banners = jobResults.map((jr: any) => ({
         id: jr.id,
         type: jr.jobType,
         message: jr.message,
@@ -217,7 +217,7 @@ export class HealthService {
         where: { userId: user.id, actionCompleted: true },
         select: { day: true }
       });
-      const completedDays = new Set(logs.map(l => l.day));
+      const completedDays = new Set(logs.map((l: any) => l.day));
 
       const days = Array.from({ length: program.duration_days }, (_, i) => {
         const d = i + 1;

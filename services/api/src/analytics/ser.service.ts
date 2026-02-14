@@ -92,7 +92,7 @@ export class SERService {
 
             // HARD CONTAMINATION CHECK: Control group must never have interventions
             if (expGroup === 'control') {
-                const hasIntervention = events.some(e => e.event === 'intervention_recommended' || e.event === 'micro_intervention_shown');
+                const hasIntervention = events.some((e: any) => e.event === 'intervention_recommended' || e.event === 'micro_intervention_shown');
                 if (hasIntervention) {
                     result.integrity.contaminationCount++;
                 }

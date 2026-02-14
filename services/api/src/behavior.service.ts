@@ -40,25 +40,25 @@ export class BehaviorService {
         // A) startedDaysLast7: distinct count of days with 'day_started' or 'day_viewed'
         const startedDays = new Set(
             eventsLast7
-                .filter(e => e.event === 'day_started' || e.event === 'day_viewed')
-                .map(e => e.timestamp.toISOString().split('T')[0])
+                .filter((e: any) => e.event === 'day_started' || e.event === 'day_viewed')
+                .map((e: any) => e.timestamp.toISOString().split('T')[0])
         );
         const startedDaysLast7 = startedDays.size;
 
         // B) completedDaysLast7: distinct count of days with 'day_completed'
         const completedDaysLast7 = new Set(
             eventsLast7
-                .filter(e => e.event === 'day_completed')
-                .map(e => e.timestamp.toISOString().split('T')[0])
+                .filter((e: any) => e.event === 'day_completed')
+                .map((e: any) => e.timestamp.toISOString().split('T')[0])
         ).size;
 
         // C) repeatedOpeningsSameDay (Friction signal)
         // Definition: Multiple 'day_viewed' or 'day_started' for the same 'day' context today
-        const eventsToday = eventsLast7.filter(e => e.timestamp >= startOfToday);
+        const eventsToday = eventsLast7.filter((e: any) => e.timestamp >= startOfToday);
         const dayOpeningsMap: Record<number, number> = {};
         let repeatedCount = 0;
 
-        eventsToday.forEach(e => {
+        eventsToday.forEach((e: any) => {
             if (e.event === 'day_viewed' || e.event === 'day_started') {
                 const day = (e.context as any)?.day;
                 if (day !== undefined) {
@@ -77,7 +77,7 @@ export class BehaviorService {
         const repeatedOpeningsSameDay = repeatedCount;
 
         // D) inactive48h: last event using reduce (no mutation)
-        const lastEventTimestamp = eventsLast7.reduce((latest, current) => {
+        const lastEventTimestamp = eventsLast7.reduce((latest: Date, current: any) => {
             return current.timestamp > latest ? current.timestamp : latest;
         }, new Date(0));
 
@@ -149,7 +149,7 @@ export class BehaviorService {
                 distinct: ['userId']
             });
 
-            const activeUserIds = recentEvents.map(e => e.userId as string);
+            const activeUserIds = recentEvents.map((e: any) => e.userId as string);
             logger.info(`Processing behavior analysis for ${activeUserIds.length} active users.`);
 
             let processed = 0;
