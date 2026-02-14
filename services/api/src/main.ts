@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { GlobalExceptionFilter } from './global-exception.filter';
 import { logger } from './logger';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { PrismaService } from './prisma.service';
 
 async function bootstrap() {
@@ -17,6 +18,8 @@ async function bootstrap() {
 
   // Apply global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
+
+  app.use(cookieParser());
 
   // Security: Helmet for secure headers
   app.use(helmet({
@@ -35,8 +38,10 @@ async function bootstrap() {
     },
   }));
 
+  const appOrigin = config.get('APP_ORIGIN') || 'http://localhost:3000';
+
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    origin: appOrigin.split(','),
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization, X-Analytics-Secret, x-request-id, x-user-email, x-mh-signature',

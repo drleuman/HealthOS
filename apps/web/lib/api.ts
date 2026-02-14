@@ -72,6 +72,7 @@ class ApiClient {
             const response = await fetch(url, {
                 ...options,
                 headers,
+                credentials: 'include',
             });
 
             // Handle 401 Unauthorized

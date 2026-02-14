@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,17 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body('email') email: string) {
-    return this.svc.login(email || 'test@example.com');
+  async login(@Body('email') email: string, @Res({ passthrough: true }) res: Response) {
+    const result = await this.svc.login(email || 'test@example.com');
+
+    // Set secure cookie for production cross-domain support
+    res.cookie('access_token', result.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    return result;
   }
 }
