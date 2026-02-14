@@ -1,4 +1,5 @@
 {
     "version": 2,
-    "outputDirectory": "apps/web/.next"
+    "framework": "nextjs",
+    "rootDirectory": "apps/web"
 }
