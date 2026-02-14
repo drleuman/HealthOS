@@ -113,7 +113,7 @@ export default function OpsDashboard() {
         setLoading(true);
         setError('');
         try {
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            const baseUrl = process.env.NEXT_PUBLIC_API_ORIGIN || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001';
             const res = await fetch(`${baseUrl}/internal/ops/state`, {
                 headers: { 'x-analytics-secret': key }
             });

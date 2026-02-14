@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function Result() {
   const [data, setData] = useState<any>(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     const payload = {
       primary_goal: sessionStorage.getItem('primary_goal') || 'sleep',
       sleep_issue_type: JSON.parse(sessionStorage.getItem('sleep_issue_type') || '[]'),
@@ -17,12 +17,13 @@ export default function Result() {
       constraints: JSON.parse(sessionStorage.getItem('constraints') || '[]'),
     };
 
-    fetch(process.env.NEXT_PUBLIC_API_ORIGIN || 'http://localhost:4000/assessment', {
+    const baseUrl = process.env.NEXT_PUBLIC_API_ORIGIN || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001';
+    fetch(baseUrl + '/assessment', {
       method: 'POST',
-      headers: { 'Content-Type':'application/json', 'X-User-Email': 'test@example.com' },
+      headers: { 'Content-Type': 'application/json', 'X-User-Email': 'test@example.com' },
       body: JSON.stringify(payload),
-    }).then(r=>r.json()).then(setData).catch(()=>setData({error:true}));
-  },[]);
+    }).then(r => r.json()).then(setData).catch(() => setData({ error: true }));
+  }, []);
 
   return (
     <main style={{ padding: 24, maxWidth: 640 }}>
