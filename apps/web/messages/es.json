@@ -1,0 +1,62 @@
+{
+    "Auth": {
+        "system_id_label": "ID_SISTEMA: HOS_BETA_9.1",
+        "title": "HEALTHOS",
+        "mode_label": "[MODO]",
+        "mode_value": "LATENTE",
+        "feedback_label": "[FEEDBACK]",
+        "feedback_value": "ASÍNCRONO",
+        "user_identifier_label": "IDENTIFICADOR_USUARIO",
+        "email_placeholder": "Introduce email autorizado",
+        "initializing": "Inicializando...",
+        "open_environment": "Abrir entorno",
+        "secure_connection": "CONEXIÓN SEGURA ESTABLECIDA"
+    },
+    "Dashboard": {
+        "system_error": "ERROR_DEL_SISTEMA",
+        "plan_load_failed": "FALLO_CARGA_PLAN",
+        "initializing_sensors": "INICIALIZANDO SENSORES...",
+        "retry_connection": "REINTENTAR CONEXIÓN",
+        "system_version": "HEALTHOS_V9.1",
+        "terminate_session": "CERRAR_SESIÓN",
+        "dataset_label": "DATASET",
+        "freq_label": "FREC: ESPONTÁNEA",
+        "event_ref_label": "REF_EVENTO",
+        "window_open": "VENTANA_ABIERTA",
+        "instrument_status": "ESTADO_INSTRUMENTO: DISPONIBLE",
+        "transmitting": "[ transmitiendo ]",
+        "record_variant_0": "[ registrar ]",
+        "record_variant_1": "[ ingestar_dato ]",
+        "record_variant_2": "[ capturar_estado ]",
+        "record_variant_3": "[ log_entrada ]",
+        "no_action_required": "No se requiere acción",
+        "technical_details": "[?] Detalles técnicos",
+        "technical_details_content": "El sistema registra estados cuando se proporcionan. Los periodos sin registros también son parte del dataset.",
+        "active_protocols": "PROTOCOLOS_ACTIVOS",
+        "no_active_protocols": "SIN_PROTOCOLOS_ACTIVOS",
+        "system_law_label": "LEY_DEL_SISTEMA:",
+        "system_law_content": "Los registros son independientes. La falta de registros no afecta a registros futuros.",
+        "timeline_origin": "La primera observación define el origen temporal.",
+        "external_context": "CONTEXTO_EXTERNO",
+        "no_contextual_data": "SIN DATOS CONTEXTUALES",
+        "automated_note": "NOTA_AUTOMATIZADA"
+    },
+    "Components": {
+        "Ambient": {
+            "msg_1": "Sistema disponible. El estado puede ser capturado en cualquier momento.",
+            "msg_2": "Sistema disponible. La observación puede ser registrada cuando esté presente.",
+            "msg_3": "Sistema disponible. Grabación posible en cualquier momento."
+        },
+        "Topbar": {
+            "events": "Eventos",
+            "history": "Historial",
+            "logout": "Salir"
+        },
+        "Select": {
+            "placeholder": "Seleccionar opción..."
+        },
+        "Alert": {
+            "context_info": "Información Contextual"
+        }
+    }
+}

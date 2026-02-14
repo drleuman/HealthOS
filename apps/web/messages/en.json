@@ -1,0 +1,62 @@
+{
+    "Auth": {
+        "system_id_label": "SYSTEM_ID: HOS_BETA_9.1",
+        "title": "HEALTHOS",
+        "mode_label": "[MODE]",
+        "mode_value": "LATENT",
+        "feedback_label": "[FEEDBACK]",
+        "feedback_value": "ASYNCHRONOUS",
+        "user_identifier_label": "USER_IDENTIFIER",
+        "email_placeholder": "Enter authorized email",
+        "initializing": "Initializing...",
+        "open_environment": "Open environment",
+        "secure_connection": "SECURE CONNECTION ESTABLISHED"
+    },
+    "Dashboard": {
+        "system_error": "SYSTEM_ERROR",
+        "plan_load_failed": "PLAN_LOAD_FAILED",
+        "initializing_sensors": "INITIALIZING SENSORS...",
+        "retry_connection": "RETRY CONNECTION",
+        "system_version": "HEALTHOS_V9.1",
+        "terminate_session": "TERMINATE_SESSION",
+        "dataset_label": "DATASET",
+        "freq_label": "FREQ: SPONTANEOUS",
+        "event_ref_label": "EVENT_REF",
+        "window_open": "WINDOW_OPEN",
+        "instrument_status": "INSTRUMENT_STATUS: AVAILABLE",
+        "transmitting": "[ transmitting ]",
+        "record_variant_0": "[ record ]",
+        "record_variant_1": "[ input_ready ]",
+        "record_variant_2": "[ capture_state ]",
+        "record_variant_3": "[ log_entry ]",
+        "no_action_required": "No action required",
+        "technical_details": "[?] Technical details",
+        "technical_details_content": "The system records states when provided. Periods without records are also part of the dataset.",
+        "active_protocols": "ACTIVE_PROTOCOLS",
+        "no_active_protocols": "NO_ACTIVE_PROTOCOLS",
+        "system_law_label": "SYSTEM_LAW:",
+        "system_law_content": "Records are independent. Missing records do not affect future records.",
+        "timeline_origin": "First observation defines timeline origin.",
+        "external_context": "EXTERNAL_CONTEXT",
+        "no_contextual_data": "NO CONTEXTUAL DATA",
+        "automated_note": "AUTOMATED_NOTE"
+    },
+    "Components": {
+        "Ambient": {
+            "msg_1": "System available. State may be captured at any moment.",
+            "msg_2": "System available. Observation may be recorded when present.",
+            "msg_3": "System available. Recording possible at any time."
+        },
+        "Topbar": {
+            "events": "Events",
+            "history": "History",
+            "logout": "Exit"
+        },
+        "Select": {
+            "placeholder": "Select option..."
+        },
+        "Alert": {
+            "context_info": "Contextual Information"
+        }
+    }
+}

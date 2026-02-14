@@ -1,0 +1,22 @@
+{
+  "id": "nervous_system_reset_10",
+  "duration_days": 10,
+  "days": [
+    {
+      "day": 1,
+      "title": "Respiraci\u00f3n 3 min",
+      "learn": "video_breathing",
+      "action": "breathing_3min",
+      "check": "calmness",
+      "tool_unlock": null
+    },
+    {
+      "day": 9,
+      "title": "Descarga nocturna",
+      "learn": "video_evening_downshift",
+      "action": "downshift_10min",
+      "check": "sleep_quality",
+      "tool_unlock": "red_light_panel"
+    }
+  ]
+}

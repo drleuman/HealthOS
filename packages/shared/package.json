@@ -1,0 +1,11 @@
+{
+  "name": "@healthos/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo shared",
+    "build": "echo shared",
+    "lint": "echo shared"
+  }
+}

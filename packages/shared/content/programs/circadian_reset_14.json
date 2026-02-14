@@ -1,0 +1,62 @@
+{
+  "id": "circadian_reset_14",
+  "duration_days": 14,
+  "days": [
+    {
+      "day": 1,
+      "title": "Luz de ma\u00f1ana",
+      "learn": "video_morning_light",
+      "action": "get_light_10min",
+      "check": "energy_after",
+      "tool_unlock": null
+    },
+    {
+      "day": 2,
+      "title": "Cena m\u00e1s temprano",
+      "learn": "video_early_dinner",
+      "action": "dinner_before_21_00",
+      "check": "wakeups",
+      "tool_unlock": null
+    },
+    {
+      "day": 3,
+      "title": "Pantallas y oscuridad",
+      "learn": "video_screen_hygiene",
+      "action": "reduce_blue_light",
+      "check": "sleep_latency",
+      "tool_unlock": null
+    },
+    {
+      "day": 4,
+      "title": "Cafe\u00edna",
+      "learn": "video_caffeine",
+      "action": "delay_caffeine_60",
+      "check": "headache",
+      "tool_unlock": null
+    },
+    {
+      "day": 5,
+      "title": "Movimiento suave",
+      "learn": "video_easy_movement",
+      "action": "walk_10min",
+      "check": "energy_after",
+      "tool_unlock": null
+    },
+    {
+      "day": 6,
+      "title": "Oscuridad nocturna",
+      "learn": "video_darkness",
+      "action": "blue_light_shutdown",
+      "check": "sleep_latency",
+      "tool_unlock": "blue_light_glasses"
+    },
+    {
+      "day": 9,
+      "title": "Descarga nocturna",
+      "learn": "video_evening_downshift",
+      "action": "downshift_10min",
+      "check": "sleep_quality",
+      "tool_unlock": null
+    }
+  ]
+}

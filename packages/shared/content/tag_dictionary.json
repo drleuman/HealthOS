@@ -1,0 +1,37 @@
+{
+  "goals": [
+    "sleep",
+    "energy",
+    "digestion",
+    "weight",
+    "stress",
+    "performance"
+  ],
+  "symptoms": [
+    "bloating",
+    "reflux",
+    "constipation_or_diarrhea",
+    "post_meal_crash",
+    "wake_3am",
+    "wake_often",
+    "wake_tired",
+    "sleep_onset",
+    "brain_fog",
+    "sugar_cravings",
+    "irritability",
+    "cold_hands_feet"
+  ],
+  "constraints": [
+    "shiftwork",
+    "kids",
+    "pregnancy",
+    "vegan",
+    "late_training",
+    "travel",
+    "meds_sleep"
+  ],
+  "tools": [
+    "blue_light_glasses",
+    "red_light_panel"
+  ]
+}

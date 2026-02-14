@@ -1,0 +1,101 @@
+########################################
+# MONOREPO ROOT IGNORE (HealthOS)
+########################################
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+########################################
+# ENVIRONMENT FILES
+########################################
+
+# Real env files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# Service specific
+services/api/.env
+apps/web/.env
+apps/web/.env.local
+
+# Allow templates only
+!.env.example
+!.env.production.example
+!.env.local.example
+
+########################################
+# BUILD OUTPUTS
+########################################
+
+# Next.js
+apps/web/.next/
+apps/web/out/
+apps/web/build/
+
+# NestJS / TS
+dist/
+build/
+
+# Turbo / cache
+.turbo/
+.cache/
+
+########################################
+# DATABASE / PRISMA
+########################################
+
+*.sqlite
+*.db
+prisma/dev.db
+prisma/*.db
+
+########################################
+# LOGS
+########################################
+
+logs/
+*.log
+*.log.*
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+services/api/api.log
+
+########################################
+# RUNTIME / TEMP
+########################################
+
+tmp/
+temp/
+uploads/
+*.pid
+backups/
+
+########################################
+# TEST / COVERAGE
+########################################
+
+coverage/
+.nyc_output/
+
+########################################
+# OS / EDITORS
+########################################
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+########################################
+# DOCKER
+########################################
+
+docker-data/
+*.tar

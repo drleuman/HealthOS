@@ -1,0 +1,224 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+import { logger } from './logger';
+
+/**
+ * Standard event schema for HealthOS
+ * All events must follow this structure
+ */
+export interface TrackingEvent {
+    event: string;
+    userId?: string;
+    sessionId?: string;
+    timestamp?: Date;
+    context?: {
+        program?: string;
+        day?: number;
+        streak?: number;
+        profile?: string;
+        [key: string]: any;
+    };
+    meta?: {
+        platform?: 'web' | 'mobile' | 'api';
+        version?: string;
+        [key: string]: any;
+    };
+}
+
+/**
+ * Official HealthOS Event Taxonomy
+ * 
+ * A — Inicio del proceso
+ * - onboarding_started
+ * - onboarding_completed
+ * - profile_generated
+ * 
+ * B — Ejecución diaria (núcleo del producto)
+ * - day_viewed
+ * - day_started
+ * - action_marked_done
+ * - action_marked_failed
+ * - day_completed
+ * - streak_extended
+ * - streak_broken
+ * 
+ * C — Fricción (oro puro)
+ * - lesson_replayed
+ * - help_opened
+ * - skipped_day
+ * - auto_simplified
+ * - return_after_drop
+ * 
+ * D — Herramientas (Mithohacks)
+ * - tool_recommended
+ * - tool_opened_store
+ * - tool_purchased
+ * - tool_guide_opened
+ * 
+ * E — Retención
+ * - week_completed
+ * - program_completed
+ * - second_program_started
+ */
+@Injectable()
+export class TrackingService {
+    constructor(private prisma: PrismaService) { }
+
+    /**
+     * Track a behavioral event
+     * Non-blocking: queues event for async processing
+     */
+    async track(event: TrackingEvent): Promise<void> {
+        try {
+            // Validate event name
+            if (!event.event || typeof event.event !== 'string') {
+                logger.warn({ event }, 'Invalid event: missing or invalid event name');
+                return;
+            }
+
+            // Store event in database
+            await this.prisma.event.create({
+                data: {
+                    event: event.event,
+                    userId: event.userId,
+                    sessionId: event.sessionId,
+                    timestamp: event.timestamp || new Date(),
+                    context: event.context || {},
+                    meta: event.meta || {},
+                },
+            });
+
+            logger.info(
+                {
+                    event: event.event,
+                    userId: event.userId,
+                    sessionId: event.sessionId,
+                },
+                'Event tracked',
+            );
+        } catch (error) {
+            // Never throw - tracking should not break app flow
+            logger.error({ error, event }, 'Failed to track event');
+        }
+    }
+
+    /**
+     * Track multiple events in batch
+     */
+    async trackBatch(events: TrackingEvent[]): Promise<void> {
+        try {
+            await this.prisma.event.createMany({
+                data: events.map((event) => ({
+                    event: event.event,
+                    userId: event.userId,
+                    sessionId: event.sessionId,
+                    timestamp: event.timestamp || new Date(),
+                    context: event.context || {},
+                    meta: event.meta || {},
+                })),
+                skipDuplicates: true,
+            });
+
+            logger.info({ count: events.length }, 'Batch events tracked');
+        } catch (error) {
+            logger.error({ error, count: events.length }, 'Failed to track batch events');
+        }
+    }
+
+    /**
+     * Get events for a user
+     */
+    async getUserEvents(userId: string, limit = 100) {
+        return this.prisma.event.findMany({
+            where: { userId },
+            orderBy: { timestamp: 'desc' },
+            take: limit,
+        });
+    }
+
+    /**
+     * Get events by type
+     */
+    async getEventsByType(eventType: string, limit = 100) {
+        return this.prisma.event.findMany({
+            where: { event: eventType },
+            orderBy: { timestamp: 'desc' },
+            take: limit,
+        });
+    }
+
+    /**
+     * Analytics: Get activation rate (users who completed day 2)
+     */
+    async getActivationRate(): Promise<{ total: number; activated: number; rate: number }> {
+        const totalUsers = await this.prisma.user.count();
+
+        const activatedUsers = await this.prisma.event.groupBy({
+            by: ['userId'],
+            where: {
+                event: 'day_completed',
+                context: {
+                    path: ['day'],
+                    equals: 2,
+                },
+            },
+        });
+
+        const activated = activatedUsers.length;
+        const rate = totalUsers > 0 ? (activated / totalUsers) * 100 : 0;
+
+        return { total: totalUsers, activated, rate };
+    }
+
+    /**
+     * Analytics: Get drop-off at specific day
+     */
+    async getDropOffAtDay(day: number): Promise<{ usersAtPrevDay: number; usersAtDay: number; dropOff: number }> {
+        const usersAtPrevDay = await this.prisma.event.groupBy({
+            by: ['userId'],
+            where: {
+                event: 'day_completed',
+                context: {
+                    path: ['day'],
+                    equals: day - 1,
+                },
+            },
+        });
+
+        const usersAtDay = await this.prisma.event.groupBy({
+            by: ['userId'],
+            where: {
+                event: 'day_completed',
+                context: {
+                    path: ['day'],
+                    equals: day,
+                },
+            },
+        });
+
+        const dropOff = usersAtPrevDay.length - usersAtDay.length;
+
+        return {
+            usersAtPrevDay: usersAtPrevDay.length,
+            usersAtDay: usersAtDay.length,
+            dropOff,
+        };
+    }
+
+    /**
+     * Analytics: Get tool conversion rate
+     */
+    async getToolConversionRate(): Promise<{ opened: number; purchased: number; rate: number }> {
+        const opened = await this.prisma.event.count({
+            where: { event: 'tool_opened_store' },
+        });
+
+        const purchased = await this.prisma.event.count({
+            where: { event: 'tool_purchased' },
+        });
+
+        const rate = opened > 0 ? (purchased / opened) * 100 : 0;
+
+        return { opened, purchased, rate };
+    }
+}

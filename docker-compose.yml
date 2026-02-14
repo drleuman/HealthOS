@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: healthos-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-healthos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-healthos}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-healthos}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for future BullMQ job queue)
+  redis:
+    image: redis:7-alpine
+    container_name: healthos-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # API Service
+  api:
+    build:
+      context: ../..
+      dockerfile: services/api/Dockerfile
+    container_name: healthos-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-healthos}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-healthos}
+      API_JWT_SECRET: ${API_JWT_SECRET}
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET}
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:4000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  # Web App (Next.js - placeholder for future)
+  # web:
+  #   build:
+  #     context: ../..
+  #     dockerfile: apps/web/Dockerfile
+  #   container_name: healthos-web
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - api
+  #   environment:
+  #     NODE_ENV: production
+  #     NEXT_PUBLIC_API_URL: http://api:4000
+  #   ports:
+  #     - "3000:3000"
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  default:
+    name: healthos-network

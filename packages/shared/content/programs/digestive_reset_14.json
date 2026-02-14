@@ -1,0 +1,22 @@
+{
+  "id": "digestive_reset_14",
+  "duration_days": 14,
+  "days": [
+    {
+      "day": 1,
+      "title": "Plato simple",
+      "learn": "video_simple_plate",
+      "action": "simple_meal_today",
+      "check": "bloating",
+      "tool_unlock": null
+    },
+    {
+      "day": 2,
+      "title": "Ritmo de comidas",
+      "learn": "video_meal_timing",
+      "action": "no_snacking",
+      "check": "hunger",
+      "tool_unlock": null
+    }
+  ]
+}

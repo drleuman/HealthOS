@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  wpUserId  Int?
+  email     String   @unique
+  plan      String   @default("free")
+  createdAt DateTime @default(now())
+
+  assessment Assessments?
+  state      UserState?
+  logs       DailyLog[]
+  recs       Recommendation[]
+  purchases  Purchase[]
+  jobResults JobResult[]
+  snapshots  UserBehaviorSnapshot[]
+  behaviorState UserBehaviorState?
+  interactions OperatorInteraction[]
+  notifications NotificationEvent[]
+}
+
+model NotificationEvent {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  channel         String   // 'email'
+  type            String   // 'nudge_return', 'nudge_resume'
+  experimentGroup String   // 'treatment', 'control'
+  reason          String   // 'inactive48h', 'ser_gt_72h', etc.
+  status          String   // 'queued', 'sent', 'failed', 'skipped'
+  sentAt          DateTime @default(now())
+  providerId      String?
+  metadata        Json?
+  dedupeKey       String?  @unique
+
+  @@index([userId])
+  @@index([sentAt])
+}
+
+model OperatorInteraction {
+  id        String   @id @default(uuid())
+  userId    String?
+  userEmail String   // Always stored for easy reconciliation/tracking
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // message, reminder, explanation, bug_help, other
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userEmail])
+  @@index([createdAt])
+}
+
+model Assessments {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  primaryGoal     String?
+  sleepIssueType  String[]
+  lowEnergyWindow String?
+  bedtime         DateTime?  // stored as DateTime with arbitrary date for simplicity
+  caffeineTime    DateTime?
+  dinnerTime      DateTime?
+  symptoms        String[]
+  constraints     String[]
+  createdAt       DateTime @default(now())
+}
+
+model UserState {
+  userId      String  @id
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileType String
+  programId   String
+  currentDay  Int     @default(1)
+  streak      Int     @default(0)
+  lastActive  DateTime?
+  experimentGroup String @default("treatment") // 'treatment', 'control'
+}
+
+model DailyLog {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day             Int
+  actionCompleted Boolean
+  selfReportEffect String?
+  createdAt       DateTime @default(now())
+
+  @@index([userId, day])
+}
+
+model Recommendation {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  slug      String
+  reason    String?
+  createdAt DateTime @default(now())
+}
+
+model Purchase {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  productSlug String
+  orderId    String?  @unique
+  createdAt  DateTime @default(now())
+}
+
+model Program {
+  id           String   @id
+  durationDays Int
+  content      Json     // Stores the full program definition
+  createdAt    DateTime @default(now())
+}
+
+model JobResult {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobType   String   // 'inactivity_check', 'weekly_summary'
+  status    String   // 'success', 'error'
+  message   String?
+  data      Json?    // Job-specific data
+  createdAt DateTime @default(now())
+  
+  @@index([userId, jobType])
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  event     String   // Event name (e.g., 'day_completed', 'tool_purchased')
+  userId    String?  // Optional: some events may not have a user
+  sessionId String?  // Session identifier for tracking user journeys
+  timestamp DateTime @default(now())
+  context   Json?    // Event-specific context (program, day, streak, etc.)
+  meta      Json?    // Platform, version, etc.
+  createdAt DateTime @default(now())
+  
+  @@index([event, timestamp])
+  @@index([userId, event])
+  @@index([sessionId])
+}
+
+model UserBehaviorSnapshot {
+  id                      String   @id @default(uuid())
+  userId                  String
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date                    DateTime // To ensure one snapshot per day
+  startedDaysLast7        Int
+  completedDaysLast7      Int
+  repeatedOpeningsSameDay Int
+  inactive48h             Boolean
+  createdAt               DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model UserBehaviorState {
+  userId     String   @id
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  state      String
+  updatedAt  DateTime @updatedAt
+}
+
+model Experiment {
+  id           String   @id @default(uuid())
+  decisionHash String
+  startedAt    DateTime @default(now())
+  expiresAt    DateTime
+  status       String   @default("active") // 'active', 'completed'
+  metadata     Json?    // stores the ProductDecision object
+  createdAt    DateTime @default(now())
+}
+
