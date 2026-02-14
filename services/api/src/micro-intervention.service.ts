@@ -127,7 +127,7 @@ export class MicroInterventionService {
                 event: 'intervention_recommended',
                 timestamp: { gte: startOfToday },
                 context: {
-                    path: ['intervention_type'],
+                    path: '$.intervention_type',
                     equals: intervention.type
                 }
             }

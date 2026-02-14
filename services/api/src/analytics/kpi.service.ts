@@ -55,7 +55,7 @@ export class KpiService {
             where: {
                 userId: { in: userIds },
                 event: 'day_completed',
-                context: { path: ['day'], equals: 2 }
+                context: { path: '$.day', equals: 2 }
             },
             select: { userId: true, timestamp: true }
         });

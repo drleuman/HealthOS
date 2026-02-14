@@ -158,7 +158,7 @@ export class TrackingService {
             where: {
                 event: 'day_completed',
                 context: {
-                    path: ['day'],
+                    path: '$.day',
                     equals: 2,
                 },
             },
@@ -179,7 +179,7 @@ export class TrackingService {
             where: {
                 event: 'day_completed',
                 context: {
-                    path: ['day'],
+                    path: '$.day',
                     equals: day - 1,
                 },
             },
@@ -190,7 +190,7 @@ export class TrackingService {
             where: {
                 event: 'day_completed',
                 context: {
-                    path: ['day'],
+                    path: '$.day',
                     equals: day,
                 },
             },
