@@ -1,59 +1,52 @@
-import { Link } from '@/lib/navigation';
+import { PublicShell } from '@/components/layout/PublicShell';
 import { useTranslations } from 'next-intl';
 
 export default function LearnPage() {
-    const t = useTranslations('Learn');
+    const t = useTranslations('Public.Learn');
 
     return (
-        <div className="mx-auto max-w-6xl px-4 py-12 animate-fade">
-            <header className="mb-10 text-center">
-                <h1 className="text-3xl md:text-5xl font-semibold text-slate-100 mb-4">{t('title') || 'Centro de Aprendizaje'}</h1>
-                <p className="text-lg text-slate-400 max-w-2xl mx-auto">{t('subtitle') || 'Todo lo que necesitas para entender y utilizar HealthOS.'}</p>
-            </header>
+        <PublicShell>
+            <div className="mx-auto max-w-6xl px-4 py-12 min-h-screen">
+                {/* Header & Search */}
+                <div className="max-w-3xl mx-auto text-center mb-16 space-y-6">
+                    <h1 className="text-4xl font-bold text-slate-100 tracking-tight">{t('title')}</h1>
 
-            <div className="grid md:grid-cols-2 gap-8">
-                {/* Start Here */}
-                <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-8">
-                    <h2 className="text-2xl font-semibold text-slate-100 mb-4">Empieza aquí</h2>
-                    <ul className="space-y-4">
-                        {[1, 2, 3].map(i => (
-                            <li key={i}>
-                                <Link href="#" className="block p-4 rounded-xl bg-slate-950/50 border border-slate-800 hover:border-slate-700 transition-colors">
-                                    <h3 className="text-slate-200 font-medium">Guía de inicio {i}</h3>
-                                    <p className="text-sm text-slate-500 mt-1">Conceptos básicos y configuración.</p>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-
-                {/* Categories */}
-                <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 flex items-center justify-between hover:border-slate-700 transition-colors cursor-pointer">
-                        <div>
-                            <h3 className="text-xl font-medium text-slate-100">Cursos</h3>
-                            <p className="text-slate-400 text-sm mt-1">Profundiza en la teoría y práctica.</p>
+                    <div className="relative group">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span className="text-slate-500 text-lg">🔍</span>
                         </div>
-                        <Link href="/courses" className="px-4 py-2 rounded-lg bg-slate-800 text-slate-200 text-sm">Explorar</Link>
-                    </div>
-
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 flex items-center justify-between hover:border-slate-700 transition-colors cursor-pointer">
-                        <div>
-                            <h3 className="text-xl font-medium text-slate-100">Blog</h3>
-                            <p className="text-slate-400 text-sm mt-1">Artículos y novedades recientes.</p>
-                        </div>
-                        <Link href="/blog" className="px-4 py-2 rounded-lg bg-slate-800 text-slate-200 text-sm">Leer</Link>
-                    </div>
-
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 flex items-center justify-between hover:border-slate-700 transition-colors cursor-pointer">
-                        <div>
-                            <h3 className="text-xl font-medium text-slate-100">Productos</h3>
-                            <p className="text-slate-400 text-sm mt-1">Herramientas para tu práctica.</p>
-                        </div>
-                        <Link href="/products" className="px-4 py-2 rounded-lg bg-slate-800 text-slate-200 text-sm">Ver</Link>
+                        <input
+                            type="text"
+                            placeholder={t('search_placeholder')}
+                            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-900 border border-slate-800 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all shadow-lg shadow-slate-950/20"
+                        />
                     </div>
                 </div>
+
+                {/* Categories */}
+                <div className="mb-12 border-b border-slate-800/50">
+                    <nav className="flex gap-8 overflow-x-auto pb-4 scrollbar-hide">
+                        <button className="text-sky-400 font-medium border-b-2 border-sky-400 pb-4 px-1">{t('tab_guides')}</button>
+                        <button className="text-slate-400 font-medium hover:text-slate-200 transition-colors pb-4 px-1">{t('tab_courses')}</button>
+                        <button className="text-slate-400 font-medium hover:text-slate-200 transition-colors pb-4 px-1">{t('tab_articles')}</button>
+                    </nav>
+                </div>
+
+                {/* Content Grid */}
+                <div>
+                    <h2 className="text-xl font-semibold text-slate-200 mb-6">{t('start_here')}</h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="group rounded-2xl border border-slate-800 bg-slate-900/30 p-6 hover:bg-slate-900/50 transition-all cursor-pointer">
+                                <div className="w-full h-40 rounded-xl bg-slate-800 mb-4 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                                <h3 className="text-lg font-medium text-slate-200 mb-2 group-hover:text-white">Protocolo Básico {i}</h3>
+                                <p className="text-sm text-slate-400">Guía paso a paso para configurar tu entorno.</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </PublicShell>
     );
 }

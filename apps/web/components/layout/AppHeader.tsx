@@ -1,34 +1,35 @@
 'use client';
 
-import { Link, usePathname } from '../../lib/navigation';
+import { Link, usePathname } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 
 export function AppHeader() {
-    const t = useTranslations('AppNavigation');
+    const t = useTranslations('App.Nav');
     const pathname = usePathname();
 
     const tabs = [
-        { href: '/app/today', label: t('today') || 'Hoy' },
-        { href: '/app/route', label: t('history') || 'Historial' },
-        { href: '/app/protocols', label: 'Protocolos' }, // New tab
+        { href: '/app/today', label: t('today') },
+        { href: '/app/route', label: t('history') },
+        { href: '/app/protocols', label: t('protocols') },
     ];
 
     return (
-        <header className="sticky top-0 z-40 bg-slate-950/70 backdrop-blur border-b border-slate-800 transition-all duration-300">
-            <div className="mx-auto max-w-2xl px-4 py-3 flex items-center justify-between">
-                <Link href="/app/today" className="font-semibold text-slate-100 tracking-tight hover:text-white transition-colors">
+        <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/70">
+            <div className="mx-auto max-w-2xl px-4 h-14 flex items-center justify-between">
+                <Link href="/app/today" className="font-semibold text-slate-100 tracking-tight hover:opacity-80 transition-opacity">
                     HealthOS
                 </Link>
-                <nav className="flex gap-1">
+
+                <nav className="flex gap-1 bg-slate-900/50 p-1 rounded-lg border border-slate-800/50">
                     {tabs.map(tab => {
                         const isActive = pathname === tab.href;
                         return (
                             <Link
                                 key={tab.href}
                                 href={tab.href}
-                                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                                        ? 'bg-slate-800/70 text-slate-100 shadow-sm ring-1 ring-slate-700/50'
-                                        : 'text-slate-300 hover:bg-slate-800/40 hover:text-slate-200'
+                                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${isActive
+                                    ? 'bg-slate-800 text-slate-100 shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                                     }`}
                             >
                                 {tab.label}
@@ -36,8 +37,9 @@ export function AppHeader() {
                         );
                     })}
                 </nav>
-                <button className="text-xs text-slate-400 hover:text-slate-200 transition-colors uppercase tracking-wider font-medium">
-                    Salir
+
+                <button className="text-[10px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider font-medium">
+                    {t('logout')}
                 </button>
             </div>
         </header>

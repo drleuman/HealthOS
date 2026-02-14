@@ -9,13 +9,12 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  console.log('Layout: rendering for locale:', locale);
   const messages = await getMessages();
 
   return (
     <html lang={locale}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
         <NextIntlClientProvider messages={messages}>

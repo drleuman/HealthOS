@@ -1,40 +1,43 @@
-import { Link } from '../../lib/navigation';
+import { Link } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 
 export function TopNav() {
-    const t = useTranslations('Navigation');
+    const t = useTranslations('Public.Nav');
 
     return (
-        <nav className="sticky top-0 z-50 backdrop-blur bg-slate-950/70 border-b border-slate-800 transition-all">
-            <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+        <nav className="sticky top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-slate-800/80 transition-all">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="text-slate-100 font-semibold tracking-tight hover:opacity-80 transition-opacity">
-                    HealthOS
-                </Link>
+                <div className="flex items-center gap-2">
+                    <Link href="/" className="text-slate-50 text-lg font-bold tracking-tight hover:opacity-90 transition-opacity">
+                        HealthOS
+                    </Link>
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/50">BETA</span>
+                </div>
 
-                {/* Links */}
-                <div className="hidden md:flex gap-6 text-slate-300">
-                    <Link href="/learn" className="hover:text-slate-100 transition-colors bg-slate-900/50 px-3 py-1 rounded-full text-sm">
-                        {t('learn') || 'Aprende'}
+                {/* Links (Desktop) - High Contrast */}
+                <div className="hidden md:flex gap-8 items-center">
+                    <Link href="/products" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        {t('products')}
                     </Link>
-                    <Link href="/products" className="hover:text-slate-100 transition-colors text-sm pt-1">
-                        {t('products') || 'Productos'}
+                    <Link href="/courses" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        {t('courses')}
                     </Link>
-                    <Link href="/courses" className="hover:text-slate-100 transition-colors text-sm pt-1">
-                        {t('courses') || 'Cursos'}
+                    <Link href="/blog" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        {t('blog')}
                     </Link>
-                    <Link href="/blog" className="hover:text-slate-100 transition-colors text-sm pt-1">
-                        {t('blog') || 'Blog'}
-                    </Link>
-                    <Link href="/community" className="hover:text-slate-100 transition-colors text-sm pt-1">
-                        {t('community') || 'Comunidad'}
+                    <Link href="/community" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        {t('community')}
                     </Link>
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-3">
-                    <Link href="/auth" className="px-4 py-2 rounded-lg bg-cyan-400/15 text-cyan-200 ring-1 ring-cyan-400/25 hover:bg-cyan-400/20 text-sm font-medium transition-all">
-                        {t('login') || 'Acceder'}
+                <div className="flex items-center gap-4">
+                    <Link href="/auth" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        {t('login')}
+                    </Link>
+                    <Link href="/learn" className="inline-flex items-center justify-center h-9 px-5 rounded-full bg-slate-100 text-slate-950 text-sm font-bold hover:bg-white hover:scale-105 transition-all shadow-lg shadow-slate-950/20">
+                        {t('start')}
                     </Link>
                 </div>
             </div>

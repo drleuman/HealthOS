@@ -1,134 +1,109 @@
 {
     "Auth": {
-        "system_id_label": "ID Sistema: HOS-BETA 9.1",
-        "title": "HealthOS",
-        "mode_label": "Modo",
-        "mode_value": "Latente",
-        "feedback_label": "Feedback",
-        "feedback_value": "Asíncrono",
-        "user_identifier_label": "Identificador de usuario",
-        "email_placeholder": "Introduce email autorizado",
-        "initializing": "Inicializando...",
-        "open_environment": "Abrir entorno",
-        "secure_connection": "Conexión segura establecida",
-        "back_to_home": "Volver al inicio"
+        "title": "Entrar",
+        "subtitle": "Acceso a tu espacio personal",
+        "email_placeholder": "Correo electrónico",
+        "submit": "Continuar",
+        "back_to_community": "Volver a la comunidad",
+        "metadata_mode": "Sistema activo",
+        "metadata_feedback": "Feedback asíncrono",
+        "error_generic": "Error de conexión",
+        "magic_link_sent": "Enlace de acceso enviado"
     },
-    "Dashboard": {
-        "title": "Registro activo",
-        "system_error": "Sistema no disponible",
-        "plan_load_failed": "No se pudo sincronizar el estado",
-        "initializing_sensors": "Conectando...",
-        "retry_connection": "Volver a intentar",
-        "system_version": "Versión 9.1",
-        "terminate_session": "Finalizar sesión",
-        "dataset_label": "Base de datos",
-        "freq_label": "Modo: Observación espontánea",
-        "event_ref_label": "Secuencia",
-        "window_open": "Disponible ahora",
-        "instrument_status": "Sistema listo",
-        "instrument_ready": "En espera",
-        "instrument_window": "(ventana abierta)",
-        "last_record": "Último registro de actividad: hace {time}",
-        "time_ago_hours": "{h}h",
-        "time_ago_minutes": "{m}m",
-        "time_ago_just_now": "unos instantes",
-        "transmitting": "Sincronizando...",
-        "record_variant_0": "Registrar observación",
-        "record_variant_1": "Introducir dato",
-        "record_variant_2": "Capturar estado",
-        "record_variant_3": "Anotar entrada",
-        "no_action_required": "En reposo",
-        "technical_details": "Detalles técnicos",
-        "technical_details_content": "El sistema está configurado para la captura pasiva de datos conductuales. Los intervalos sin actividad son informativos para el estudio.",
-        "active_protocols": "Protocolos para hoy",
-        "no_active_protocols": "Sin tareas asignadas",
-        "system_law_label": "Principio del sistema",
-        "system_law_content": "Cada observación es independiente. La ausencia de registros no condiciona la validez de los futuros.",
-        "timeline_origin": "Origen de la línea temporal.",
-        "external_context": "Contexto",
-        "no_contextual_data": "Sin datos",
-        "automated_note": "Anotación del sistema",
-        "history": "Historial",
-        "logout": "Salir"
-    },
-    "Components": {
-        "Ambient": {
-            "msg_1": "Sistema disponible. El estado puede ser capturado en cualquier momento.",
-            "msg_2": "Sistema disponible. La observación puede ser registrada cuando esté presente.",
-            "msg_3": "Sistema disponible. Grabación posible en cualquier momento."
+    "Public": {
+        "Nav": {
+            "products": "Productos",
+            "courses": "Cursos",
+            "blog": "Blog",
+            "community": "Comunidad",
+            "learn": "Aprender",
+            "login": "Entrar",
+            "start": "Empezar"
         },
-        "Topbar": {
-            "events": "Eventos",
-            "history": "Historial",
-            "logout": "Salir"
+        "Landing": {
+            "hero_title": "Tu sistema operativo de salud",
+            "hero_subtitle": "Una comunidad para aprender y un instrumento privado para entender tus propios datos. Sin ruido, sin algoritmos de atención.",
+            "hero_cta_primary": "Explorar recursos",
+            "hero_cta_secondary": "Empezar ahora",
+            "trust_1": "Sin recordatorios",
+            "trust_2": "Privacidad total",
+            "trust_3": "Contenido experto",
+            "trust_4": "Beta cerrada",
+            "features_title": "Explora el ecosistema",
+            "cta_final_title": "¿Listo para empezar?",
+            "cta_final_btn": "Ver planes"
         },
-        "Select": {
-            "placeholder": "Seleccionar opción..."
-        },
-        "Alert": {
-            "context_info": "Información Contextual"
-        }
-    },
-    "Navigation": {
-        "products": "Productos",
-        "courses": "Cursos",
-        "blog": "Blog",
-        "community": "Comunidad",
-        "learn": "Aprende",
-        "support": "Soporte",
-        "login": "Acceder",
-        "resources": "Recursos"
-    },
-    "AppNavigation": {
-        "today": "Hoy",
-        "history": "Historial"
-    },
-    "Landing": {
-        "Hero": {
-            "title": "Comunidad e Instrumento",
-            "subtitle": "Una plataforma doble: espacio público para aprender y conectar, y un instrumento privado para el registro neutral de observaciones.",
-            "cta_primary": "Acceder al Instrumento",
-            "cta_secondary": "Ver cómo funciona"
-        },
-        "Trust": {
-            "pilar_1_title": "Registro sin recordatorios",
-            "pilar_1_body": "El sistema nunca te pedirá que entres. Tú decides cuándo hay algo relevante que registrar.",
-            "pilar_2_title": "Privacidad por diseño",
-            "pilar_2_body": "Tus datos están encriptados y separados de tu identidad pública en la comunidad.",
-            "pilar_3_title": "Datos útiles, sin presión",
-            "pilar_3_body": "Visualiza tendencias reales, no metas artificiales o gamificación adictiva."
+        "Learn": {
+            "title": "Centro de Aprendizaje",
+            "subtitle": "Guías, protocolos y recursos para tu salud",
+            "search_placeholder": "¿Qué quieres aprender hoy?",
+            "tab_guides": "Guías",
+            "tab_courses": "Cursos",
+            "tab_articles": "Artículos",
+            "featured_title": "Destacado para ti",
+            "latest_title": "Lo último"
         },
         "Products": {
-            "title": "Productos"
+            "title": "Productos",
+            "subtitle": "Herramientas para tu práctica diaria",
+            "cta_view": "Ver detalles"
         },
         "Courses": {
-            "title": "Formación"
+            "title": "Cursos",
+            "subtitle": "Profundiza en la metodología HealthOS",
+            "cta_start": "Empezar curso"
+        },
+        "Blog": {
+            "title": "Blog",
+            "subtitle": "Artículos sobre salud metabólica y sistemas",
+            "read_more": "Leer artículo"
         },
         "Community": {
-            "title": "Comunidad"
+            "title": "Comunidad",
+            "subtitle": "Conversaciones reales con personas reales",
+            "channels_title": "Canales activos",
+            "join_cta": "Unirme a la discusión"
+        },
+        "Footer": {
+            "rights": "HealthOS © 2024. Todos los derechos reservados.",
+            "privacy": "Privacidad",
+            "terms": "Términos"
         }
     },
-    "Products": {
-        "title": "Productos",
-        "subtitle": "Herramientas diseñadas para la comunidad."
+    "App": {
+        "Nav": {
+            "today": "Hoy",
+            "history": "Historial",
+            "protocols": "Protocolos",
+            "logout": "Salir"
+        },
+        "Today": {
+            "card_title": "¿Qué está pasando?",
+            "cta_register": "Registrar observación",
+            "no_action_note": "El sistema es pasivo. Solo registra eventos cuando ocurran espontáneamente.",
+            "status_active": "Monitor activo",
+            "status_empty": "En espera",
+            "context_title": "Contexto del sistema",
+            "context_empty": "Sin avisos activos",
+            "technical_title": "Datos técnicos"
+        },
+        "History": {
+            "title": "Historial",
+            "subtitle": "Registro cronológico de eventos.",
+            "empty": "No hay eventos registrados.",
+            "item_observed": "Registrado"
+        },
+        "Protocols": {
+            "title": "Protocolos Activos",
+            "back": "Volver al dashboard"
+        }
     },
-    "Courses": {
-        "title": "Cursos",
-        "subtitle": "Formación especializada."
-    },
-    "Blog": {
-        "title": "Blog",
-        "subtitle": "Pensamiento y actualizaciones."
-    },
-    "Community": {
-        "title": "Comunidad",
-        "subtitle": "Conecta, comparte y aprende con otros usuarios."
-    },
-    "Learn": {
-        "title": "Centro de Aprendizaje",
-        "subtitle": "Todo lo que necesitas para entender y utilizar HealthOS."
-    },
-    "Footer": {
-        "all_rights_reserved": "Todos los derechos reservados."
+    "Components": {
+        "Select": {
+            "placeholder": "Seleccionar..."
+        },
+        "Alert": {
+            "context_info": "Nota"
+        }
     }
 }
