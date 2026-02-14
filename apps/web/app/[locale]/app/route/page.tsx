@@ -74,7 +74,7 @@ export default function RoutePage() {
                 </div>
 
                 <div className="section">
-                    <div className="flex flex-col gap-12">
+                    <div className="flex flex-col gap-16">
                         {['Hoy', 'Ayer', 'Anteriormente'].map((group) => {
                             const groupDays = data.days.filter(d => {
                                 if (group === 'Hoy') return d.day === data.current_day;
@@ -85,9 +85,9 @@ export default function RoutePage() {
                             if (groupDays.length === 0) return null;
 
                             return (
-                                <div key={group} className="flex flex-col gap-6">
-                                    <small className="meta opacity-30 px-2" style={{ fontSize: '10px', letterSpacing: '0.05em' }}>{group.toUpperCase()}</small>
-                                    <div className="flex flex-col gap-4">
+                                <div key={group} className="flex flex-col gap-8">
+                                    <small className="meta opacity-20 px-4" style={{ fontSize: '10px', letterSpacing: '0.1em' }}>{group.toUpperCase()}</small>
+                                    <div className="flex flex-col">
                                         {groupDays.map((day) => {
                                             const isCurrent = day.status === 'current';
                                             const isDone = day.status === 'done';
@@ -97,30 +97,38 @@ export default function RoutePage() {
                                                     key={day.day}
                                                     onClick={() => !isCurrent && day.status !== 'locked' && handleNavigate(day)}
                                                     className={`
-                                                        px-2 py-1 flex justify-between items-baseline group transition-all duration-300
-                                                        ${day.status === 'locked' ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer'}
+                                                        px-4 py-5 flex justify-between items-center group transition-all duration-300 border-b border-white/[0.03]
+                                                        ${day.status === 'locked' ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer hover:bg-white/[0.02]'}
                                                     `}
                                                 >
-                                                    <div className="flex items-baseline gap-4">
-                                                        <span className="meta opacity-20 group-hover:opacity-100 transition-all" style={{ fontSize: '9px', minWidth: '12px' }}>
-                                                            {day.day}
+                                                    <div className="flex items-center gap-6">
+                                                        <span className="meta opacity-20 group-hover:opacity-100 transition-all font-mono" style={{ fontSize: '9px', minWidth: '12px' }}>
+                                                            {day.day.toString().padStart(2, '0')}
                                                         </span>
-                                                        <span style={{
-                                                            fontSize: '14px',
-                                                            color: isCurrent ? 'var(--text-primary)' : 'var(--text-secondary)',
-                                                            opacity: isDone ? 0.6 : 1
-                                                        }}>
-                                                            {day.title}
-                                                        </span>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span style={{
+                                                                fontSize: '15px',
+                                                                color: isCurrent ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                                                opacity: isDone ? 0.5 : 1,
+                                                                fontWeight: isCurrent ? '500' : '400'
+                                                            }}>
+                                                                {day.title}
+                                                            </span>
+                                                            {isCurrent && (
+                                                                <small className="meta" style={{ fontSize: '8px', color: 'var(--accent)', textTransform: 'lowercase' }}>
+                                                                    en curso
+                                                                </small>
+                                                            )}
+                                                        </div>
                                                     </div>
 
                                                     <div className="text-right">
                                                         <small className="meta group-hover:opacity-100 transition-all" style={{
                                                             fontSize: '9px',
-                                                            opacity: 0.3,
-                                                            color: isCurrent ? 'var(--accent)' : 'inherit'
+                                                            opacity: 0.2,
+                                                            textTransform: 'lowercase'
                                                         }}>
-                                                            {isCurrent ? 'Actual' : (isDone ? 'Completado' : '')}
+                                                            {isDone ? 'completado' : ''}
                                                         </small>
                                                     </div>
                                                 </div>

@@ -150,63 +150,78 @@ export default function TodayPage() {
           </button>
         </div>
 
-        {/* 1. Centro de Gravedad: Acción Principal */}
-        <div className="section flex-grow flex flex-col justify-center items-center gap-16" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
-          <div className="text-center opacity-40">
-            <h1 className="meta" style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>{t('title')}</h1>
-            <small className="meta" style={{ fontSize: '9px', opacity: 0.6 }}>{t('instrument_ready').toLowerCase()}</small>
+        {/* 1. Centro de Gravedad: Jerarquía Clínica */}
+        <div className="section flex-grow flex flex-col justify-center items-center gap-20" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+
+          {/* Tier 1: Dominant Question */}
+          <div className="text-center">
+            <h1 className="text-primary mb-4" style={{ fontSize: '24px', fontWeight: '500', letterSpacing: '-0.02em', textTransform: 'none' }}>
+              ¿Qué está pasando ahora?
+            </h1>
+            <p className="text-secondary" style={{ fontSize: '14px', opacity: 0.8 }}>
+              {t('instrument_ready')}
+            </p>
           </div>
 
-          <div className="w-full max-w-[320px] text-center">
-            <h2 className="text-secondary mb-8" style={{ fontSize: '18px', fontWeight: 'linear', letterSpacing: '-0.01em' }}>
-              ¿Qué está pasando ahora?
-            </h2>
+          {/* Tier 2: Clear Action */}
+          <div className="w-full max-w-[280px]">
             <button
               onClick={handleComplete}
               disabled={completing}
-              className="w-full py-4 transition-all duration-500 hover:text-white"
+              className="w-full py-5 rounded-md transition-all duration-300 group"
               style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-secondary)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '13px',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-primary)',
+                fontSize: '15px',
                 cursor: completing ? 'not-allowed' : 'pointer',
-                opacity: 0.7
+                boxShadow: 'var(--shadow-sm)'
               }}
             >
-              {completing ? t('transmitting') : (t('record_variant_0'))}
+              <span className={completing ? 'opacity-50' : ''}>
+                {completing ? t('transmitting') : t('record_variant_0')}
+              </span>
             </button>
-            <div className="mt-4">
-              <small className="meta" style={{ opacity: 0.2, fontSize: '9px' }}>{getTimeAgo()}</small>
+            <div className="text-center mt-6">
+              <small className="meta" style={{ color: 'var(--text-tertiary)', fontSize: '10px' }}>
+                {getTimeAgo()}
+              </small>
             </div>
           </div>
 
-          <div className="text-center opacity-20 hover:opacity-100 transition-all">
-            <details className="text-center">
+          {/* Tier 3: Passive Context */}
+          <div className="max-w-[300px] text-center">
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--text-tertiary)' }}>
+              No es necesario registrar nada. Los periodos sin actividad también son parte del estudio conductual.
+            </p>
+          </div>
+
+          {/* Tier 4: Technical Metadata (Collapsed) */}
+          <div className="w-full border-t border-white/5 pt-8 opacity-40 hover:opacity-100 transition-all">
+            <details className="group">
               <summary
-                className="meta cursor-pointer"
-                style={{ opacity: 0.5, listStyle: 'none', fontSize: '10px' }}
+                className="meta cursor-pointer text-center list-none flex items-center justify-center gap-2"
+                style={{ fontSize: '10px', opacity: 0.6 }}
                 onClick={() => api.trackEvent('details_expanded')}
               >
                 {t('technical_details')}
               </summary>
-              <div className="mt-8 flex flex-col gap-8 items-center text-left max-w-[280px] mx-auto">
-                <p className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', opacity: 0.7 }}>
+              <div className="mt-8 grid grid-cols-1 gap-8 text-left max-w-[320px] mx-auto px-4">
+                <p className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
                   {t('technical_details_content')}
                 </p>
 
-                <div className="w-full flex flex-col gap-4 border-t border-white/5 pt-6">
+                <div className="flex flex-col gap-4 border-t border-white/5 pt-6">
                   <div className="flex justify-between items-baseline">
-                    <small className="meta opacity-40">{t('active_protocols')}</small>
-                    <span className="meta" style={{ fontSize: '9px' }}>{data.tasks && data.tasks.length}</span>
+                    <small className="meta">{t('active_protocols')}</small>
+                    <span className="meta">{data.tasks && data.tasks.length}</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     {data.tasks && data.tasks.length > 0 ? (
                       data.tasks.map((task, i) => (
                         <div key={i} className="flex items-center gap-2">
-                          <div className="w-1 h-1 rounded-full bg-white/20"></div>
-                          <span className="meta" style={{ textTransform: 'none', fontSize: '11px', opacity: 0.8 }}>{task}</span>
+                          <div className="w-1 h-1 rounded-full bg-accent"></div>
+                          <span className="meta" style={{ textTransform: 'none', fontSize: '11px', color: 'var(--text-secondary)' }}>{task}</span>
                         </div>
                       ))
                     ) : (
@@ -215,27 +230,33 @@ export default function TodayPage() {
                   </div>
                 </div>
 
-                <div className="w-full flex flex-col gap-2 border-t border-white/5 pt-6 opacity-40">
-                  <div className="flex justify-between">
+                <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-6 opacity-60">
+                  <div className="flex flex-col gap-1">
                     <small className="meta" style={{ fontSize: '9px' }}>{t('system_version')}</small>
                     <small className="meta" style={{ fontSize: '9px' }}>{t('dataset_label')}: {data.program_id.toUpperCase()}</small>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex flex-col gap-1 text-right">
                     <small className="meta" style={{ fontSize: '9px' }}>{t('event_ref_label')}: {data.day}</small>
                     <small className="meta" style={{ fontSize: '9px' }}>{t('freq_label')}</small>
                   </div>
+                </div>
+
+                <div className="border-t border-white/5 pt-6 pb-4">
+                  <p className="text-[10px] italic leading-relaxed text-tertiary">
+                    {t('system_law_label')}: {t('system_law_content')}
+                  </p>
                 </div>
               </div>
             </details>
           </div>
         </div>
 
-        {/* 2. Footer: Historial (Muy Tenue) */}
-        <div className="mt-auto pt-8 pb-4 flex justify-center">
+        {/* Footer: Navigational Memory */}
+        <div className="mt-auto pt-8 pb-4 flex justify-center gap-8">
           <button
             onClick={() => router.push('/app/route' as any)}
-            className="meta opacity-10 hover:opacity-60 transition-all"
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}
+            className="meta opacity-40 hover:opacity-100 transition-all"
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.1em' }}
           >
             {t('Topbar.history').toUpperCase()}
           </button>

@@ -1,42 +1,38 @@
 :root {
-    /* Fondos - Warm Dark Gray Palette */
-    --bg-base: #1C1C1E;
-    /* Base background - Warm dark gray */
-    --bg-card: #2C2C2E;
-    /* Card background - Slightly lighter */
-    --bg-hover: #3A3A3C;
-    /* Hover state */
+    /* Fondos - Clinical High Contrast Palette */
+    --bg-base: #0F1115;
+    /* Deep void for focus */
+    --bg-card: #171A21;
+    /* Subtle panel depth */
+    --bg-hover: #1C2029;
+    /* Perception of interaction */
 
-    /* Texto - Technical/Neutral */
-    --text-primary: #E5E5EA;
-    /* High contrast but not pure white */
-    --text-secondary: #AEAEB2;
-    /* Muted details */
-    --text-tertiary: #636366;
-    /* Disabled/Faint */
+    /* Texto - Clinical Hierarchy */
+    --text-primary: #E6EAF2;
+    /* Dominant focus - Clinical white */
+    --text-secondary: #9AA3B2;
+    /* Secondary information - Orienting gray */
+    --text-tertiary: #5B6472;
+    /* Technical metadata - Deeply muted */
 
-    /* Acento - Desaturado/Frío */
-    --accent: #64748B;
-    /* Slate blue - Technical focus */
-    --accent-hover: #94A3B8;
-    /* Interaction feedback */
-    --accent-dim: rgba(100, 116, 139, 0.15);
+    /* Acento - Neutral Metrology */
+    --accent: #DCE3F0;
+    /* Neutral highlight - Interaction signal */
+    --accent-hover: #FFFFFF;
+    --accent-dim: rgba(220, 227, 240, 0.1);
 
-    /* Bordes & Shadows - Hardware Feel */
-    --border: #38383A;
-    --border-focus: #64748B;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
-    /* User spec: 0 2px 6px roughly */
+    /* Bordes & Shadows - Sharp Instrument Feel */
+    --border: #2A2F3A;
+    --border-focus: #4F5666;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.5);
 
     /* Layout Tokens */
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    /* User spec: max 6px */
+    --radius-sm: 2px;
+    /* Sharper edges for instrument feel */
+    --radius-md: 4px;
     --space-unit: 8px;
-    /* Base unit for spacing */
     --max-w: 420px;
-    /* Constrained width */
 
     /* Typography */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
