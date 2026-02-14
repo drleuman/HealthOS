@@ -2,7 +2,7 @@ generator client {
   provider = "prisma-client-js"
 }
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -62,13 +62,13 @@ model Assessments {
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   primaryGoal     String?
-  sleepIssueType  String[]
+  sleepIssueType  Json?
   lowEnergyWindow String?
   bedtime         DateTime?  // stored as DateTime with arbitrary date for simplicity
   caffeineTime    DateTime?
   dinnerTime      DateTime?
-  symptoms        String[]
-  constraints     String[]
+  symptoms        Json?
+  constraints     Json?
   createdAt       DateTime @default(now())
 }
 
