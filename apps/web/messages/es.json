@@ -1,18 +1,20 @@
 {
     "Auth": {
-        "system_id_label": "ID SISTEMA: HOS-BETA 9.1",
-        "title": "HEALTHOS",
-        "mode_label": "[MODO]",
-        "mode_value": "LATENTE",
-        "feedback_label": "[FEEDBACK]",
-        "feedback_value": "ASÍNCRONO",
-        "user_identifier_label": "IDENTIFICADOR DE USUARIO",
+        "system_id_label": "ID Sistema: HOS-BETA 9.1",
+        "title": "HealthOS",
+        "mode_label": "Modo",
+        "mode_value": "Latente",
+        "feedback_label": "Feedback",
+        "feedback_value": "Asíncrono",
+        "user_identifier_label": "Identificador de usuario",
         "email_placeholder": "Introduce email autorizado",
         "initializing": "Inicializando...",
         "open_environment": "Abrir entorno",
-        "secure_connection": "CONEXIÓN SEGURA ESTABLECIDA"
+        "secure_connection": "Conexión segura establecida",
+        "back_to_home": "Volver al inicio"
     },
     "Dashboard": {
+        "title": "Registro activo",
         "system_error": "Sistema no disponible",
         "plan_load_failed": "No se pudo sincronizar el estado",
         "initializing_sensors": "Conectando...",
@@ -30,13 +32,13 @@
         "time_ago_hours": "{h}h",
         "time_ago_minutes": "{m}m",
         "time_ago_just_now": "unos instantes",
-        "transmitting": "[ sincronizando ]",
+        "transmitting": "Sincronizando...",
         "record_variant_0": "Registrar observación",
         "record_variant_1": "Introducir dato",
         "record_variant_2": "Capturar estado",
         "record_variant_3": "Anotar entrada",
         "no_action_required": "En reposo",
-        "technical_details": "▾ Detalles técnicos",
+        "technical_details": "Detalles técnicos",
         "technical_details_content": "El sistema está configurado para la captura pasiva de datos conductuales. Los intervalos sin actividad son informativos para el estudio.",
         "active_protocols": "Protocolos para hoy",
         "no_active_protocols": "Sin tareas asignadas",
@@ -66,5 +68,67 @@
         "Alert": {
             "context_info": "Información Contextual"
         }
+    },
+    "Navigation": {
+        "products": "Productos",
+        "courses": "Cursos",
+        "blog": "Blog",
+        "community": "Comunidad",
+        "learn": "Aprende",
+        "support": "Soporte",
+        "login": "Acceder",
+        "resources": "Recursos"
+    },
+    "AppNavigation": {
+        "today": "Hoy",
+        "history": "Historial"
+    },
+    "Landing": {
+        "Hero": {
+            "title": "Comunidad e Instrumento",
+            "subtitle": "Una plataforma doble: espacio público para aprender y conectar, y un instrumento privado para el registro neutral de observaciones.",
+            "cta_primary": "Acceder al Instrumento",
+            "cta_secondary": "Ver cómo funciona"
+        },
+        "Trust": {
+            "pilar_1_title": "Registro sin recordatorios",
+            "pilar_1_body": "El sistema nunca te pedirá que entres. Tú decides cuándo hay algo relevante que registrar.",
+            "pilar_2_title": "Privacidad por diseño",
+            "pilar_2_body": "Tus datos están encriptados y separados de tu identidad pública en la comunidad.",
+            "pilar_3_title": "Datos útiles, sin presión",
+            "pilar_3_body": "Visualiza tendencias reales, no metas artificiales o gamificación adictiva."
+        },
+        "Products": {
+            "title": "Productos"
+        },
+        "Courses": {
+            "title": "Formación"
+        },
+        "Community": {
+            "title": "Comunidad"
+        }
+    },
+    "Products": {
+        "title": "Productos",
+        "subtitle": "Herramientas diseñadas para la comunidad."
+    },
+    "Courses": {
+        "title": "Cursos",
+        "subtitle": "Formación especializada."
+    },
+    "Blog": {
+        "title": "Blog",
+        "subtitle": "Pensamiento y actualizaciones."
+    },
+    "Community": {
+        "title": "Comunidad",
+        "subtitle": "Conecta, comparte y aprende con otros usuarios."
+    },
+    "Learn": {
+        "title": "Centro de Aprendizaje",
+        "subtitle": "Todo lo que necesitas para entender y utilizar HealthOS."
+    },
+    "Footer": {
+        "all_rights_reserved": "Todos los derechos reservados."
     }
 }

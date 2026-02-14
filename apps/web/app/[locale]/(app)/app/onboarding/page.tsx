@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/lib/navigation';
 import { api } from '@/lib/api';
-import { Page, Shell, Card, Button, Input, Badge } from '../../components/ui';
+import { Page, Shell, Card, Button, Input, Badge } from '@/components/ui';
 
 type Goal = 'sleep' | 'energy' | 'digestion' | 'weight' | 'stress' | 'performance';
 
@@ -150,8 +150,8 @@ export default function OnboardingPage() {
                                             key={goal.value}
                                             onClick={() => setData({ ...data, primary_goal: goal.value })}
                                             className={`px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.primary_goal === goal.value
-                                                    ? 'border-secondary bg-secondary/10 text-primary'
-                                                    : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                                ? 'border-secondary bg-secondary/10 text-primary'
+                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
                                                 }`}
                                         >
                                             <span className="font-mono mr-2">[{goal.emoji}]</span>
@@ -173,8 +173,8 @@ export default function OnboardingPage() {
                                         key={issue}
                                         onClick={() => setData({ ...data, sleep_issue_type: toggleArrayItem(data.sleep_issue_type, issue) })}
                                         className={`w-full px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.sleep_issue_type.includes(issue)
-                                                ? 'border-secondary bg-secondary/10 text-primary'
-                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                            ? 'border-secondary bg-secondary/10 text-primary'
+                                            : 'border-border bg-transparent text-secondary hover:border-tertiary'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -217,8 +217,8 @@ export default function OnboardingPage() {
                                         key={symptom}
                                         onClick={() => setData({ ...data, symptoms: toggleArrayItem(data.symptoms, symptom) })}
                                         className={`w-full px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.symptoms.includes(symptom)
-                                                ? 'border-secondary bg-secondary/10 text-primary'
-                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                            ? 'border-secondary bg-secondary/10 text-primary'
+                                            : 'border-border bg-transparent text-secondary hover:border-tertiary'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -241,8 +241,8 @@ export default function OnboardingPage() {
                                         key={constraint}
                                         onClick={() => setData({ ...data, constraints: toggleArrayItem(data.constraints, constraint) })}
                                         className={`w-full px-4 py-3 rounded-lg border text-left text-sm transition-all duration-150 ${data.constraints.includes(constraint)
-                                                ? 'border-secondary bg-secondary/10 text-primary'
-                                                : 'border-border bg-transparent text-secondary hover:border-tertiary'
+                                            ? 'border-secondary bg-secondary/10 text-primary'
+                                            : 'border-border bg-transparent text-secondary hover:border-tertiary'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">

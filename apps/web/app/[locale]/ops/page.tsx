@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Page, Card, Button, Input, Property } from '../components/ui';
+import { Page, Card, Button, Input, Property } from '@/components/ui';
 
 interface OpsState {
     status: 'COLLECTING' | 'STABLE';

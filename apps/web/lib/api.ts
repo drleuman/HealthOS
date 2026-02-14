@@ -79,7 +79,7 @@ class ApiClient {
             if (response.status === 401) {
                 this.clearToken();
                 if (typeof window !== 'undefined') {
-                    window.location.href = '/app/login';
+                    window.location.href = '/auth';
                 }
                 throw new Error('Unauthorized');
             }

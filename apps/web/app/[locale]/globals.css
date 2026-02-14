@@ -1,317 +1,42 @@
-:root {
-    /* Fondos - Clinical High Contrast Palette */
-    --bg-base: #0F1115;
-    /* Deep void for focus */
-    --bg-card: #171A21;
-    /* Subtle panel depth */
-    --bg-hover: #1C2029;
-    /* Perception of interaction */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-    /* Texto - Clinical Hierarchy */
-    --text-primary: #E6EAF2;
-    /* Dominant focus - Clinical white */
-    --text-secondary: #9AA3B2;
-    /* Secondary information - Orienting gray */
-    --text-tertiary: #5B6472;
-    /* Technical metadata - Deeply muted */
-
-    /* Acento - Neutral Metrology */
-    --accent: #DCE3F0;
-    /* Neutral highlight - Interaction signal */
-    --accent-hover: #FFFFFF;
-    --accent-dim: rgba(220, 227, 240, 0.1);
-
-    /* Bordes & Shadows - Sharp Instrument Feel */
-    --border: #2A2F3A;
-    --border-focus: #4F5666;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.5);
-
-    /* Layout Tokens */
-    --radius-sm: 2px;
-    /* Sharper edges for instrument feel */
-    --radius-md: 4px;
-    --space-unit: 8px;
-    --max-w: 640px;
-    /* Slightly wider for desktop readability */
-
-    /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'SF Mono', monospace;
+@layer base {
+    body {
+        @apply bg-slate-950 text-slate-100 antialiased;
+    }
 }
 
-* {
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+@layer utilities {
+    /* Custom utility adjustments if needed, 
+     but keeping it clean as requested. */
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    color: var(--text-primary);
-    background-color: var(--bg-base);
-    font-family: var(--font-sans);
-    line-height: 1.5;
-    min-height: 100vh;
-}
-
-/* Typography Scale - Documentation Style */
-h1,
-h2,
-h3,
-h4 {
-    margin: 0;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-}
-
-h1 {
-    font-size: 24px;
-}
-
-h2 {
-    font-size: 18px;
-}
-
-h3 {
-    font-size: 15px;
-}
-
-p,
-span,
-div {
-    color: var(--text-secondary);
-    font-size: 14px;
-}
-
-small,
-.meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* Base Layout */
+/* 
+   Legacy classes kept for compatibility during migration.
+   Ideally these should be replaced by utility classes in the components.
+*/
 .layout-container {
-    max-width: var(--max-w);
-    margin: 0 auto;
-    padding: 24px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    @apply mx-auto max-w-6xl px-6 min-h-screen flex flex-col;
 }
 
-.container {
-    width: 100%;
-}
-
-/* Topbar & Navigation Tabs */
-.topbar {
-    margin-bottom: 32px;
-}
-
-.topbar-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.nav-link {
-    font-family: var(--font-sans);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    transition: all 150ms ease;
-    cursor: pointer;
-}
-
-.nav-link:hover {
-    color: var(--text-primary);
-}
-
-.nav-link.active {
-    color: var(--text-primary);
-    background-color: var(--bg-card);
-    box-shadow: inset 0 0 0 1px var(--border);
-}
-
-/* Panels/Cards */
 .card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    margin-bottom: 16px;
+    @apply rounded-2xl border border-slate-800 bg-slate-900/60 p-6;
 }
 
-/* Buttons */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    padding: 0 24px;
-    border-radius: var(--radius-md);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 150ms ease;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-primary);
-}
-
-.btn:hover:not(:disabled) {
-    border-color: var(--text-secondary);
+    @apply inline-flex items-center justify-center h-11 px-6 rounded-xl font-medium transition-all;
 }
 
 .btn-primary {
-    background-color: var(--text-primary);
-    color: var(--bg-base);
-    border-color: var(--text-primary);
+    @apply bg-cyan-400/10 text-cyan-200 ring-1 ring-cyan-400/20 hover:bg-cyan-400/15;
 }
 
-.btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-/* Forms */
-.input-group {
-    margin-bottom: 24px;
+.input {
+    @apply w-full rounded-xl bg-slate-950/50 border border-slate-800 px-4 py-3 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20;
 }
 
 .label {
-    display: block;
-    font-size: 11px;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-}
-
-.input,
-.select,
-textarea {
-    width: 100%;
-    background-color: transparent;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    outline: none;
-    transition: border-color 150ms ease;
-}
-
-.input:focus,
-.select:focus {
-    border-color: var(--text-secondary);
-}
-
-/* Utilities */
-.section-title {
-    margin-bottom: 4px;
-}
-
-.section-desc {
-    margin-bottom: 24px;
-    font-size: 14px;
-    color: var(--text-secondary);
-}
-
-/* Alerts / Context */
-.alert {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    margin-bottom: 24px;
-}
-
-.text-xs {
-    font-size: 12px;
-}
-
-.font-mono {
-    font-family: var(--font-mono);
-}
-
-.tracking-tight {
-    letter-spacing: -0.01em;
-}
-
-.leading-relaxed {
-    line-height: 1.6;
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(2px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade {
-    animation: fade-in 200ms ease-out forwards;
-}
-
-.flex {
-    display: flex;
-}
-
-.flex-col {
-    flex-direction: column;
-}
-
-.items-center {
-    align-items: center;
-}
-
-.justify-between {
-    justify-content: space-between;
-}
-
-.gap-2 {
-    gap: 8px;
-}
-
-.gap-4 {
-    gap: 16px;
-}
-
-.w-full {
-    width: 100%;
-}
-
-.mt-1 {
-    margin-top: 4px;
-}
-
-.mt-4 {
-    margin-top: 16px;
-}
-
-.mb-4 {
-    margin-bottom: 16px;
-}
-
-.py-5 {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    @apply block text-slate-300 text-xs tracking-wide uppercase mb-2;
 }
