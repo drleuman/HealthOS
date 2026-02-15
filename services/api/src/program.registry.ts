@@ -9,6 +9,11 @@ export interface ProgramDay {
     learn: string;
     action: string;
     check: string;
+    biological_phase?: string;
+    system_message?: {
+        neutral: string;
+        calibration: string;
+    };
     tool_unlock?: string | null;
 }
 

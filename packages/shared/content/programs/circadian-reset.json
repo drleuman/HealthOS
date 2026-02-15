@@ -1,0 +1,175 @@
+{
+    "id": "circadian-reset",
+    "title": "Circadian Reset",
+    "duration_days": 14,
+    "days": [
+        {
+            "day": 1,
+            "title": "La Señal de Inicio",
+            "biological_phase": "detection",
+            "learn": "Tu cuerpo necesita saber cuándo empieza el día. La luz solar directa es la señal más potente.",
+            "action": "Sal afuera 10 minutos antes de las 10:00 AM.",
+            "check": "signal_strength",
+            "system_message": {
+                "neutral": "Sistema esperando confirmación de señal lumínica.",
+                "calibration": "Detectando sensibilidad a la luz matutina."
+            }
+        },
+        {
+            "day": 2,
+            "title": "Contraste",
+            "biological_phase": "detection",
+            "learn": "La oscuridad es tan importante como la luz. Reduce la luz artificial antes de dormir.",
+            "action": "Atenúa luces 1 hora antes de dormir.",
+            "check": "contrast_perception",
+            "system_message": {
+                "neutral": "Monitoreando amplitud de ciclo luz/oscuridad.",
+                "calibration": "Verificando tolerancia a la reducción de estímulos."
+            }
+        },
+        {
+            "day": 3,
+            "title": "Hidratación Temprana",
+            "biological_phase": "disruption",
+            "learn": "El agua activa tu metabolismo. Beber al despertar refuerza la señal de 'día'.",
+            "action": "Bebe 500ml de agua al despertar.",
+            "check": "metabolic_response",
+            "system_message": {
+                "neutral": "Iniciando secuencia de hidratación.",
+                "calibration": "Midiendo respuesta de activación metabólica."
+            }
+        },
+        {
+            "day": 4,
+            "title": "Movimiento Matutino",
+            "biological_phase": "disruption",
+            "learn": "El movimiento eleva la temperatura corporal, sincronizando tus relojes internos.",
+            "action": "Camina o estira 5 min al despertar.",
+            "check": "temperature_regulation",
+            "system_message": {
+                "neutral": "Detectando actividad física temprana.",
+                "calibration": "Evaluando termorregulación matutina."
+            }
+        },
+        {
+            "day": 5,
+            "title": "Ventana de Comida",
+            "biological_phase": "repair",
+            "learn": "Comer tarde confunde a tu hígado. Dale un descanso nocturno.",
+            "action": "Termina de cenar 3 horas antes de dormir.",
+            "check": "digestive_alignment",
+            "system_message": {
+                "neutral": "Verificando ventana de alimentación.",
+                "calibration": "Sincronizando relojes periféricos (hepáticos)."
+            }
+        },
+        {
+            "day": 6,
+            "title": "Temperatura Nocturna",
+            "biological_phase": "repair",
+            "learn": "Tu cuerpo necesita enfriarse para dormir profundamente.",
+            "action": "Mantén tu habitación fresca o ducha tibia antes de dormir.",
+            "check": "thermal_offset",
+            "system_message": {
+                "neutral": "Optimizando gradiente térmico nocturno.",
+                "calibration": "Facilitando descenso de temperatura central."
+            }
+        },
+        {
+            "day": 7,
+            "title": "Revisión de Fase",
+            "biological_phase": "recovery",
+            "learn": "Has enviado señales consistentes durante una semana. Observa cómo te sientes.",
+            "action": "Registra tu nivel de energía hoy.",
+            "check": "subjective_energy",
+            "system_message": {
+                "neutral": "Compilando datos de la primera semana.",
+                "calibration": "Analizando coherencia del ritmo circadiano."
+            }
+        },
+        {
+            "day": 8,
+            "title": "Consistencia de Despertar",
+            "biological_phase": "recovery",
+            "learn": "Despertar a la misma hora estabiliza tu cortisol.",
+            "action": "Despierta a la misma hora (+/- 30 min) mañana.",
+            "check": "wake_consistency",
+            "system_message": {
+                "neutral": "Estabilizando ancla de inicio de día.",
+                "calibration": "Reduciendo variabilidad de cortisol matutino."
+            }
+        },
+        {
+            "day": 9,
+            "title": "Luz Vespertina",
+            "biological_phase": "recovery",
+            "learn": "La luz de la tarde protege contra la luz azul nocturna.",
+            "action": "Observa el atardecer o sal por la tarde.",
+            "check": "retinal_sensitivity",
+            "system_message": {
+                "neutral": "Calibrando sensibilidad retinal vespertina.",
+                "calibration": "Amortiguando impacto de luz artificial nocturna."
+            }
+        },
+        {
+            "day": 10,
+            "title": "Cafeína Táctica",
+            "biological_phase": "maintenance",
+            "learn": "La cafeína tiene una vida media larga. Cortarla temprano protege el sueño.",
+            "action": "Evita cafeína después de las 2:00 PM.",
+            "check": "adenosine_pressure",
+            "system_message": {
+                "neutral": "Monitoreando niveles de adenosina.",
+                "calibration": "Optimizando presión de sueño."
+            }
+        },
+        {
+            "day": 11,
+            "title": "Descanso Digestivo",
+            "biological_phase": "maintenance",
+            "learn": "Un ayuno nocturno de 12 horas optimiza la reparación celular.",
+            "action": "Deja pasar 12h entre cena y desayuno.",
+            "check": "autophagy_initiation",
+            "system_message": {
+                "neutral": "Iniciando modo de mantenimiento celular.",
+                "calibration": "Verificando ventana de autofagia."
+            }
+        },
+        {
+            "day": 12,
+            "title": "Entorno de Sueño",
+            "biological_phase": "maintenance",
+            "learn": "Tu habitación debe ser una cueva: oscura, fresca y silenciosa.",
+            "action": "Elimina cualquier LED o luz en tu cuarto.",
+            "check": "environmental_integrity",
+            "system_message": {
+                "neutral": "Escaneando integridad del entorno de descanso.",
+                "calibration": "Maximizando oscuridad ambiental."
+            }
+        },
+        {
+            "day": 13,
+            "title": "Desconexión Digital",
+            "biological_phase": "optimization",
+            "learn": "El estrés digital activa el sistema de alerta.",
+            "action": "Sin pantallas 1h antes de dormir.",
+            "check": "cognitive_load",
+            "system_message": {
+                "neutral": "Iniciando protocolo de desconexión.",
+                "calibration": "Reduciendo carga cognitiva pre-sueño."
+            }
+        },
+        {
+            "day": 14,
+            "title": "Integración",
+            "biological_phase": "optimization",
+            "learn": "Has completado el ciclo. Estas herramientas son ahora tuyas.",
+            "action": "Planifica tu rutina ideal para mañana.",
+            "check": "routine_integration",
+            "system_message": {
+                "neutral": "Protocolo completado. Sistema calibrado.",
+                "calibration": "Integrando patrones en comportamiento base."
+            }
+        }
+    ]
+}

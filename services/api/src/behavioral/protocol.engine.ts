@@ -30,7 +30,7 @@ export class ProtocolEngine {
 
         // 1. Fetch current context
         const state = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
-        const ctx = (state?.context as any) || {};
+        const ctx = ((state as any)?.context as any) || {};
 
         // 2. Determine new Minimal Mode state
         // We calculate this based on the *result* of the action (and previous context).
@@ -64,7 +64,7 @@ export class ProtocolEngine {
                 context: {
                     ...ctx,
                     minimalMode: updatedMinimalMode
-                }
+                } as any
             }
         });
 

@@ -81,25 +81,16 @@ export class HealthService {
     }
   }
 
-  private readonly TASK_TRANSLATIONS: Record<string, string> = {
-    'get_light_10min': 'Recibir luz natural (10 min)',
-    'dinner_before_21_00': 'Cenar antes de las 21:00',
-    'reduce_blue_light': 'Reducir luz azul (pantallas)',
-    'delay_caffeine_60': 'Retrasar cafeína 60 min',
-    'walk_10min': 'Caminar 10 min',
-    'blue_light_shutdown': 'Apagar pantallas con luz azul',
-    'downshift_10min': 'Relajación pre-sueño (10 min)',
-    'simple_meal_today': 'Comida sencilla (baja carga)',
-    'no_snacking': 'Sin snacks entre comidas',
-    'breathing_3min': 'Respiración consciente (3 min)',
-    'energy_after': '¿Cómo está tu energía?',
-    'wakeups': '¿Cuántas veces has despertado?',
-    'sleep_latency': '¿Cuánto tardaste en dormir?',
-    'headache': '¿Tienes dolor de cabeza?',
-    'bloating': '¿Sientes hinchazón?',
-    'hunger': '¿Nivel de hambre?',
-    'calmness': '¿Nivel de calma?',
-    'sleep_quality': '¿Calidad del sueño?'
+  private readonly ACTION_DEFINITIONS: Record<string, any> = {
+    'get_light_10min': { type: 'light', minutes: 10, window: 'morning', title: 'Recibir luz natural' },
+    'dinner_before_21_00': { type: 'food', window: 'evening', title: 'Cenar antes de las 21:00' },
+    'reduce_blue_light': { type: 'screen', window: 'night', title: 'Reducir luz azul' },
+    'delay_caffeine_60': { type: 'caffeine', minutes: 60, window: 'morning', title: 'Retrasar cafeína' },
+    'walk_10min': { type: 'movement', minutes: 10, window: 'morning', title: 'Caminar 10 min' },
+    'simple_meal_today': { type: 'food', title: 'Comida sencilla' },
+    'breathing_3min': { type: 'breath', minutes: 3, title: 'Respiración consciente' },
+    'attenuate_lights': { type: 'light', window: 'night', title: 'Atenuar luces' },
+    'hydration_500ml': { type: 'water', title: 'Beber 500ml agua' }
   };
 
   private readonly RECOMMENDATION_TRANSLATIONS: Record<string, string> = {
@@ -109,34 +100,63 @@ export class HealthService {
     'red_light_panel': 'Panel de luz roja'
   };
 
+  private readonly CHECK_DEFINITIONS: Record<string, { type: string, question: string, options: string[] }> = {
+    'signal_strength': {
+      type: 'scale',
+      question: '¿Qué intensidad tuvo la luz?',
+      options: ['Baja (Nublado/Interior)', 'Media (Ventana)', 'Alta (Sol directo)']
+    },
+    'contrast_perception': {
+      type: 'scale',
+      question: '¿Notaste la diferencia de luz al atenuar?',
+      options: ['No, igual', 'Un poco', 'Sí, mucha calma']
+    },
+    'metabolic_response': {
+      type: 'single_choice',
+      question: '¿Cómo sentiste el agua al despertar?',
+      options: ['Náusea', 'Neutro', 'Activación', 'Energía']
+    }
+  };
+
   async getToday(email: string): Promise<TodayPayload & { behavior?: any, microIntervention?: any }> {
     try {
       const user = await this.ensureUser(email);
       const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
 
-      // Behavior Inisghts & Interventions
       const behaviorStateObj = await this.behaviorService.getUserState(user.id);
       const intervention = await this.microInterventionService.getIntervention(user.id, behaviorStateObj.state);
 
       if (!state) {
+        // Default/Fallback State
         return {
           day: 1,
           program_id: 'circadian_reset_14',
-          tasks: [this.TASK_TRANSLATIONS['get_light_10min'] || 'get_light_10min'],
+          // Return as any because format changed
+          tasks: ['get_light_10min'] as any,
+          actions: [this.ACTION_DEFINITIONS['get_light_10min']],
           progress_week: 0,
           community_group: 'starter',
           recommendation: null,
           behavior: { state: behaviorStateObj.state, updatedAt: behaviorStateObj.updatedAt },
           microIntervention: intervention
-        };
+        } as any;
       }
 
       const program = await this.registry.getProgram(state.programId);
       const currentDay = Math.min(state.currentDay, program.duration_days);
       const lesson = program.days.find(d => d.day === currentDay) || program.days[0];
 
-      const rawTasks = [lesson.action, 'simple_meal_today', 'breathing_3min'];
-      const tasks = rawTasks.map(t => this.TASK_TRANSLATIONS[t] || t);
+      const rawTaskKeys = [lesson.action, 'simple_meal_today', 'breathing_3min'];
+
+      // Map keys to full Action objects
+      const actions = rawTaskKeys.map(k => ({
+        type: k,
+        ...this.ACTION_DEFINITIONS[k] || { title: k }
+      }));
+
+      // Map Check key to full Check object
+      const checkDef = lesson.check ? this.CHECK_DEFINITIONS[lesson.check] : null;
+      const checkObj = checkDef ? { id: lesson.check, ...checkDef } : null;
 
       const completed = await this.prisma.dailyLog.count({ where: { userId: user.id, actionCompleted: true } });
       let recommendationSlug = (completed >= 3 && lesson.tool_unlock) ? lesson.tool_unlock : null;
@@ -161,13 +181,9 @@ export class HealthService {
       const jobResults = await this.prisma.jobResult.findMany({
         where: {
           userId: user.id,
-          createdAt: {
-            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          },
+          createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
         take: 3,
       });
 
@@ -186,15 +202,20 @@ export class HealthService {
       return {
         day: currentDay,
         program_id: state.programId,
-        tasks,
+        tasks: [] as any, // Deprecated in favor of actions
+        actions,
+        check: checkObj,
         progress_week: Math.min(100, Math.floor((completed / program.duration_days) * 100)),
         community_group: `${state.programId}_day_${currentDay}`,
         recommendation,
         banners,
         behavior: { state: behaviorStateObj.state, updatedAt: behaviorStateObj.updatedAt },
         microIntervention: intervention,
-        lastRecordAt: lastLog?.createdAt || null
-      };
+        lastRecordAt: lastLog?.createdAt || null,
+        biological_phase: lesson.biological_phase || null,
+        system_message: lesson.system_message || null
+      } as any;
+
     } catch (e) {
       return {
         day: 1,
@@ -260,42 +281,43 @@ export class HealthService {
   }
 
   async logDay(email: string, input: DayLogInput) {
+    const user = await this.ensureUser(email);
+    const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
+    if (!state) return { ok: false };
+
     try {
-      const user = await this.ensureUser(email);
-      const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
-      if (!state) return { ok: false };
-
-      const program = await this.registry.getProgram(state.programId);
-
-      await this.prisma.dailyLog.create({
-        data: {
-          userId: user.id,
-          day: input.day,
-          actionCompleted: input.action_completed,
-          selfReportEffect: input.self_report_effect || Prisma.DbNull,
+      // Delegate to Behavioral Engine (The "Brain")
+      const behaviorResult = await this.behaviorService.processDailyLog(user.id, {
+        day: input.day,
+        actionCompleted: input.action_completed,
+        selfReportEffect: input.self_report_effect,
+        programContext: {
+          programId: state.programId,
+          currentPhase: (state as any).currentPhase
         }
       });
 
+      // Update Legacy/Gamified State (The "Scoreboard")
       const nextStreak = input.action_completed ? state.streak + 1 : 0;
-
-      let nextDay = state.currentDay;
-      if (input.action_completed && input.day === state.currentDay) {
-        nextDay = Math.min(state.currentDay + 1, program.duration_days);
-      }
 
       await this.prisma.userState.update({
         where: { userId: user.id },
         data: {
           streak: nextStreak,
-          currentDay: nextDay,
+          currentDay: behaviorResult.nextDay, // Use engine's decision
           lastActive: new Date(),
         }
       });
 
-      return { ok: true, streak: nextStreak, currentDay: nextDay };
-    } catch (e) {
-      console.log('Mock logDay success');
-      return { ok: true, mock: true };
+      return {
+        ok: true,
+        streak: nextStreak,
+        currentDay: behaviorResult.nextDay,
+        message: behaviorResult.systemMessage
+      };
+    } catch (e: any) {
+      console.error('logDay Error:', e);
+      return { ok: false, error: 'Failed to process log' };
     }
   }
 }

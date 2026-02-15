@@ -33,12 +33,14 @@ type TodayCheck = {
 
 type TodayPayload = {
     day?: number;
-    protocol?: {
-        actions: TodayAction[];
-        check?: TodayCheck[];
-    };
-    message?: string; // system message neutral
+    // tasks: string[]; // Deprecated
+    actions?: TodayAction[]; // Now returning full objects
+    check?: TodayCheck;      // Now returning single object or null
+    message?: { neutral: string; calibration?: string }; // System message object
+    biological_phase?: string;
     instrument?: InstrumentPayload;
+    program_id?: string;
+    community_group?: string;
 };
 
 function Pill({ children }: { children: React.ReactNode }) {
@@ -99,9 +101,9 @@ function StatusHeader({
     );
 }
 
-function SystemMessage({ message }: { message?: string }) {
+function SystemMessage({ message }: { message?: { neutral: string; calibration?: string } }) {
     const t = useTranslations('App.Today');
-    const text = message?.trim() || t('no_message');
+    const text = message?.neutral?.trim() || t('no_message');
 
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-3">
@@ -320,8 +322,8 @@ export default function TodayView() {
         void load();
     }, []);
 
-    const actions = payload?.protocol?.actions ?? [];
-    const check = payload?.protocol?.check?.[0];
+    const actions = payload?.actions ?? [];
+    const check = payload?.check;
 
     async function recordAction(action: TodayAction) {
         await api.post('/user/day-log', { actionType: action.type, ts: new Date().toISOString() });

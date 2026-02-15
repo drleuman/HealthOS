@@ -33,6 +33,13 @@ export interface TodayPayload {
     data: any;
   }>;
   lastRecordAt?: Date | string | null;
+  // Perception System Fields
+  check?: string | null;
+  biological_phase?: string | null;
+  system_message?: {
+    neutral: string;
+    calibration: string;
+  } | null;
 }
 
 export interface RouteDay {
@@ -51,7 +58,7 @@ export interface RoutePayload {
 export interface DayLogInput {
   day: number;
   action_completed: boolean;
-  self_report_effect?: string | null;
+  self_report_effect?: any;
 }
 
 export interface MithohacksOrderWebhook {
