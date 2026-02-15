@@ -29,6 +29,13 @@ import { KpiService } from './analytics/kpi.service';
 import { SERService } from './analytics/ser.service';
 import { ExperimentRegistry } from './analytics/experiment-registry';
 import { OpsDigestService } from './analytics/ops-digest.service';
+import { AppController } from './app.controller';
+import { PerceptionInterpreter } from './behavioral/perception.interpreter';
+import { StateEngine } from './behavioral/state.engine';
+import { ProtocolEngine } from './behavioral/protocol.engine';
+import { MessageGenerationService } from './behavioral/message-generation.service';
+import { ProtocolContentService } from './content/protocol-content.service';
+import { SystemMessageService } from './behavioral/system-message.service';
 
 @Module({
   imports: [
@@ -40,6 +47,7 @@ import { OpsDigestService } from './analytics/ops-digest.service';
     }]),
   ],
   controllers: [
+    AppController,
     HealthController,
     AuthController,
     WebhooksController,
@@ -66,6 +74,13 @@ import { OpsDigestService } from './analytics/ops-digest.service';
     SecretsValidator,
     TrackingService,
     FileProgramRegistry,
+    // Behavioral & Content Services
+    PerceptionInterpreter,
+    StateEngine,
+    ProtocolEngine,
+    MessageGenerationService,
+    ProtocolContentService,
+    SystemMessageService,
     {
       provide: ProgramRegistry,
       useFactory: (fileRegistry: FileProgramRegistry) => {

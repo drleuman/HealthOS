@@ -1,0 +1,388 @@
+{
+    "id": "circadian-reset",
+    "title": "Reset Circadiano",
+    "duration_days": 14,
+    "phases": [
+        {
+            "id": "detection",
+            "days": [
+                1,
+                2,
+                3
+            ],
+            "goal": "Establish baseline light/dark signals"
+        },
+        {
+            "id": "disruption",
+            "days": [
+                4,
+                5,
+                6,
+                7
+            ],
+            "goal": "Force metabolic/temperature phase shift"
+        },
+        {
+            "id": "stabilization",
+            "days": [
+                8,
+                9,
+                10,
+                11
+            ],
+            "goal": "Consolidate new rhythm"
+        },
+        {
+            "id": "integration",
+            "days": [
+                12,
+                13,
+                14
+            ],
+            "goal": "Automate cues"
+        }
+    ],
+    "days": [
+        {
+            "day": 1,
+            "anchor": "Morning Light",
+            "title": "La hora biológica empieza en la mañana",
+            "learn": "Tu cerebro no sabe qué hora es por el reloj: lo sabe por la luz. Si la primera señal llega tarde, todo se retrasa.",
+            "action": "Sal a luz natural antes de las 11:00 (8-20 min)",
+            "check": {
+                "question": "2–3 h después me siento:",
+                "options": [
+                    {
+                        "label": "Más despejado",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Más cansado",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "anchor": "No Digital Input",
+            "title": "No hables con tu cerebro antes de despertarlo",
+            "learn": "Mirar el móvil antes de la luz confunde el sistema: activa cognición sin despertar biológico.",
+            "action": "15 min tras despertar: NO móvil, NO noticias.",
+            "check": {
+                "question": "Arranque mental:",
+                "options": [
+                    {
+                        "label": "Más claro",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Más lento",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "anchor": "Caffeine Delay",
+            "title": "El café no da energía (la roba antes)",
+            "learn": "La adenosina se limpia sola al despertar. Si tomas café antes, bloqueas el proceso.",
+            "action": "Retrasa el café 60 minutos tras despertar",
+            "check": {
+                "question": "A media mañana:",
+                "options": [
+                    {
+                        "label": "Hambre estable",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Nerviosismo",
+                        "value": "worse"
+                    },
+                    {
+                        "label": "Sueño",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 4,
+            "anchor": "Protein First",
+            "title": "El mediodía decide tu tarde",
+            "learn": "Tu energía de la tarde depende de la señal metabólica del mediodía.",
+            "action": "Almuerzo: come proteína primero",
+            "check": {
+                "question": "2 h después:",
+                "options": [
+                    {
+                        "label": "Energía estable",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Somnolencia",
+                        "value": "worse",
+                        "isAdaptation": true
+                    },
+                    {
+                        "label": "Antojo dulce",
+                        "value": "worse"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 5,
+            "anchor": "Dinner Timing",
+            "title": "El reloj interno se programa con comida",
+            "learn": "Comer tarde = tu cerebro cree que aún es de día.",
+            "action": "Cena 2–3 h antes de dormir",
+            "check": {
+                "question": "Al acostarte:",
+                "options": [
+                    {
+                        "label": "Sueño rápido",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Activación mental",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 6,
+            "anchor": "Dim Light",
+            "title": "La noche empieza 2 horas antes",
+            "learn": "Dormir no empieza en la cama. Empieza cuando bajas la luz.",
+            "action": "Reduce luces del hogar tras las 21:30",
+            "check": {
+                "question": "Somnolencia nocturna:",
+                "options": [
+                    {
+                        "label": "Antes",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Más tarde",
+                        "value": "worse"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 7,
+            "anchor": "Screen Block",
+            "title": "Oscuridad real, sueño real",
+            "learn": "Incluso con ojos cerrados, la retina detecta luz.",
+            "action": "Pantallas con brillo mínimo tras las 22:00",
+            "check": {
+                "question": "Tiempo hasta dormir:",
+                "options": [
+                    {
+                        "label": "Menos",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Más",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 8,
+            "anchor": "Temperature Drop",
+            "title": "La temperatura duerme, no la voluntad",
+            "learn": "El sueño llega cuando la temperatura corporal baja.",
+            "action": "Ducha tibia-caliente 60-90 min antes de dormir",
+            "check": {
+                "question": "Somnolencia:",
+                "options": [
+                    {
+                        "label": "Aparece",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Ninguna",
+                        "value": "worse"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 9,
+            "anchor": "Morning Movement",
+            "title": "El movimiento abre la mañana",
+            "learn": "Mover el cuerpo temprano fija el reloj más fuerte que la luz sola.",
+            "action": "5–10 min caminar tras la luz matinal",
+            "check": {
+                "question": "Claridad mental:",
+                "options": [
+                    {
+                        "label": "Mejor",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Peor"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 10,
+            "anchor": "Breath Regulation",
+            "title": "El estrés roba la noche",
+            "learn": "No duermes mal por pensar mucho. Piensas mucho porque sigues en alerta.",
+            "action": "Respiración 3 min antes de dormir (4 in - 6 ex)",
+            "check": {
+                "question": "Al acostarte:",
+                "options": [
+                    {
+                        "label": "Más calma",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Ansiedad",
+                        "value": "worse"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 11,
+            "anchor": "Nap Control",
+            "title": "La tarde decide el sueño",
+            "learn": "Dormir siesta tarde empuja tu noche hacia delante.",
+            "action": "No dormir después de las 16:00",
+            "check": {
+                "question": "Hora de sueño:",
+                "options": [
+                    {
+                        "label": "Antes",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Más tarde",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 12,
+            "anchor": "Total Darkness",
+            "title": "Oscuridad completa",
+            "learn": "La melatonina necesita oscuridad física, no intención.",
+            "action": "Dormitorio completamente oscuro",
+            "check": {
+                "question": "Despertares nocturnos:",
+                "options": [
+                    {
+                        "label": "Menos",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Más"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 13,
+            "anchor": "Consolidation",
+            "title": "Consolidación",
+            "learn": "El cerebro aprende por repetición estable.",
+            "action": "Repite 3 hábitos clave: luz, café retrasado, cena temprana",
+            "check": {
+                "question": "Día general:",
+                "options": [
+                    {
+                        "label": "Mejor",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Irregular",
+                        "value": "worse",
+                        "isAdaptation": true
+                    }
+                ]
+            }
+        },
+        {
+            "day": 14,
+            "anchor": "Fixed Wake Time",
+            "title": "El nuevo ritmo",
+            "learn": "No has 'mejorado el sueño'. Has cambiado la señal del tiempo.",
+            "action": "Elige hora fija de despertar para próximos 7 días",
+            "check": {
+                "question": "Percepción general:",
+                "options": [
+                    {
+                        "label": "Descanso",
+                        "value": "better"
+                    },
+                    {
+                        "label": "Igual",
+                        "value": "same"
+                    },
+                    {
+                        "label": "Cansancio"
+                    }
+                ]
+            }
+        }
+    ]
+}

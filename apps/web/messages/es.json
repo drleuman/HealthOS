@@ -110,20 +110,90 @@
             "logout": "Salir"
         },
         "Today": {
-            "card_title": "¿Qué está pasando?",
-            "cta_register": "Registrar observación",
-            "no_action_note": "El sistema es pasivo. Solo registra eventos cuando ocurran espontáneamente.",
-            "status_active": "Monitor activo",
-            "status_empty": "En espera",
-            "context_title": "Contexto del sistema",
-            "context_empty": "Sin avisos activos",
-            "technical_title": "Datos técnicos"
+            "instrument": "Instrumento",
+            "title": "Hoy",
+            "day_label": "Día {day}",
+            "load_label": "Carga: {value}",
+            "load_normal": "normal",
+            "load_reduced": "reducida",
+            "minimal_active": "Minimal activo (L{level})",
+            "minimal_inactive": "Carga completa",
+            "system_message": "Sistema",
+            "no_message": "Sin observaciones del sistema.",
+            "record": "[ registrar ]",
+            "transmitting": "[ transmitiendo ]",
+            "no_actions": "No hay acciones disponibles.",
+            "check": "Comprobación",
+            "check_default_question": "Registra tu percepción.",
+            "check_placeholder": "Escribe una nota breve…",
+            "submit_check": "Registrar",
+            "technical_details": "[?] Detalles técnicos",
+            "expand": "expandir",
+            "collapse": "cerrar",
+            "loading": "Cargando…",
+            "load_failed": "No se pudo cargar.",
+            "retry": "Reintentar",
+            "minutes": "{m} min",
+            "windows": {
+                "before_11": "antes de las 11:00",
+                "first_hour_awake": "primera hora tras despertar",
+                "morning": "mañana"
+            },
+            "footer": "El sistema registra estados cuando se proporcionan. Periodos sin registros también forman parte del dataset.",
+            "actions": {
+                "light": {
+                    "title": "Luz de mañana",
+                    "desc": "Exposición a luz natural al inicio del día."
+                },
+                "delay_caffeine": {
+                    "title": "Retrasar cafeína",
+                    "desc": "Evita cafeína durante la primera ventana."
+                },
+                "movement": {
+                    "title": "Movimiento",
+                    "desc": "Actividad física ligera."
+                },
+                "meal": {
+                    "title": "Primera ingesta",
+                    "desc": "Nutrición alineada con ritmo circadiano."
+                }
+            },
+            "checks": {
+                "sleepiness_morning": {
+                    "question": "¿Nivel de somnolencia al despertar (1-5)?"
+                },
+                "energy_midday": {
+                    "question": "¿Nivel de energía a mediodía (1-5)?"
+                },
+                "sleep_latency": {
+                    "question": "¿Cuántos minutos tardaste en dormir anoche?"
+                }
+            }
         },
         "History": {
+            "instrument": "Instrumento",
             "title": "Historial",
-            "subtitle": "Registro cronológico de eventos.",
-            "empty": "No hay eventos registrados.",
-            "item_observed": "Registrado"
+            "observed": "OBSERVADO",
+            "day": "Día {day}",
+            "last_record": "Última observación: {when}",
+            "no_records": "Sin observaciones registradas.",
+            "back_to_today": "Volver a hoy",
+            "confirm_recorded": "Observación registrada.",
+            "confirm_time": "Hora: {when}",
+            "loading": "Cargando…",
+            "load_failed": "No se pudo cargar.",
+            "retry": "Reintentar",
+            "empty_title": "Aún no hay registros.",
+            "empty_body": "Si registras una observación, aparecerá aquí en orden cronológico.",
+            "footer": "Los registros son independientes. La ausencia de registros también forma parte del dataset.",
+            "unknown": "Entrada",
+            "actions": {
+                "light": "Luz de mañana",
+                "delay_caffeine": "Retrasar cafeína"
+            },
+            "checks": {
+                "energy_after": "Percepción posterior"
+            }
         },
         "Protocols": {
             "title": "Protocolos Activos",

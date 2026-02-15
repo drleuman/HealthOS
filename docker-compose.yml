@@ -1,21 +1,23 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
     container_name: healthos-db
     restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-healthos}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      POSTGRES_DB: ${POSTGRES_DB:-healthos}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-healthos}
+      MYSQL_USER: ${MYSQL_USER:-healthos}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-healthos}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-healthos}" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,14 +43,15 @@ services:
     container_name: healthos-api
     restart: unless-stopped
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
       NODE_ENV: production
       PORT: 4000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-healthos}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-healthos}
+      # Connect to 'mysql' container internal hostname
+      DATABASE_URL: mysql://${MYSQL_USER:-healthos}:${MYSQL_PASSWORD:-healthos}@mysql:3306/${MYSQL_DATABASE:-healthos}
       API_JWT_SECRET: ${API_JWT_SECRET}
       WEBHOOK_SECRET: ${WEBHOOK_SECRET}
       APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3000}
@@ -77,7 +80,7 @@ services:
   #     - "3000:3000"
 
 volumes:
-  postgres_data:
+  mysql_data:
     driver: local
 
 networks:

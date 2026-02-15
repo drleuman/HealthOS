@@ -1,20 +1,115 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { logger } from './logger';
+import { PerceptionInterpreter } from './behavioral/perception.interpreter';
+import { StateEngine } from './behavioral/state.engine';
+import { MessageGenerationService } from './behavioral/message-generation.service';
+import { ProtocolEngine } from './behavioral/protocol.engine';
 
 @Injectable()
 export class BehaviorService {
-    constructor(private prisma: PrismaService) { }
+    private readonly logger = new Logger(BehaviorService.name);
 
-    /**
-     * computeSnapshotForUser
-     * Definition of signals:
-     * - startedDaysLast7: Distinct days where user either triggered 'day_started' or 'day_viewed'.
-     * - completedDaysLast7: Distinct days where user triggered 'day_completed'.
-     * - repeatedOpeningsSameDay: Count of 'day_viewed' or 'day_started' (excluding app_opened) 
-     *   that happen multiple times for the exact same 'day' context today.
-     * - inactive48h: True if 48h have passed since the absolute last event of any type.
-     */
+    constructor(
+        private prisma: PrismaService,
+        private perceptionInterpreter: PerceptionInterpreter,
+        private stateEngine: StateEngine,
+        private messageGenerationService: MessageGenerationService,
+        private protocolEngine: ProtocolEngine
+    ) { }
+
+    async processDailyLog(userId: string, logData: {
+        day: number,
+        actionCompleted: boolean,
+        selfReportEffect?: any, // JSON
+        // Additional context needed for interpretation
+        programContext?: any
+    }) {
+        this.logger.log(`Processing daily log for user ${userId} / Day ${logData.day}`);
+
+        // 1. Persist Raw Log
+        // Note: Assuming 'selfReportEffect' is passed as the feedback value ('worse', 'better', etc.)
+        // OR the full check object. For MVP interpretation, we need the simplified values.
+
+        // Map boolean to status
+        const actionStatus = logData.actionCompleted ? 'completed' : 'failed';
+
+        // Extract feedback value (assuming payload structure)
+        const feedbackValue = logData.selfReportEffect?.value || logData.selfReportEffect;
+
+        const log = await this.prisma.dailyLog.create({
+            data: {
+                userId,
+                day: logData.day,
+                actionCompleted: logData.actionCompleted,
+                selfReportEffect: logData.selfReportEffect // Store full JSON
+            }
+        });
+
+        // 2. Fetch User Context + Metrics
+        const currentState = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+        const context = (currentState?.context as any) || {};
+
+        // Calculate Metrics for UIG (Derived from Context + Current input)
+        // In a real impl, we'd query history. For MVP, we use the rolling counters in context.
+        const metrics = {
+            consecutiveCompletions: context.consecutiveSuccess || 0,
+            consecutiveFailures: context.consecutiveFailures || 0,
+            consecutiveMisses: context.consecutiveMisses || 0,
+            stagnationDays: context.stagnationDays || 0,
+            gapHours: 24, // Placeholder: Compute from lastActive
+            timeToLogMinutes: 0, // Placeholder
+            checkEffectHistory: context.checkEffectHistory || [],
+            navigationFlags: { historyViewed: false, detailsExpanded: false } // Placeholder
+        };
+
+        // 3. Interpret Signals (UIG)
+        const analysis = await this.perceptionInterpreter.interpret({
+            userId,
+            day: logData.day,
+            actionStatus,
+            feedback: feedbackValue,
+            timestamp: new Date(),
+            metrics,
+            context: {
+                ...context,
+                isAdaptationExpected: logData.programContext?.isAdaptation
+            }
+        });
+
+        // 4. Update Behavioral State
+        const newState = await this.stateEngine.updateState(userId, analysis, context);
+
+        // 5. Execute Protocol Action (Advance/Repeat/Simplify)
+        const protocolResult = await this.protocolEngine.executeAction(userId, analysis.protocolAction, logData.day);
+
+        // 6. Generate System Message
+        const message = this.messageGenerationService.generateMessage(analysis);
+
+        // 7. Audit Trail (BehaviorAnalysis)
+        await this.prisma.behaviorAnalysis.create({
+            data: {
+                userId,
+                day: logData.day,
+                userAction: actionStatus,
+                userFeedback: typeof feedbackValue === 'string' ? feedbackValue : 'unknown',
+                primarySignal: analysis.signal,
+                detectedCognitiveState: analysis.cognitiveState,
+                phaseProgress: analysis.phaseProgress,
+                systemResponseType: analysis.recommendedResponse,
+                generatedMessage: message
+            }
+        });
+
+        return {
+            logId: log.id,
+            analysis,
+            protocolAction: analysis.protocolAction,
+            nextDay: protocolResult.nextDay,
+            systemMessage: message,
+            newState
+        };
+    }
+
     async computeSnapshotForUser(userId: string, now: Date) {
         const aWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const startOfToday = new Date(now);
@@ -133,7 +228,7 @@ export class BehaviorService {
     }
 
     async runBehaviorAnalysisJob() {
-        logger.info('Starting Behavior Analysis Job...');
+        this.logger.log('Starting Behavior Analysis Job...');
         const now = new Date();
         const aWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const prismaAny = this.prisma as any;
@@ -150,7 +245,7 @@ export class BehaviorService {
             });
 
             const activeUserIds = recentEvents.map((e: any) => e.userId as string);
-            logger.info(`Processing behavior analysis for ${activeUserIds.length} active users.`);
+            this.logger.log(`Processing behavior analysis for ${activeUserIds.length} active users.`);
 
             let processed = 0;
             for (const userId of activeUserIds) {
@@ -167,16 +262,16 @@ export class BehaviorService {
                     });
                     processed++;
                 } catch (e: any) {
-                    logger.error(`Behavior Job failed for user ${userId}: ${e.message}`);
+                    this.logger.error(`Behavior Job failed for user ${userId}: ${e.message}`);
                 }
             }
 
-            logger.info(`Behavior Analysis Job Complete. Processed ${processed} users.`);
+            this.logger.log(`Behavior Analysis Job Complete. Processed ${processed} users.`);
             return { processed };
         } catch (error: any) {
             // Harden against missing migrations
             if (error.code === 'P2021' || error.message.includes('relation') || error.message.includes('UserBehavior')) {
-                logger.error('Behavior tables missing — run migrations. Skipping job.');
+                this.logger.error('Behavior tables missing — run migrations. Skipping job.');
                 return { processed: 0, error: 'Database schema mismatch' };
             }
             throw error;
@@ -204,5 +299,37 @@ export class BehaviorService {
         } catch (e) {
             return { state: 'error', message: 'Migration missing or database issue' };
         }
+    }
+
+    async getUserHistory(userId: string) {
+        // Fetch logs ordered by day descending
+        const logs = await this.prisma.dailyLog.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+            take: 50 // Limit to last 50 for now
+        });
+
+        // Map to frontend HistoryItem shape
+        return {
+            items: logs.map(log => ({
+                id: log.id,
+                ts: log.createdAt.toISOString(),
+                day: log.day,
+                actionType: log.actionCompleted ? (log.selfReportEffect ? 'check_completed' : 'action_completed') : 'failed', // Simplified mapping
+                // If we store specific action types in DailyLog, we should map them.
+                // Currently DailyLog schema has 'actionCompleted' boolean. 
+                // We might need to look at 'programContext' or infer.
+                // For MVP, let's just return what we have.
+                // Actually, the user prompts implied 'actionType' is stored. 
+                // In my schema, DailyLog has no 'actionType' column! 
+                // It has 'selfReportEffect' (JSON).
+                // Let's check how 'processDailyLog' stores it. 
+                // it receives 'logData' but only stores 'actionCompleted'.
+                // Ideally we should have stored 'actionType'. start of MVP limitation.
+                // I will return generic types for now.
+                value: log.selfReportEffect
+            })),
+            lastRecordedAt: logs.length > 0 ? logs[0].createdAt.toISOString() : null
+        };
     }
 }

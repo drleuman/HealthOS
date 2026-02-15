@@ -89,7 +89,7 @@ model DailyLog {
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   day             Int
   actionCompleted Boolean
-  selfReportEffect String?
+  selfReportEffect Json?   // Structured perception check result (e.g. { "energy": "higher" })
   createdAt       DateTime @default(now())
 
   @@index([userId, day])
@@ -168,7 +168,37 @@ model UserBehaviorState {
   userId     String   @id
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   state      String
+  context    Json?    // Stores behavioral metrics: friction_type, circadian_phase, failures, etc.
+  currentPhase String? // 'detection', 'disruption', 'stabilization', etc.
+  cognitiveState String? // 'oriented', 'resistant', 'overwhelmed', etc.
   updatedAt  DateTime @updatedAt
+}
+
+model BehaviorAnalysis {
+  id              String   @id @default(uuid())
+  userId          String
+  day             Int
+  date            DateTime @default(now())
+  
+  // Raw Input (from log)
+  userAction      String   // 'completed', 'failed', 'partial'
+  userFeedback    String?  // 'worse', 'same', 'better'
+  
+  // Interpreted Signals (The "Why")
+  primarySignal   String   // From BIL: 'adaptation_response', 'cognitive_confusion', etc.
+  secondarySignal String?
+  
+  // Resulting State
+  detectedCognitiveState String // 'uncertain', 'stabilized'
+  phaseProgress          String // 'detection', 'disruption'
+  
+  // System Output
+  systemResponseType     String // 'normalization', 'orientation', 'simplification'
+  generatedMessage       String?
+  
+  createdAt       DateTime @default(now())
+
+  @@index([userId, date])
 }
 
 model Experiment {
