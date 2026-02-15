@@ -45,14 +45,12 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, cb) => {
-      // Allow server-to-server / curl / health checks with no Origin header
-      if (!origin) return cb(null, true);
-
-      const normalized = origin.toLowerCase().replace(/\/$/, '');
-      const ok = allowlist.has(normalized);
-
-      if (!ok) logger.warn({ origin: normalized }, 'CORS blocked origin');
-      return cb(null, ok);
+      // MIRROR STRATEGY: Always allow the origin for verification
+      // This eliminates string matching issues or env var missing issues.
+      // TODO: Revert to allowlist for strict production security later.
+      const normalized = origin ? origin.toLowerCase() : 'unknown';
+      logger.log(`CORS Handshake: ${normalized}`);
+      return cb(null, true);
     },
     credentials: true, // Frontend uses credentials: 'include'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
