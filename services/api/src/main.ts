@@ -44,14 +44,12 @@ async function bootstrap() {
   logger.info(`CORS allowlist: ${Array.from(allowlist).join(', ')}`);
 
   app.enableCors({
-    origin: (origin, cb) => {
-      // MIRROR STRATEGY: Always allow the origin for verification
-      // This eliminates string matching issues or env var missing issues.
-      // TODO: Revert to allowlist for strict production security later.
-      const normalized = origin ? origin.toLowerCase() : 'unknown';
-      logger.info(`CORS Handshake: ${normalized}`);
-      return cb(null, true);
-    },
+    origin: [
+      'https://healthos-ten.vercel.app',
+      'https://healthos.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ],
     credentials: true, // Frontend uses credentials: 'include'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: [
