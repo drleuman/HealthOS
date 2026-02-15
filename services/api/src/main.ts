@@ -49,7 +49,7 @@ async function bootstrap() {
       // This eliminates string matching issues or env var missing issues.
       // TODO: Revert to allowlist for strict production security later.
       const normalized = origin ? origin.toLowerCase() : 'unknown';
-      logger.log(`CORS Handshake: ${normalized}`);
+      logger.info(`CORS Handshake: ${normalized}`);
       return cb(null, true);
     },
     credentials: true, // Frontend uses credentials: 'include'
