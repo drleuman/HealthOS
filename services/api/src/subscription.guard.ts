@@ -41,11 +41,18 @@ export class SubscriptionGuard implements CanActivate {
             context.getClass(),
         ]) || 'member';
 
-        // Fetch user from database to get current plan
-        const dbUser = await this.prisma.user.findUnique({
-            where: { email: user.email },
-            select: { plan: true },
-        });
+        let dbUser;
+        try {
+            // Fetch user from database to get current plan
+            dbUser = await this.prisma.user.findUnique({
+                where: { email: user.email },
+                select: { plan: true },
+            });
+        } catch (e) {
+            console.error('SubscriptionGuard DB Error:', e);
+            // Fallback to minimal plan to allow app to load in Limited Mode
+            dbUser = { plan: 'member' };
+        }
 
         if (!dbUser) {
             throw new ForbiddenException('User not found');
