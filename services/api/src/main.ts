@@ -34,9 +34,14 @@ async function bootstrap() {
     'http://127.0.0.1:3001',
   ];
 
-  const allowlist = new Set([...(isDev ? devAllow : []), ...prodAllow]);
+  const allowlist = new Set([
+    ...(isDev ? devAllow : []),
+    ...prodAllow,
+    'https://healthos-ten.vercel.app', // Hardcoded to ensure access
+    'https://healthos.vercel.app'
+  ]);
 
-  logger.info(`CORS allowlist (${isDev ? 'dev+prod' : 'prod'}): ${Array.from(allowlist).join(', ')}`);
+  logger.info(`CORS allowlist: ${Array.from(allowlist).join(', ')}`);
 
   app.enableCors({
     origin: (origin, cb) => {
