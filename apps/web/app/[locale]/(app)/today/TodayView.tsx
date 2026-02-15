@@ -210,7 +210,7 @@ function CheckBlock({
     if (!check) return null;
 
     async function handleSubmit() {
-        if (busy) return;
+        if (busy || !check) return;
         setBusy(true);
         try {
             await onSubmit({ checkId: check.id, value });
