@@ -16,8 +16,13 @@ export class JwtAuthGuard implements CanActivate {
             return true;
         }
 
-        // 2. Check for JWT Authorization header
-        const token = this.extractTokenFromHeader(request);
+        // 2. Check for JWT in Cookie (Zero-Preflight) OR Header
+        let token = request.cookies?.['hos_session'] || request.cookies?.['access_token'];
+
+        if (!token) {
+            token = this.extractTokenFromHeader(request);
+        }
+
         if (!token) {
             throw new UnauthorizedException('No token or user info provided');
         }

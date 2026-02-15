@@ -21,14 +21,41 @@ export class AuthController {
   async login(@Body('email') email: string, @Res({ passthrough: true }) res: Response) {
     const result = await this.svc.login(email || 'test@example.com');
 
-    // Set secure cookie for production cross-domain support
-    res.cookie('access_token', result.access_token, {
+    // ZERO-PREFLIGHT: Use HttpOnly Cookie instead of returning token
+    res.cookie('hos_session', result.access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: true, // Always true for cross-site (Vercel -> Plesk)
+      sameSite: 'none',
+      path: '/',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
-    return result;
+    // Also set legacy cookie for now just in case, but 'hos_session' is the key
+    res.cookie('access_token', result.access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return { user: result.user }; // No token in body
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('hos_session', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/'
+    });
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/'
+    });
+    return { ok: true };
   }
 }

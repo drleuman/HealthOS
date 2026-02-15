@@ -12,41 +12,7 @@ interface ApiError {
 }
 
 class ApiClient {
-    private token: string | null = null;
-
-    constructor() {
-        // Load token from localStorage on client side
-        if (typeof window !== 'undefined') {
-            this.token = localStorage.getItem('healthos_token');
-        }
-    }
-
-    /**
-     * Set authentication token
-     */
-    setToken(token: string) {
-        this.token = token;
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('healthos_token', token);
-        }
-    }
-
-    /**
-     * Clear authentication token
-     */
-    clearToken() {
-        this.token = null;
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('healthos_token');
-        }
-    }
-
-    /**
-     * Get current token
-     */
-    getToken(): string | null {
-        return this.token;
-    }
+    constructor() { }
 
     /**
      * Make authenticated request
@@ -63,10 +29,8 @@ class ApiClient {
             ...(options.headers as Record<string, string>),
         };
 
-        // Add auth token if available
-        if (this.token) {
-            headers['Authorization'] = `Bearer ${this.token}`;
-        }
+        // ZERO-PREFLIGHT: No Authorization header using Bearer token
+        // Cookies are sent automatically via credentials: 'include'
 
         try {
             const response = await fetch(url, {
@@ -77,7 +41,7 @@ class ApiClient {
 
             // Handle 401 Unauthorized
             if (response.status === 401) {
-                this.clearToken();
+                // this.clearToken(); // No local token to clear
                 if (typeof window !== 'undefined') {
                     window.location.href = '/auth';
                 }
@@ -123,12 +87,12 @@ class ApiClient {
     /**
      * Auth: Login
      */
-    async login(email: string): Promise<{ access_token: string; user: any }> {
-        const response = await this.post<{ access_token: string; user: any }>(
+    async login(email: string): Promise<{ user: any }> {
+        const response = await this.post<{ user: any }>(
             '/auth/login',
             { email },
         );
-        this.setToken(response.access_token);
+        // Token is now HttpOnly cookie set by server
         return response;
     }
 
@@ -136,14 +100,20 @@ class ApiClient {
      * Auth: Check if authenticated
      */
     isAuthenticated(): boolean {
-        return !!this.token;
+        // Optimistic: Assume authenticated (Cookie-based). 
+        // 401 response will trigger redirect to /auth
+        return true;
     }
 
     /**
      * Auth: Logout
      */
-    logout(): void {
-        this.clearToken();
+    async logout(): Promise<void> {
+        try {
+            await this.post('/auth/logout');
+        } catch (e) {
+            console.error('Logout failed', e);
+        }
     }
 
     /**
