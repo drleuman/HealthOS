@@ -37,7 +37,18 @@ const mockPrisma = {
     }
 } as any;
 
-const service = new BehaviorService(mockPrisma);
+const mockInterpreter = { interpret: createMockFn() } as any;
+const mockStateEngine = { updateState: createMockFn() } as any;
+const mockMessageGen = { generateMessage: createMockFn() } as any;
+const mockProtocolEngine = { executeAction: createMockFn() } as any;
+
+const service = new BehaviorService(
+    mockPrisma,
+    mockInterpreter,
+    mockStateEngine,
+    mockMessageGen,
+    mockProtocolEngine
+);
 
 // Shim logic: Manually attach spy behavior because we are not using Jest
 function attachSpy(obj: any) {
