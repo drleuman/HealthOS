@@ -25,12 +25,15 @@ class ApiClient {
         const url = `${API_BASE_URL}${endpoint}`;
 
         const headers: Record<string, string> = {
-            'Content-Type': 'application/json',
             ...(options.headers as Record<string, string>),
         };
 
-        // ZERO-PREFLIGHT: No Authorization header using Bearer token
-        // Cookies are sent automatically via credentials: 'include'
+        // ZERO-PREFLIGHT CRITICAL:
+        // Do NOT send Content-Type on GET requests, or it effectively becomes a "non-simple" request 
+        // and triggers a preflight (OPTIONS), defeating the purpose.
+        if (options.method !== 'GET' && options.method !== 'HEAD' && !headers['Content-Type']) {
+            headers['Content-Type'] = 'application/json';
+        }
 
         try {
             const response = await fetch(url, {
