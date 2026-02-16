@@ -10,18 +10,29 @@
         "email_placeholder": "Enter authorized email",
         "initializing": "Initializing...",
         "open_environment": "Open environment",
-        "secure_connection": "SECURE CONNECTION ESTABLISHED"
+        "secure_connection": "SECURE CONNECTION ESTABLISHED",
+        "subtitle": "Access your personal space",
+        "submit": "Continue",
+        "back_to_community": "Back to community",
+        "metadata_mode": "Active system",
+        "metadata_feedback": "Asynchronous feedback",
+        "error_generic": "Connection error",
+        "magic_link_sent": "Access link sent"
     },
     "App": {
         "Nav": {
             "today": "Today",
             "history": "History",
             "protocols": "Protocols",
+            "resources": "Resources",
             "logout": "Exit"
         },
         "Today": {
             "instrument": "Instrument",
             "title": "Today",
+            "card_title": "Today",
+            "status_active": "ACTIVE",
+            "status_empty": "LATENT SYSTEM",
             "day_label": "Day {day}",
             "load_label": "Load: {value}",
             "load_normal": "normal",
@@ -36,15 +47,20 @@
             "record": "[ record ]",
             "transmitting": "[ syncing ]",
             "no_actions": "No actions available.",
+            "no_action_note": "The system does not detect necessary intervention. Record any spontaneous observation.",
+            "cta_register": "Record observation",
             "check": "Check",
             "check_default_question": "Record your perception.",
             "check_placeholder": "Write a short note...",
             "submit_check": "Record",
             "technical_details": "[?] Technical details",
+            "technical_title": "Technical details",
             "expand": "expand",
             "collapse": "collapse",
             "learn_label": "Learning (Context)",
             "learn_title": "Daily content",
+            "context_title": "System Context",
+            "context_empty": "No additional observations for this period.",
             "community_active": "Active community",
             "minimal_active_label": "Minimal Active",
             "minimal_mode_l2_hint": "Today: minimal version (1 step).",
@@ -63,11 +79,31 @@
             "view_resource": "View",
             "no_resources": "No resources linked for today.",
             "optional_tool_label": "Optional tool",
-            "view_all_community": "View group"
+            "view_all_community": "View group",
+            "replies_label": "{count, plural, =0 {replies} one {reply} other {replies}}",
+            "status_completed": "OBSERVATION",
+            "maintenance_mode": "The system does not detect necessary intervention"
+        },
+        "Observation": {
+            "title": "OBSERVATION · active monitor",
+            "record": "[ record observation ]"
+        },
+        "Reentry": {
+            "title": "Minimal recalibration available",
+            "body": "A drift has been detected in the recorded signals. An optional minimal intervention phase (3 days) allows restoring pattern stability.",
+            "start_recalibration": "Open recalibration (3 days)",
+            "keep_observing": "Continue observing"
+        },
+        "Recalibration": {
+            "title": "Minimal recalibration",
+            "day_label": "Day {day} of 3",
+            "submit": "Update status"
         },
         "History": {
             "instrument": "Instrument",
             "title": "History",
+            "subtitle": "Chronological record of observations",
+            "item_observed": "RECORDED",
             "observed": "OBSERVED",
             "day": "Day {day}",
             "last_record": "Last observation: {when}",
@@ -129,6 +165,10 @@
                 "daily_energy_variation": "Daily Variation"
             }
         },
+        "Protocols": {
+            "title": "Active Protocols",
+            "back": "Back to dashboard"
+        },
         "Community": {
             "Nav": {
                 "threads": "Threads",
@@ -157,7 +197,30 @@
                 "peer_prescription_overlay": "System note: this space does not record recommendations for other people. Describe your own observation and what changed after a specific action.",
                 "diagnosis_request_overlay": "System note: this space records observations, not causes. Note what happened today and compare it across days.",
                 "expert_dependency_overlay": "System note: the instrument does not provide individual instructions. Continue with today’s step and record the observed result."
-            }
+            },
+            "Groups": {
+                "DigestiveRepair": {
+                    "day_1": "Day 1 Group",
+                    "day_2": "Day 2 Group",
+                    "day_3": "Day 3 Group",
+                    "day_4": "Day 4 Group",
+                    "day_5": "Day 5 Group",
+                    "day_6": "Day 6 Group",
+                    "day_7": "Day 7 Group",
+                    "day_8": "Day 8 Group",
+                    "day_9": "Day 9 Group",
+                    "day_10": "Day 10 Group",
+                    "day_11": "Day 11 Group",
+                    "day_12": "Day 12 Group",
+                    "day_13": "Day 13 Group",
+                    "day_14": "Day 14 Group"
+                }
+            },
+            "gated_title": "Members Only",
+            "gated_body": "This thread is part of the private community space.",
+            "enter_button": "Sign In",
+            "back_to_community": "Back",
+            "view_group": "View Group"
         }
     },
     "Components": {
@@ -1156,33 +1219,6 @@
             }
         }
     },
-    "Community": {
-        "Groups": {
-            "DigestiveRepair": {
-                "day_1": "Day 1 Group",
-                "day_2": "Day 2 Group",
-                "day_3": "Day 3 Group",
-                "day_4": "Day 4 Group",
-                "day_5": "Day 5 Group",
-                "day_6": "Day 6 Group",
-                "day_7": "Day 7 Group",
-                "day_8": "Day 8 Group",
-                "day_9": "Day 9 Group",
-                "day_10": "Day 10 Group",
-                "day_11": "Day 11 Group",
-                "day_12": "Day 12 Group",
-                "day_13": "Day 13 Group",
-                "day_14": "Day 14 Group"
-            }
-        },
-        "gated_title": "Members Only",
-        "gated_body": "This thread is part of the private community space.",
-        "enter_button": "Sign In",
-        "back_to_community": "Back",
-        "view_group": "View Group",
-        "reply_placeholder": "Add observation...",
-        "send_reply": "Reply"
-    },
     "SystemMessages": {
         "circadian": {
             "ORIENTATION": "This protocol adjusts day and night signals. A single stable action per day is enough.",
@@ -1229,6 +1265,19 @@
             "summary": "Closure: choose one minimal practice to continue.",
             "energy_stable": "More stable energy pattern detected.",
             "metabolic_stable": "Energy rhythm stabilized. No intervention required."
+        },
+        "Transition": {
+            "next_options": "Status: Observation. Record your perception when you consider it necessary.",
+            "silence_is_data": "Calibration note: periods without records are valid data and part of the pattern."
+        },
+        "Reentry": {
+            "drift_detected": "Drift pattern detected in recent signals. Minimal recalibration available (optional).",
+            "instability_detected": "Return with negative signal after a period of silence. Recalibration available (optional)."
+        },
+        "Recalibration": {
+            "start": "Recalibration log active. The goal is to restore main anchors.",
+            "progress": "Recalibration in progress. Record perception after action.",
+            "ack": "Status updated."
         }
     },
     "Public": {

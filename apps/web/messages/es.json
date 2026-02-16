@@ -1,8 +1,17 @@
 {
     "Auth": {
-        "title": "Entrar",
+        "system_id_label": "SYSTEM ID: HOS-BETA 9.1",
+        "title": "HEALTHOS",
         "subtitle": "Acceso a tu espacio personal",
+        "mode_label": "[MODO]",
+        "mode_value": "LATENTE",
+        "feedback_label": "[FEEDBACK]",
+        "feedback_value": "ASÍNCRONO",
+        "user_identifier_label": "IDENTIFICADOR DE USUARIO",
         "email_placeholder": "Correo electrónico",
+        "initializing": "Inicializando...",
+        "open_environment": "Abrir entorno",
+        "secure_connection": "CONEXIÓN SEGURA ESTABLECIDA",
         "submit": "Continuar",
         "back_to_community": "Volver a la comunidad",
         "metadata_mode": "Sistema activo",
@@ -139,6 +148,9 @@
         "Today": {
             "instrument": "Instrumento",
             "title": "Hoy",
+            "card_title": "Hoy",
+            "status_active": "ACTIVO",
+            "status_empty": "SISTEMA LATENTE",
             "day_label": "Día {day}",
             "load_label": "Carga: {value}",
             "load_normal": "normal",
@@ -152,11 +164,14 @@
             "record": "[ registrar ]",
             "transmitting": "[ transmitiendo ]",
             "no_actions": "No hay acciones disponibles.",
+            "no_action_note": "El sistema no detecta intervención necesaria. Registra cualquier observación espontánea.",
+            "cta_register": "Registrar observación",
             "check": "Comprobación",
             "check_default_question": "Registra tu percepción.",
             "check_placeholder": "Escribe una nota breve…",
             "submit_check": "Registrar",
             "technical_details": "[?] Detalles técnicos",
+            "technical_title": "Detalles técnicos",
             "loading": "Cargando…",
             "load_failed": "No se pudo cargar.",
             "retry": "Reintentar",
@@ -165,6 +180,8 @@
             "minutes": "{m} min",
             "learn_label": "Aprendizaje (Contexto)",
             "learn_title": "Contenido del día",
+            "context_title": "Contexto del sistema",
+            "context_empty": "No hay observaciones adicionales para este periodo.",
             "community_active": "Comunidad activa",
             "minimal_mode_l2_hint": "Hoy: versión mínima (1 paso).",
             "windows": {
@@ -181,6 +198,8 @@
             "view_all_community": "Ver grupo",
             "replies_label": "{count, plural, =0 {respuestas} one {respuesta} other {respuestas}}",
             "status_completed": "OBSERVACIÓN",
+            "view_group": "Ver grupo",
+            "minimal_active_label": "Minimal activo",
             "maintenance_mode": "El sistema no detecta intervención necesaria"
         },
         "Observation": {
@@ -201,6 +220,8 @@
         "History": {
             "instrument": "Instrumento",
             "title": "Historial",
+            "subtitle": "Registro cronológico de observaciones",
+            "item_observed": "REGISTRADO",
             "observed": "OBSERVADO",
             "day": "Día {day}",
             "last_record": "Última observación: {when}",
@@ -219,6 +240,11 @@
             "filter_30d": "30 días",
             "filter_all": "Todo",
             "actions": {
+                "light": "Luz",
+                "caffeine": "Cafeína",
+                "delay_caffeine": "Retrasar cafeína",
+                "morning_light": "Luz matutina",
+                "earlier_dinner": "Cena temprana",
                 "eat_within_60min": "Comida <60min",
                 "protein_breakfast": "Proteína en desayuno",
                 "no_sugar_isolated": "Sin azúcar aislado",
@@ -238,6 +264,8 @@
                 "fixed_meal_structure": "Estructura fija"
             },
             "checks": {
+                "perceived_activation": "Activación",
+                "digestion_check": "Digestión",
                 "morning_energy": "Energía AM",
                 "midday_crash": "Bajón mediodía",
                 "energy_stability": "Estabilidad día",
@@ -287,10 +315,43 @@
                 "peer_prescription_overlay": "Nota del sistema: este espacio no registra recomendaciones para otras personas. Describe tu propia observación y qué cambió tras una acción concreta.",
                 "diagnosis_request_overlay": "Nota del sistema: este espacio registra observaciones, no interpreta causas. Anota qué ocurrió hoy y compáralo con días anteriores.",
                 "expert_dependency_overlay": "Nota del sistema: el instrumento no ofrece indicaciones individuales. Continúa con el paso del día y registra el resultado observado."
-            }
+            },
+            "Groups": {
+                "DigestiveRepair": {
+                    "day_1": "Grupo Día 1",
+                    "day_2": "Grupo Día 2",
+                    "day_3": "Grupo Día 3",
+                    "day_4": "Grupo Día 4",
+                    "day_5": "Grupo Día 5",
+                    "day_6": "Grupo Día 6",
+                    "day_7": "Grupo Día 7",
+                    "day_8": "Grupo Día 8",
+                    "day_9": "Grupo Día 9",
+                    "day_10": "Grupo Día 10",
+                    "day_11": "Grupo Día 11",
+                    "day_12": "Grupo Día 12",
+                    "day_13": "Grupo Día 13",
+                    "day_14": "Grupo Día 14"
+                }
+            },
+            "gated_title": "Acceso para miembros",
+            "gated_body": "Este hilo es parte del espacio de comunidad privada.",
+            "enter_button": "Entrar",
+            "back_to_community": "Volver",
+            "view_group": "Ver grupo"
         }
     },
     "Components": {
+        "Ambient": {
+            "msg_1": "Sistema disponible. El estado puede ser capturado en cualquier momento.",
+            "msg_2": "Sistema disponible. La observación puede registrarse cuando esté presente.",
+            "msg_3": "Sistema disponible. Registro posible en cualquier momento."
+        },
+        "Topbar": {
+            "events": "Eventos",
+            "history": "Historial",
+            "logout": "Salir"
+        },
         "Select": {
             "placeholder": "Seleccionar..."
         },
@@ -1183,33 +1244,6 @@
                 "daily_energy_variation": "Variación energética diaria"
             }
         }
-    },
-    "Community": {
-        "Groups": {
-            "DigestiveRepair": {
-                "day_1": "Grupo Día 1",
-                "day_2": "Grupo Día 2",
-                "day_3": "Grupo Día 3",
-                "day_4": "Grupo Día 4",
-                "day_5": "Grupo Día 5",
-                "day_6": "Grupo Día 6",
-                "day_7": "Grupo Día 7",
-                "day_8": "Grupo Día 8",
-                "day_9": "Grupo Día 9",
-                "day_10": "Grupo Día 10",
-                "day_11": "Grupo Día 11",
-                "day_12": "Grupo Día 12",
-                "day_13": "Grupo Día 13",
-                "day_14": "Grupo Día 14"
-            }
-        },
-        "gated_title": "Acceso para miembros",
-        "gated_body": "Este hilo es parte del espacio de comunidad privada.",
-        "enter_button": "Entrar",
-        "back_to_community": "Volver",
-        "view_group": "Ver grupo",
-        "reply_placeholder": "Añadir observación...",
-        "send_reply": "Responder"
     },
     "SystemMessages": {
         "circadian": {
