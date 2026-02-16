@@ -15,7 +15,7 @@ export default function HeroBlock() {
             </p>
             <div className="mt-10 flex justify-center gap-4">
                 <Link
-                    href="/onboarding/start"
+                    href="/app/onboarding/start"
                     className="rounded-lg bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-100"
                 >
                     {t('cta_primary')}

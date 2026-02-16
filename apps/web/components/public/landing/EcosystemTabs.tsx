@@ -16,12 +16,12 @@ const CatalogGrid = ({ items, type, locale }: { items: any[], type: string, loca
             {displayItems.map((item) => (
                 <Link
                     key={item.id}
-                    // Determine href based on type
+                    // Determine href based on type (Simplified to category for now to avoid 404s)
                     href={type === 'product'
-                        ? `/community/products/${item.slug}`
+                        ? `/community/products`
                         : type === 'course'
-                            ? `/community/courses/${item.slug}`
-                            : `/community/blog/${item.slug}`
+                            ? `/community/courses`
+                            : `/community/blog`
                     }
                     className="flex flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50 shadow-sm transition hover:bg-slate-800 hover:shadow-md hover:border-slate-700"
                 >

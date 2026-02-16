@@ -19,11 +19,11 @@ export default function GoalSelector() {
             <h2 className="text-xl font-semibold text-slate-100 sm:text-2xl mb-8">
                 {t('title')}
             </h2>
-            <div className="flex flex-wrapjustify-center gap-3 justify-center">
+            <div className="flex flex-wrap justify-center gap-3 justify-center">
                 {GOALS.map((goal) => (
                     <Link
                         key={goal}
-                        href={`/onboarding/start?goal=${goal}`}
+                        href={`/app/onboarding/start?goal=${goal}`}
                         className="group inline-flex items-center rounded-full border border-slate-700 bg-slate-900/40 px-5 py-2.5 text-sm font-medium text-slate-300 shadow-sm transition-all hover:border-slate-500 hover:bg-slate-800 hover:text-white hover:shadow-md"
                     >
                         <span>{t(goal)}</span>

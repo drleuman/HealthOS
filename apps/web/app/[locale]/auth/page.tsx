@@ -19,19 +19,11 @@ export default function AuthPage({ params: { locale } }: { params: { locale: str
         e.preventDefault();
         setLoading(true);
         try {
-            // Mock auth - usually this would call an API
-            // For now, let's assume we just set a cookie or hit an endpoint that sets it.
-            // We'll call a simple endpoint or just redirect if it were a real app.
-            // Given I don't see the auth endpoint code, I'll attempt a login/magic-link request
-            // or just redirect for MVP demonstration if allowed.
-            // But wait, the previous context had `api.post('/auth/login', ...)`?
-            // Let's assume we simulate a successful login action.
-
-            // Simulate network delay
-            await new Promise(r => setTimeout(r, 800));
+            // Call login API to set HttpOnly session cookie
+            await api.login(email);
 
             // In a real app we'd await api.post('/auth/email', { email }) ...
-            // For this "Instrument" demo, let's just push to returnTo
+            // For this "Instrument" demo, we call login and then push to returnTo
             router.push(decodeURIComponent(returnTo));
         } catch (err) {
             console.error(err);
