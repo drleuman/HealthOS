@@ -1,0 +1,497 @@
+{
+    "id": "nervous_regulation_10",
+    "version": "1.0.0",
+    "tags": [
+        "nervous_system",
+        "stress",
+        "anxiety",
+        "recovery"
+    ],
+    "localeFallback": "es",
+    "timeBudgetMinutes": {
+        "min": 5,
+        "max": 10
+    },
+    "durationDays": 10,
+    "phases": [
+        {
+            "id": "detection",
+            "dayRange": [
+                1,
+                3
+            ]
+        },
+        {
+            "id": "stabilization",
+            "dayRange": [
+                4,
+                7
+            ]
+        },
+        {
+            "id": "expansion",
+            "dayRange": [
+                8,
+                10
+            ]
+        }
+    ],
+    "days": [
+        {
+            "day": 1,
+            "title": "Protocol.NervousRegulation.Day1.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day1.learn.title",
+                "summary": "Protocol.NervousRegulation.Day1.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_breathing_2min",
+                        "label": "Protocol.NervousRegulation.Actions.breathing_2min.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "quiet_place_optional",
+                            "no_special_posture_required"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_state",
+                "prompt": "Protocol.NervousRegulation.Checks.state.prompt",
+                "options": [
+                    {
+                        "id": "calmer",
+                        "label": "Protocol.NervousRegulation.Checks.state.options.calmer"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.state.options.same"
+                    },
+                    {
+                        "id": "more_activated",
+                        "label": "Protocol.NervousRegulation.Checks.state.options.more_activated"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_1",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 2,
+            "title": "Protocol.NervousRegulation.Day2.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day2.learn.title",
+                "summary": "Protocol.NervousRegulation.Day2.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_sigh_1min",
+                        "label": "Protocol.NervousRegulation.Actions.physiological_sigh.label",
+                        "minMinutes": 1,
+                        "rules": [
+                            "two_inhales_one_exhale",
+                            "stop_if_dizzy"
+                        ]
+                    },
+                    {
+                        "id": "nsr_walk_5min",
+                        "label": "Protocol.NervousRegulation.Actions.walk_5min.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "indoors_ok",
+                            "slow_pace_ok"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_body",
+                "prompt": "Protocol.NervousRegulation.Checks.body.prompt",
+                "options": [
+                    {
+                        "id": "looser",
+                        "label": "Protocol.NervousRegulation.Checks.body.options.looser"
+                    },
+                    {
+                        "id": "neutral",
+                        "label": "Protocol.NervousRegulation.Checks.body.options.neutral"
+                    },
+                    {
+                        "id": "tenser",
+                        "label": "Protocol.NervousRegulation.Checks.body.options.tenser"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_2",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 3,
+            "title": "Protocol.NervousRegulation.Day3.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day3.learn.title",
+                "summary": "Protocol.NervousRegulation.Day3.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_downshift_3min",
+                        "label": "Protocol.NervousRegulation.Actions.downshift_3min.label",
+                        "minMinutes": 3,
+                        "rules": [
+                            "longer_exhale",
+                            "soft_gaze_optional"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_sleep_pressure",
+                "prompt": "Protocol.NervousRegulation.Checks.sleep_pressure.prompt",
+                "options": [
+                    {
+                        "id": "easier",
+                        "label": "Protocol.NervousRegulation.Checks.sleep_pressure.options.easier"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.sleep_pressure.options.same"
+                    },
+                    {
+                        "id": "harder",
+                        "label": "Protocol.NervousRegulation.Checks.sleep_pressure.options.harder"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_3",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 4,
+            "title": "Protocol.NervousRegulation.Day4.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day4.learn.title",
+                "summary": "Protocol.NervousRegulation.Day4.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_caffeine_boundary",
+                        "label": "Protocol.NervousRegulation.Actions.caffeine_boundary.label",
+                        "minMinutes": 1,
+                        "rules": [
+                            "set_latest_caffeine_time"
+                        ]
+                    },
+                    {
+                        "id": "nsr_breathing_2min",
+                        "label": "Protocol.NervousRegulation.Actions.breathing_2min.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "quiet_place_optional",
+                            "no_special_posture_required"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_afternoon_energy",
+                "prompt": "Protocol.NervousRegulation.Checks.afternoon_energy.prompt",
+                "options": [
+                    {
+                        "id": "steadier",
+                        "label": "Protocol.NervousRegulation.Checks.afternoon_energy.options.steadier"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.afternoon_energy.options.same"
+                    },
+                    {
+                        "id": "crash",
+                        "label": "Protocol.NervousRegulation.Checks.afternoon_energy.options.crash"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_4",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 5,
+            "title": "Protocol.NervousRegulation.Day5.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day5.learn.title",
+                "summary": "Protocol.NervousRegulation.Day5.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_light_evening_dimmer",
+                        "label": "Protocol.NervousRegulation.Actions.evening_light_dimmer.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "reduce_overhead_lighting"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_evening_activation",
+                "prompt": "Protocol.NervousRegulation.Checks.evening_activation.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.NervousRegulation.Checks.evening_activation.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.evening_activation.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.NervousRegulation.Checks.evening_activation.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_5",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 6,
+            "title": "Protocol.NervousRegulation.Day6.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day6.learn.title",
+                "summary": "Protocol.NervousRegulation.Day6.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_reflection_2min",
+                        "label": "Protocol.NervousRegulation.Actions.reflection_2min.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "write_or_think_ok",
+                            "no_judgement"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_reactivity",
+                "prompt": "Protocol.NervousRegulation.Checks.reactivity.prompt",
+                "options": [
+                    {
+                        "id": "less",
+                        "label": "Protocol.NervousRegulation.Checks.reactivity.options.less"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.reactivity.options.same"
+                    },
+                    {
+                        "id": "more",
+                        "label": "Protocol.NervousRegulation.Checks.reactivity.options.more"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_6",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 7,
+            "title": "Protocol.NervousRegulation.Day7.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day7.learn.title",
+                "summary": "Protocol.NervousRegulation.Day7.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_social_contact",
+                        "label": "Protocol.NervousRegulation.Actions.social_contact.label",
+                        "minMinutes": 3,
+                        "rules": [
+                            "message_or_voice_ok",
+                            "in_person_optional"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_connection",
+                "prompt": "Protocol.NervousRegulation.Checks.connection.prompt",
+                "options": [
+                    {
+                        "id": "better",
+                        "label": "Protocol.NervousRegulation.Checks.connection.options.better"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.connection.options.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Protocol.NervousRegulation.Checks.connection.options.worse"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_7",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 8,
+            "title": "Protocol.NervousRegulation.Day8.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day8.learn.title",
+                "summary": "Protocol.NervousRegulation.Day8.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_body_scan_5min",
+                        "label": "Protocol.NervousRegulation.Actions.body_scan_5min.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "eyes_open_ok",
+                            "stop_if_uncomfortable"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_tension_hotspot",
+                "prompt": "Protocol.NervousRegulation.Checks.tension_hotspot.prompt",
+                "options": [
+                    {
+                        "id": "identified",
+                        "label": "Protocol.NervousRegulation.Checks.tension_hotspot.options.identified"
+                    },
+                    {
+                        "id": "unclear",
+                        "label": "Protocol.NervousRegulation.Checks.tension_hotspot.options.unclear"
+                    },
+                    {
+                        "id": "none",
+                        "label": "Protocol.NervousRegulation.Checks.tension_hotspot.options.none"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_8",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 9,
+            "title": "Protocol.NervousRegulation.Day9.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day9.learn.title",
+                "summary": "Protocol.NervousRegulation.Day9.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_boundary_1",
+                        "label": "Protocol.NervousRegulation.Actions.boundary_1.label",
+                        "minMinutes": 3,
+                        "rules": [
+                            "one_boundary_today",
+                            "tiny_boundary_ok"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_load",
+                "prompt": "Protocol.NervousRegulation.Checks.load.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.NervousRegulation.Checks.load.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.NervousRegulation.Checks.load.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.NervousRegulation.Checks.load.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_9",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 10,
+            "title": "Protocol.NervousRegulation.Day10.title",
+            "learn": {
+                "id": "Protocol.NervousRegulation.Day10.learn.title",
+                "summary": "Protocol.NervousRegulation.Day10.learn.body",
+                "type": "text"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "nsr_plan_next_5min",
+                        "label": "Protocol.NervousRegulation.Actions.plan_next_5min.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "choose_one_practice",
+                            "schedule_minimum"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "nsr_check_overall",
+                "prompt": "Protocol.NervousRegulation.Checks.overall.prompt",
+                "options": [
+                    {
+                        "id": "improved",
+                        "label": "Protocol.NervousRegulation.Checks.overall.options.improved"
+                    },
+                    {
+                        "id": "mixed",
+                        "label": "Protocol.NervousRegulation.Checks.overall.options.mixed"
+                    },
+                    {
+                        "id": "no_change",
+                        "label": "Protocol.NervousRegulation.Checks.overall.options.no_change"
+                    }
+                ]
+            },
+            "support": {
+                "communityGroupKey": "community.nervous_regulation.day_10",
+                "toolUnlock": null
+            }
+        }
+    ]
+}

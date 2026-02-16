@@ -1,0 +1,52 @@
+{
+    "rules": [
+        {
+            "id": "NORMALIZATION_CRASH",
+            "priority": 700,
+            "when": {
+                "checkEq": "crash"
+            },
+            "i18nKey": "SystemMessages.Normalization.glucose_drop"
+        },
+        {
+            "id": "NORMALIZATION_URGENT_HUNGER",
+            "priority": 690,
+            "when": {
+                "checkEq": "urgent"
+            },
+            "i18nKey": "SystemMessages.Normalization.reactive_hunger"
+        },
+        {
+            "id": "NORMALIZATION_SLEEPY_POSTMEAL",
+            "priority": 680,
+            "when": {
+                "checkEq": "sleepy"
+            },
+            "i18nKey": "SystemMessages.Normalization.postmeal_insulin"
+        },
+        {
+            "id": "SIMPLIFICATION",
+            "priority": 900,
+            "when": {
+                "consecutiveFailuresGte": 2
+            },
+            "i18nKey": "SystemMessages.Simplification.reduce_load"
+        },
+        {
+            "id": "REENGAGE_48H",
+            "priority": 950,
+            "when": {
+                "inactivityHoursGte": 48
+            },
+            "i18nKey": "SystemMessages.Reengagement.resume_anchor"
+        },
+        {
+            "id": "CLOSURE",
+            "priority": 1000,
+            "when": {
+                "dayEq": 10
+            },
+            "i18nKey": "SystemMessages.Closure.metabolic_stable"
+        }
+    ]
+}

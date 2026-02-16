@@ -1,0 +1,686 @@
+{
+    "id": "digestive_repair_14",
+    "version": "1.0.0",
+    "tags": [
+        "digestion",
+        "bloating",
+        "reflux",
+        "gut_motility",
+        "meal_structure"
+    ],
+    "localeFallback": "es",
+    "timeBudgetMinutes": {
+        "min": 6,
+        "max": 12
+    },
+    "durationDays": 14,
+    "phases": [
+        {
+            "id": "detection",
+            "days": [
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "id": "stabilization",
+            "days": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+            ]
+        },
+        {
+            "id": "expansion",
+            "days": [
+                11,
+                12,
+                13,
+                14
+            ]
+        }
+    ],
+    "days": [
+        {
+            "day": 1,
+            "title": "Protocol.DigestiveRepair.Day1.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day1.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day1.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_meal_pause_30s",
+                        "label": "Protocol.DigestiveRepair.Actions.meal_pause.label",
+                        "details": "Protocol.DigestiveRepair.Actions.meal_pause.details",
+                        "timeMinutes": 1,
+                        "rules": [
+                            "before_first_bite",
+                            "no_perfection_required"
+                        ]
+                    },
+                    {
+                        "id": "dr_walk_10min",
+                        "label": "Protocol.DigestiveRepair.Actions.walk_10min.label",
+                        "details": "Protocol.DigestiveRepair.Actions.walk_10min.details",
+                        "timeMinutes": 10,
+                        "rules": [
+                            "after_main_meal",
+                            "indoors_ok",
+                            "slow_pace_ok"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "bloating",
+                "prompt": "Protocol.DigestiveRepair.Checks.bloating.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.bloating.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.bloating.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.bloating.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_1"
+            }
+        },
+        {
+            "day": 2,
+            "title": "Protocol.DigestiveRepair.Day2.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day2.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day2.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_meal_order_protein_first",
+                        "label": "Protocol.DigestiveRepair.Actions.meal_order.label",
+                        "details": "Protocol.DigestiveRepair.Actions.meal_order.details",
+                        "timeMinutes": 1,
+                        "rules": [
+                            "protein_veg_first",
+                            "carbs_last_optional"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "reflux",
+                "prompt": "Protocol.DigestiveRepair.Checks.reflux.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.reflux.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.reflux.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.reflux.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_2"
+            }
+        },
+        {
+            "day": 3,
+            "title": "Protocol.DigestiveRepair.Day3.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day3.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day3.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_kitchen_cutoff_3h",
+                        "label": "Protocol.DigestiveRepair.Actions.kitchen_cutoff.label",
+                        "details": "Protocol.DigestiveRepair.Actions.kitchen_cutoff.details",
+                        "timeMinutes": 1,
+                        "rules": [
+                            "finish_food_3h_before_sleep",
+                            "adjust_if_shift_work"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "sleep_after_dinner",
+                "prompt": "Protocol.DigestiveRepair.Checks.sleep_after_dinner.prompt",
+                "options": [
+                    {
+                        "id": "easier",
+                        "label": "Protocol.DigestiveRepair.Checks.sleep_after_dinner.options.easier"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.sleep_after_dinner.options.same"
+                    },
+                    {
+                        "id": "harder",
+                        "label": "Protocol.DigestiveRepair.Checks.sleep_after_dinner.options.harder"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_3"
+            }
+        },
+        {
+            "day": 4,
+            "title": "Protocol.DigestiveRepair.Day4.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day4.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day4.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_chew_20pct_more",
+                        "label": "Protocol.DigestiveRepair.Actions.chew.label",
+                        "details": "Protocol.DigestiveRepair.Actions.chew.details",
+                        "timeMinutes": 1,
+                        "rules": [
+                            "one_meal_only_ok",
+                            "no_counting_required"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "fullness",
+                "prompt": "Protocol.DigestiveRepair.Checks.fullness.prompt",
+                "options": [
+                    {
+                        "id": "lighter",
+                        "label": "Protocol.DigestiveRepair.Checks.fullness.options.lighter"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.fullness.options.same"
+                    },
+                    {
+                        "id": "heavier",
+                        "label": "Protocol.DigestiveRepair.Checks.fullness.options.heavier"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_4"
+            }
+        },
+        {
+            "day": 5,
+            "title": "Protocol.DigestiveRepair.Day5.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day5.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day5.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_trigger_scan",
+                        "label": "Protocol.DigestiveRepair.Actions.trigger_scan.label",
+                        "details": "Protocol.DigestiveRepair.Actions.trigger_scan.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "identify_one_possible_trigger",
+                            "no_elimination_needed_today"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "gas",
+                "prompt": "Protocol.DigestiveRepair.Checks.gas.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.gas.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.gas.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.gas.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_5"
+            }
+        },
+        {
+            "day": 6,
+            "title": "Protocol.DigestiveRepair.Day6.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day6.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day6.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_water_timing",
+                        "label": "Protocol.DigestiveRepair.Actions.water_timing.label",
+                        "details": "Protocol.DigestiveRepair.Actions.water_timing.details",
+                        "timeMinutes": 1,
+                        "rules": [
+                            "reduce_big_water_with_meals",
+                            "sip_ok"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "burping",
+                "prompt": "Protocol.DigestiveRepair.Checks.burping.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.burping.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.burping.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.burping.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_6"
+            }
+        },
+        {
+            "day": 7,
+            "title": "Protocol.DigestiveRepair.Day7.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day7.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day7.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_simple_plate",
+                        "label": "Protocol.DigestiveRepair.Actions.simple_plate.label",
+                        "details": "Protocol.DigestiveRepair.Actions.simple_plate.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "reduce_mix_complexity_one_meal",
+                            "choose_familiar_foods"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "stool",
+                "prompt": "Protocol.DigestiveRepair.Checks.stool.prompt",
+                "options": [
+                    {
+                        "id": "improved",
+                        "label": "Protocol.DigestiveRepair.Checks.stool.options.improved"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.stool.options.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Protocol.DigestiveRepair.Checks.stool.options.worse"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_7"
+            }
+        },
+        {
+            "day": 8,
+            "title": "Protocol.DigestiveRepair.Day8.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day8.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day8.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_walk_10min",
+                        "label": "Protocol.DigestiveRepair.Actions.walk_10min.label",
+                        "details": "Protocol.DigestiveRepair.Actions.walk_10min.details",
+                        "timeMinutes": 10,
+                        "rules": [
+                            "after_main_meal",
+                            "slow_pace_ok"
+                        ]
+                    },
+                    {
+                        "id": "dr_breath_before_meal_1min",
+                        "label": "Protocol.DigestiveRepair.Actions.breath_before_meal.label",
+                        "details": "Protocol.DigestiveRepair.Actions.breath_before_meal.details",
+                        "timeMinutes": 1,
+                        "rules": [
+                            "one_meal_ok"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "cravings",
+                "prompt": "Protocol.DigestiveRepair.Checks.cravings.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.cravings.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.cravings.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.cravings.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_8"
+            }
+        },
+        {
+            "day": 9,
+            "title": "Protocol.DigestiveRepair.Day9.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day9.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day9.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_one_change_meal",
+                        "label": "Protocol.DigestiveRepair.Actions.one_change.label",
+                        "details": "Protocol.DigestiveRepair.Actions.one_change.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "change_one_variable_only",
+                            "keep_rest_same"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "bloating",
+                "prompt": "Protocol.DigestiveRepair.Checks.bloating.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.bloating.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.bloating.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.bloating.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_9"
+            }
+        },
+        {
+            "day": 10,
+            "title": "Protocol.DigestiveRepair.Day10.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day10.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day10.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_reflux_positioning",
+                        "label": "Protocol.DigestiveRepair.Actions.reflux_positioning.label",
+                        "details": "Protocol.DigestiveRepair.Actions.reflux_positioning.details",
+                        "timeMinutes": 3,
+                        "rules": [
+                            "left_side_optional",
+                            "head_elevation_optional"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "reflux",
+                "prompt": "Protocol.DigestiveRepair.Checks.reflux.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.reflux.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.reflux.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.reflux.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_10"
+            }
+        },
+        {
+            "day": 11,
+            "title": "Protocol.DigestiveRepair.Day11.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day11.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day11.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_add_one_fiber_food",
+                        "label": "Protocol.DigestiveRepair.Actions.add_fiber.label",
+                        "details": "Protocol.DigestiveRepair.Actions.add_fiber.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "one_fiber_food_only",
+                            "start_small"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "gas",
+                "prompt": "Protocol.DigestiveRepair.Checks.gas.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.DigestiveRepair.Checks.gas.options.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.gas.options.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.DigestiveRepair.Checks.gas.options.higher"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_11"
+            }
+        },
+        {
+            "day": 12,
+            "title": "Protocol.DigestiveRepair.Day12.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day12.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day12.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_protein_anchor",
+                        "label": "Protocol.DigestiveRepair.Actions.protein_anchor.label",
+                        "details": "Protocol.DigestiveRepair.Actions.protein_anchor.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "one_meal_anchor",
+                            "simple_ok"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "fullness",
+                "prompt": "Protocol.DigestiveRepair.Checks.fullness.prompt",
+                "options": [
+                    {
+                        "id": "lighter",
+                        "label": "Protocol.DigestiveRepair.Checks.fullness.options.lighter"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.fullness.options.same"
+                    },
+                    {
+                        "id": "heavier",
+                        "label": "Protocol.DigestiveRepair.Checks.fullness.options.heavier"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_12"
+            }
+        },
+        {
+            "day": 13,
+            "title": "Protocol.DigestiveRepair.Day13.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day13.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day13.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_review_trigger",
+                        "label": "Protocol.DigestiveRepair.Actions.review_trigger.label",
+                        "details": "Protocol.DigestiveRepair.Actions.review_trigger.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "review_one_trigger_only",
+                            "decide_one_adjustment"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "stool",
+                "prompt": "Protocol.DigestiveRepair.Checks.stool.prompt",
+                "options": [
+                    {
+                        "id": "improved",
+                        "label": "Protocol.DigestiveRepair.Checks.stool.options.improved"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Protocol.DigestiveRepair.Checks.stool.options.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Protocol.DigestiveRepair.Checks.stool.options.worse"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_13"
+            }
+        },
+        {
+            "day": 14,
+            "title": "Protocol.DigestiveRepair.Day14.title",
+            "learn": {
+                "id": "Protocol.DigestiveRepair.Day14.learn.title",
+                "summary": "Protocol.DigestiveRepair.Day14.learn.body"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "dr_plan_next_5min",
+                        "label": "Protocol.DigestiveRepair.Actions.plan_next.label",
+                        "details": "Protocol.DigestiveRepair.Actions.plan_next.details",
+                        "timeMinutes": 5,
+                        "rules": [
+                            "choose_one_practice",
+                            "schedule_maximum"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "overall",
+                "prompt": "Protocol.DigestiveRepair.Checks.overall.prompt",
+                "options": [
+                    {
+                        "id": "improved",
+                        "label": "Protocol.DigestiveRepair.Checks.overall.options.improved"
+                    },
+                    {
+                        "id": "mixed",
+                        "label": "Protocol.DigestiveRepair.Checks.overall.options.mixed"
+                    },
+                    {
+                        "id": "no_change",
+                        "label": "Protocol.DigestiveRepair.Checks.overall.options.no_change"
+                    }
+                ]
+            },
+            "support": {
+                "commonQuestionsKey": "Protocol.DigestiveRepair.Support.common_questions",
+                "communityGroupKey": "Community.Groups.DigestiveRepair.day_14"
+            }
+        }
+    ]
+}

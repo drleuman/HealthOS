@@ -4,6 +4,38 @@ import React, { useEffect, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
+
+type TodayAction = {
+    id: string;
+    labelKey?: string;     // New i18n key
+    label?: string;        // Fallback/Legacy
+    type: string;          // "light" | "delay_caffeine" etc
+    status?: 'pending' | 'completed';
+    minutes?: number;
+    window?: string;       // "before_11"
+    title?: string;        // fallback
+    description?: string;  // fallback
+};
+
+type TodayCheck = {
+    id: string;
+    type?: string;          // "single_choice" | "scale" etc
+    prompt?: string;
+    question?: string;
+    labelKey?: string;      // New i18n key
+    options?: Array<{ id: string; label?: string; labelKey?: string }> | string[];
+};
+
+type TodayResource = {
+    slug?: string;
+    threadId?: string;
+    titleKey: string;
+    whyKey: string;
+    type: 'blog' | 'recipe' | 'product' | 'course' | 'community';
+    tags?: string[];
+};
 
 type MinimalMode = {
     enabled: boolean;
@@ -11,37 +43,161 @@ type MinimalMode = {
     reason?: string;
 };
 
-type InstrumentPayload = {
-    load?: 'normal' | 'reduced';
-    minimalMode?: MinimalMode;
-};
-
-type TodayAction = {
-    type: string;          // "light" | "delay_caffeine" etc
-    minutes?: number;
-    window?: string;       // "before_11"
-    title?: string;        // opcional si lo pasas
-    description?: string;  // opcional si lo pasas
-};
-
-type TodayCheck = {
-    id: string;
-    type: string;          // "single_choice" | "scale" etc
-    question?: string;
-    options?: string[];
-};
-
+// Start strict contract types locally (mirroring shared)
 type TodayPayload = {
+    uiMode: 'PROTOCOL' | 'OBSERVATION' | 'RECALIBRATION';
+    status: 'ACTIVE' | 'COMPLETED';
+    protocolId?: string;
     day?: number;
-    // tasks: string[]; // Deprecated
-    actions?: TodayAction[]; // Now returning full objects
-    check?: TodayCheck;      // Now returning single object or null
-    message?: { neutral: string; calibration?: string }; // System message object
-    biological_phase?: string;
-    instrument?: InstrumentPayload;
-    program_id?: string;
-    community_group?: string;
+    systemMessage: {
+        i18nKey: string;
+        params?: any;
+        selectedRuleId?: string;
+        reason?: any;
+    };
+    behavior: {
+        deviation?: {
+            active: boolean;
+            type: string;
+            severity?: number;
+        } | null;
+        reentry: {
+            eligible: boolean;
+            cooldownUntil?: string | null;
+        };
+        recalibration: {
+            status: 'NONE' | 'OFFERED' | 'ACTIVE';
+        };
+        minimalMode?: MinimalMode | null;
+    };
+    protocol?: {
+        actions: TodayAction[];
+        check?: TodayCheck;
+        learn?: any;
+        progress?: number;
+    };
+    community: {
+        threads: any[];
+        primaryThreadId?: string | null;
+    };
+    // Legacy mapping helpers if needed
+    instrument?: any;
+    message?: any; // legacy fallback
 };
+
+function ResourceIcon({ type }: { type: string }) {
+    switch (type) {
+        case 'blog':
+            return (
+                <svg className="h-4 w-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            );
+        case 'recipe':
+            return (
+                <svg className="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            );
+        case 'product':
+            return (
+                <svg className="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            );
+        case 'community':
+            return (
+                <svg className="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+            );
+        default:
+            return (
+                <svg className="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            );
+    }
+}
+
+function ResourcesBlock({ resources }: { resources?: TodayResource[] }) {
+    const t = useTranslations();
+    const t_today = useTranslations('App.Today');
+    const locale = useLocale();
+
+    if (!resources || resources.length === 0) return null;
+
+    return (
+        <div className="space-y-3">
+            <div className="border-t border-slate-800 pt-4">
+                <div className="text-xs uppercase tracking-wide text-slate-500">
+                    {t_today('resources_title')}
+                </div>
+                <div className="mt-1 text-xs text-slate-500">
+                    {t_today('resources_subtitle')}
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                {resources.map((res, idx) => {
+                    const title = t(res.titleKey);
+                    const why = t(res.whyKey);
+
+                    let href = `/${locale}/learn/${res.slug || ''}`;
+                    if (res.type === 'blog') href = `/${locale}/blog/${res.slug || ''}`;
+                    if (res.type === 'community') href = `/${locale}/community${res.threadId ? `/thread/${res.threadId}` : ''}`;
+                    if (res.type === 'product') href = `/${locale}/products/${res.slug || ''}`;
+                    if (res.type === 'course') href = `/${locale}/courses/${res.slug || ''}`;
+
+                    return (
+                        <div key={idx} className="group relative flex items-start justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900/10 p-4 transition-colors hover:bg-slate-900/20">
+                            <div className="flex gap-3 min-w-0">
+                                <div className="mt-1 shrink-0">
+                                    <ResourceIcon type={res.type} />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-sm font-semibold text-slate-100">{title}</div>
+                                    <div className="mt-1 text-xs text-slate-400 leading-relaxed">{why}</div>
+                                    {res.type === 'product' && (
+                                        <div className="mt-2">
+                                            <span className="inline-flex items-center rounded-full bg-slate-800/80 border border-slate-700 px-2 py-0.5 text-[9px] uppercase font-bold text-slate-300 tracking-wider">
+                                                {t_today('optional_tool_label')}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            <Link
+                                href={href}
+                                className="shrink-0 flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:bg-slate-800/40 hover:border-slate-600"
+                            >
+                                {t_today('view_resource')}
+                                <svg className="w-3 h-3 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </Link>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {resources.some(r => r.type === 'community') && (
+                <div className="mt-4 border-t border-slate-800 pt-3">
+                    <Link
+                        href={`/${locale}/community?scope=program_day`}
+                        className="text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1"
+                    >
+                        {t_today('view_all_community')}
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </Link>
+                </div>
+            )}
+        </div>
+    );
+}
+
 
 function Pill({ children }: { children: React.ReactNode }) {
     return (
@@ -59,38 +215,123 @@ function Card({ children }: { children: React.ReactNode }) {
     );
 }
 
-function StatusHeader({
-    instrument,
-    day,
+function ReentryOfferCard({
+    reentry,
+    onDecision
 }: {
-    instrument?: InstrumentPayload;
+    reentry?: { eligible: boolean; type?: string; planId?: string } | null;
+    onDecision: (decision: 'ACCEPT' | 'DECLINE') => Promise<void>;
+}) {
+    const t = useTranslations('App.Reentry');
+    const [busy, setBusy] = useState(false);
+
+    if (!reentry?.eligible) return null;
+
+    async function handle(decision: 'ACCEPT' | 'DECLINE') {
+        if (busy) return;
+        setBusy(true);
+        try {
+            await onDecision(decision);
+        } finally {
+            setBusy(false);
+        }
+    }
+
+    return (
+        <div className="relative overflow-hidden rounded-xl border border-amber-900/30 bg-gradient-to-br from-amber-500/10 to-transparent p-4">
+            <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-500">
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div className="flex-1">
+                    <h3 className="text-sm font-semibold text-amber-400">{t('title')}</h3>
+                    <p className="mt-1 text-xs text-amber-200/70 leading-relaxed">
+                        {t('body')}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        <button
+                            onClick={() => handle('ACCEPT')}
+                            disabled={busy}
+                            className="flex items-center gap-2 rounded-lg bg-amber-500 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-900 transition-all hover:bg-amber-400 active:scale-95 disabled:opacity-50"
+                        >
+                            <span>{t('start_recalibration')}</span>
+                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </button>
+                        <button
+                            onClick={() => handle('DECLINE')}
+                            disabled={busy}
+                            className="rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 transition-all hover:border-slate-600 hover:text-slate-300 disabled:opacity-50"
+                        >
+                            {t('keep_observing')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ObservationStatusCard({ message }: { message?: any }) {
+    const t = useTranslations('App.Observation');
+    return (
+        <div className="rounded-xl border border-slate-700/50 bg-slate-900/10 p-4">
+            <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-slate-400"></div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                    {t('title')}
+                </div>
+            </div>
+            {message && (
+                <p className="mt-3 text-sm text-slate-400 leading-relaxed italic">
+                    {message}
+                </p>
+            )}
+        </div>
+    );
+}
+
+function StatusHeader({
+    behavior,
+    day,
+    status,
+    uiMode
+}: {
+    behavior?: any;
     day?: number;
+    status?: string;
+    uiMode?: string;
 }) {
     const t = useTranslations('App.Today');
 
-    const load = instrument?.load ?? 'normal';
-    const loadLabel = load === 'reduced' ? t('load_reduced') : t('load_normal');
+    // Mapped from behavior or defaults
+    const load = 'normal'; // MVP default as it wasn't strictly in new contract yet
+    const loadLabel = t('load_normal');
+    const minimalMode = behavior?.minimalMode;
 
     return (
         <div className="flex items-start justify-between gap-4">
             <div>
-                <div className="text-sm text-slate-400">{t('instrument')}</div>
-                <div className="mt-1 text-xl font-semibold tracking-tight text-slate-100">
+                <div className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{t('instrument')}</div>
+                <div className="mt-1 text-xl font-semibold tracking-tight text-slate-100 flex items-center gap-2">
                     {t('title')}
                 </div>
-                {typeof day === 'number' ? (
+                {uiMode === 'PROTOCOL' && typeof day === 'number' && (
                     <div className="mt-1 text-sm text-slate-400">
                         {t('day_label', { day })}
                     </div>
-                ) : null}
+                )}
             </div>
 
             <div className="flex flex-col items-end gap-2">
-                <Pill>{t('load_label', { value: loadLabel })}</Pill>
-                {instrument?.minimalMode?.enabled ? (
+                {/* <Pill>{t('load_label', { value: loadLabel })}</Pill> */}
+                {minimalMode ? (
                     <Pill>
                         {t('minimal_active', {
-                            level: instrument.minimalMode.level,
+                            level: minimalMode.level || 1,
                         })}
                     </Pill>
                 ) : (
@@ -101,14 +342,16 @@ function StatusHeader({
     );
 }
 
-function SystemMessage({ message }: { message?: { neutral: string; calibration?: string } }) {
-    const t = useTranslations('App.Today');
-    const text = message?.neutral?.trim() || t('no_message');
+function SystemMessage({ message }: { message?: { i18nKey: string; params?: any } }) {
+    const t = useTranslations();
+    const t_today = useTranslations('App.Today');
+
+    const text = message?.i18nKey ? t(message.i18nKey, message.params || {}) : t_today('no_message');
 
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-3">
             <div className="text-xs uppercase tracking-wide text-slate-500">
-                {t('system_message')}
+                {t_today('system_message')}
             </div>
             <div className="mt-1 text-sm leading-relaxed text-slate-200">{text}</div>
         </div>
@@ -124,17 +367,17 @@ function ActionRow({
     onRecord: (action: TodayAction) => Promise<void>;
     disabled?: boolean;
 }) {
-    const t = useTranslations('App.Today');
+    const t = useTranslations();
+    const t_today = useTranslations('App.Today');
     const [busy, setBusy] = useState(false);
 
-    const label = action.title || t(`actions.${action.type}.title`, { fallback: action.type });
-    const desc =
-        action.description ||
-        t(`actions.${action.type}.desc`, { fallback: '' });
+    // New UPG format uses action.label as an i18n key or fallback
+    const label = action.label ? t(action.label) : t_today(`actions.${action.type}.title`, { fallback: action.type });
+    const desc = action.description || t_today(`actions.${action.type}.desc`, { fallback: '' });
 
     const metaParts: string[] = [];
-    if (typeof action.minutes === 'number') metaParts.push(t('minutes', { m: action.minutes }));
-    if (action.window) metaParts.push(t(`windows.${action.window}`, { fallback: action.window }));
+    if (typeof action.minutes === 'number') metaParts.push(t_today('minutes', { m: action.minutes }));
+    if (action.window) metaParts.push(t_today(`windows.${action.window}`, { fallback: action.window }));
 
     const meta = metaParts.filter(Boolean).join(' · ');
 
@@ -166,7 +409,7 @@ function ActionRow({
                     "hover:bg-slate-900/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 ].join(' ')}
             >
-                {busy ? t('transmitting') : t('record')}
+                {busy ? t_today('transmitting') : t_today('record')}
             </button>
         </div>
     );
@@ -192,8 +435,67 @@ function ActionList({
     return (
         <div className="space-y-3">
             {actions.map((a, idx) => (
-                <ActionRow key={`${a.type}-${idx}`} action={a} onRecord={onRecord} />
+                <ActionRow key={`${a.type || a.id}-${idx}`} action={a} onRecord={onRecord} />
             ))}
+        </div>
+    );
+}
+
+function LearnBlock({ learn }: { learn: any }) {
+    const t = useTranslations();
+    const t_today = useTranslations('App.Today');
+    const [open, setOpen] = useState(false);
+
+    if (!learn) return null;
+
+    // Support both new strict contract (titleKey) and potential legacy (id as key)
+    const title = learn.titleKey ? t(learn.titleKey) : (learn.id ? t(learn.id) : t_today('learn_title'));
+    const summary = learn.summaryKey ? t(learn.summaryKey) : (learn.summary ? t(learn.summary) : '');
+
+    return (
+        <div className="rounded-xl border border-slate-800 bg-slate-900/10 p-3">
+            <button
+                type="button"
+                onClick={() => setOpen(v => !v)}
+                className="flex w-full items-center justify-between text-left"
+            >
+                <div>
+                    <div className="text-xs uppercase tracking-wide text-slate-500">
+                        {t_today('learn_label')}
+                    </div>
+                    <div className="mt-1 text-sm font-medium text-slate-200">{title}</div>
+                </div>
+                <div className="text-xs text-slate-500">{open ? t_today('collapse') : t_today('expand')}</div>
+            </button>
+
+            {open && summary && (
+                <div className="mt-3 text-sm leading-relaxed text-slate-400 border-t border-slate-800 pt-3">
+                    {summary}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function SupportBlock({ support }: { support: any }) {
+    const t = useTranslations();
+    const t_today = useTranslations('App.Today');
+
+    if (!support) return null;
+
+    return (
+        <div className="mt-4 flex flex-wrap gap-3 border-t border-slate-800 pt-4">
+            {support.communityGroupKey && (
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                    <span className="h-1.5 w-1.5 rounded-full bg-slate-700"></span>
+                    {t_today('community_active')}
+                </div>
+            )}
+            {support.commonQuestionsKey && (
+                <button className="text-xs text-slate-400 hover:text-slate-200 underline underline-offset-4 decoration-slate-700">
+                    {t(support.commonQuestionsKey)}
+                </button>
+            )}
         </div>
     );
 }
@@ -202,10 +504,11 @@ function CheckBlock({
     check,
     onSubmit,
 }: {
-    check?: TodayCheck;
+    check?: TodayCheck & { prompt?: string };
     onSubmit: (payload: { checkId: string; value: any }) => Promise<void>;
 }) {
-    const t = useTranslations('App.Today');
+    const t = useTranslations();
+    const t_today = useTranslations('App.Today');
     const [value, setValue] = useState<string>('');
     const [busy, setBusy] = useState(false);
 
@@ -221,39 +524,44 @@ function CheckBlock({
         }
     }
 
+    const question = check.prompt ? t(check.prompt) : (check.question || t_today(`checks.${check.id}.question`, { fallback: t_today('check_default_question') }));
+
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-3">
             <div className="text-xs uppercase tracking-wide text-slate-500">
-                {t('check')}
+                {t_today('check')}
             </div>
 
             <div className="mt-2 text-sm text-slate-200">
-                {check.question || t(`checks.${check.id}.question`, { fallback: t('check_default_question') })}
+                {question}
             </div>
 
             <div className="mt-3 flex flex-col gap-2">
-                {/* MVP: input simple (si tienes options, usa radios) */}
                 {Array.isArray(check.options) && check.options.length ? (
                     <div className="space-y-2">
-                        {check.options.map((opt) => (
-                            <label key={opt} className="flex items-center gap-2 text-sm text-slate-300">
-                                <input
-                                    type="radio"
-                                    name={`check-${check.id}`}
-                                    value={opt}
-                                    checked={value === opt}
-                                    onChange={(e) => setValue(e.target.value)}
-                                    className="accent-slate-200"
-                                />
-                                <span>{opt}</span>
-                            </label>
-                        ))}
+                        {check.options.map((opt: any) => {
+                            const optId = typeof opt === 'string' ? opt : opt.id;
+                            const optLabel = typeof opt === 'string' ? opt : t(opt.label);
+                            return (
+                                <label key={optId} className="flex items-center gap-2 text-sm text-slate-300">
+                                    <input
+                                        type="radio"
+                                        name={`check-${check.id}`}
+                                        value={optId}
+                                        checked={value === optId}
+                                        onChange={(e) => setValue(e.target.value)}
+                                        className="accent-slate-200"
+                                    />
+                                    <span>{optLabel}</span>
+                                </label>
+                            );
+                        })}
                     </div>
                 ) : (
                     <input
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
-                        placeholder={t('check_placeholder')}
+                        placeholder={t_today('check_placeholder')}
                         className="w-full rounded-lg border border-slate-700 bg-slate-950/40 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600 outline-none focus:border-slate-500"
                     />
                 )}
@@ -264,7 +572,7 @@ function CheckBlock({
                     disabled={busy || !value}
                     className="mt-1 inline-flex w-fit items-center rounded-lg border border-slate-700 bg-slate-900/30 px-3 py-2 text-sm text-slate-200 hover:bg-slate-900/50 disabled:opacity-50"
                 >
-                    {busy ? t('transmitting') : t('submit_check')}
+                    {busy ? t_today('transmitting') : t_today('submit_check')}
                 </button>
             </div>
         </div>
@@ -299,9 +607,10 @@ function TechnicalAccordion({ data }: { data: any }) {
 
 export default function TodayView() {
     const t = useTranslations('App.Today');
-    const locale = useLocale(); // Fix: Import useLocale
+    const t_global = useTranslations();
+    const locale = useLocale();
     const [loading, setLoading] = useState(true);
-    const [payload, setPayload] = useState<TodayPayload | null>(null);
+    const [payload, setPayload] = useState<any>(null); // We use any for avoiding strict type duels locally
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -309,7 +618,7 @@ export default function TodayView() {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.get<TodayPayload>('/today');
+            const res = await api.get<any>('/today');
             setPayload(res);
         } catch (e: any) {
             setError(e?.message || 'Failed to load');
@@ -322,29 +631,32 @@ export default function TodayView() {
         void load();
     }, []);
 
-    const actions = payload?.actions ?? [];
-    const check = payload?.check;
+    const protocol = payload?.protocol;
+    const actions = protocol?.actions ?? [];
+    const check = protocol?.check;
 
-    async function recordAction(action: TodayAction) {
-        await api.post('/user/day-log', { actionType: action.type, ts: new Date().toISOString() });
-        // Set confirmation flag for History view
+    async function recordAction(action: any) {
+        // Map new action.id/labelKey to generic log
+        await api.post('/user/day-log', { actionType: action.id, ts: new Date().toISOString() });
         localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
-        // Redirect to History for "neutral confirmation" by observation
         router.push(`/${locale}/app/history`);
     }
 
     async function submitCheck(p: { checkId: string; value: any }) {
         await api.post('/user/day-log', { checkId: p.checkId, value: p.value });
-        // Set confirmation flag for History view
         localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
-        // Redirect to History
         router.push(`/${locale}/app/history`);
     }
 
     return (
         <div className="mx-auto w-full max-w-2xl px-4 py-6">
             <div className="space-y-4">
-                <StatusHeader instrument={payload?.instrument} day={payload?.day} />
+                <StatusHeader
+                    behavior={payload?.behavior}
+                    day={payload?.day}
+                    status={payload?.status}
+                    uiMode={payload?.uiMode}
+                />
 
                 <Card>
                     {loading ? (
@@ -362,23 +674,126 @@ export default function TodayView() {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <SystemMessage message={payload?.message} />
+                            <SystemMessage message={payload?.systemMessage} />
 
-                            <div className="space-y-2">
-                                <div className="text-xs uppercase tracking-wide text-slate-500">
-                                    {t('actions')}
+                            {payload?.uiMode === 'OBSERVATION' && (
+                                <div className="space-y-6">
+                                    <ObservationStatusCard
+                                        // Pass localized text if deviation active, etc.
+                                        message={null}
+                                    />
+                                    <ReentryOfferCard
+                                        reentry={payload?.behavior?.reentry}
+                                        onDecision={async (decision) => {
+                                            const res = await api.post('/user/reentry/decision', {
+                                                decision,
+                                                planId: 'recalibration_3d'
+                                            }) as any;
+                                            if (res.ok && decision === 'ACCEPT') {
+                                                router.push(`/${locale}/app/recalibration`);
+                                            } else {
+                                                load(); // Refresh state
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Community-first for Observation mode: from community.threads */}
+                                    {payload?.community?.threads?.length > 0 && (
+                                        <div className="pt-2">
+                                            {/* We adapt the thread preview to the ResourcesBlock format or similar */}
+                                            <div className="space-y-2">
+                                                <div className="text-xs uppercase tracking-wide text-slate-500">
+                                                    {t('community_active')}
+                                                </div>
+                                                {payload.community.threads.map((th: any) => (
+                                                    <Link
+                                                        key={th.id}
+                                                        href={`/${locale}/community/thread/${th.id}`}
+                                                        className="block rounded-xl border border-slate-800 bg-slate-900/10 p-4 hover:bg-slate-900/20"
+                                                    >
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="h-1.5 w-1.5 rounded-full bg-violet-400"></div>
+                                                            <div className="text-sm font-semibold text-slate-200">
+                                                                {/* Render translated title, falling back to raw key/string */}
+                                                                {t_global(th.titleKey)}
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-1 text-xs text-slate-500 ml-3.5">
+                                                            {th.replyCount} {t('replies_label', { count: th.replyCount, fallback: 'replies' })} · {new Date(th.lastActivityAt).toLocaleDateString()}
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                                <ActionList actions={actions} onRecord={recordAction} />
-                            </div>
+                            )}
 
-                            <CheckBlock check={check} onSubmit={submitCheck} />
+                            {payload?.uiMode === 'RECALIBRATION' && (
+                                <div className="rounded-xl border border-amber-900/30 bg-amber-500/5 p-4 text-center">
+                                    <div className="text-xs font-bold uppercase tracking-widest text-amber-500/80">Recalibración activa</div>
+                                    <p className="mt-2 text-sm text-amber-200/70 leading-relaxed">
+                                        Fase de ajuste de 3 días en curso.
+                                    </p>
+                                    <button
+                                        onClick={() => router.push(`/${locale}/app/recalibration`)}
+                                        className="mt-4 w-full rounded-lg bg-amber-500 py-3 text-xs font-bold uppercase tracking-wider text-slate-900 transition-all hover:bg-amber-400"
+                                    >
+                                        Ver seguimiento
+                                    </button>
+                                </div>
+                            )}
+
+                            {payload?.uiMode === 'PROTOCOL' && (
+                                <>
+                                    {payload?.behavior?.minimalMode?.level === 2 && (
+                                        <div className="text-xs text-slate-500 italic px-1">
+                                            {t('minimal_mode_l2_hint', { fallback: 'Hoy: versión mínima (1 paso).' })}
+                                        </div>
+                                    )}
+
+                                    <LearnBlock learn={protocol?.learn} />
+
+                                    <div className="space-y-2">
+                                        <div className="text-xs uppercase tracking-wide text-slate-500">
+                                            {t('actions')}
+                                        </div>
+                                        <ActionList actions={actions} onRecord={recordAction} />
+                                    </div>
+
+
+                                    {check && <CheckBlock check={check} onSubmit={submitCheck} />}
+
+                                    {/* Community Deep Link */}
+                                    {payload?.community?.threadOfDayId && (
+                                        <div className="mt-6 border-t border-slate-800/50 pt-4">
+                                            <div className="flex items-center justify-between rounded-xl bg-slate-900/20 p-4 transition-colors hover:bg-slate-900/30">
+                                                <div>
+                                                    <div className="text-xs uppercase tracking-wide text-slate-500">
+                                                        {t('community')}
+                                                    </div>
+                                                    <div className="mt-1 text-sm font-medium text-slate-300">
+                                                        {t('view_group')}
+                                                    </div>
+                                                </div>
+                                                <Link
+                                                    href={`/${locale}/community/thread/${payload.community.threadOfDayId}?from=app`}
+                                                    className="rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+                                                >
+                                                    {t('open')}
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
 
                             <TechnicalAccordion
                                 data={{
-                                    instrument: payload?.instrument,
+                                    mode: payload?.uiMode,
                                     day: payload?.day,
                                     actionsCount: actions.length,
-                                    check: check ? { id: check.id, type: check.type } : null,
+                                    check: check ? { id: check.id } : null,
                                 }}
                             />
                         </div>
@@ -392,3 +807,6 @@ export default function TodayView() {
         </div>
     );
 }
+
+
+

@@ -1,0 +1,29 @@
+{
+    "protocolId": "recalibration_3d",
+    "rules": [
+        {
+            "id": "RECAL_START",
+            "priority": 1000,
+            "when": {
+                "dayEq": 1,
+                "protocolStatus": "ACTIVE"
+            },
+            "i18nKey": "SystemMessages.Recalibration.start"
+        },
+        {
+            "id": "RECAL_PROGRESS",
+            "priority": 900,
+            "when": {
+                "dayGt": 1,
+                "protocolStatus": "ACTIVE"
+            },
+            "i18nKey": "SystemMessages.Recalibration.progress"
+        },
+        {
+            "id": "RECAL_ACK",
+            "priority": 100,
+            "always": true,
+            "i18nKey": "SystemMessages.Recalibration.ack"
+        }
+    ]
+}

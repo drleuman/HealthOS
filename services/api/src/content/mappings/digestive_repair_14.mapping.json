@@ -1,0 +1,650 @@
+{
+    "protocolId": "digestive_repair_14",
+    "version": "1.0.0",
+    "days": [
+        {
+            "day": 1,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "digest-why-slowing-down-helps",
+                        "titleKey": "Resources.DigestiveRepair.Day1.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day1.blog1.why",
+                        "tags": [
+                            "meal_pace",
+                            "bloating"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "simple-breakfast-protein",
+                        "titleKey": "Resources.DigestiveRepair.Day1.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day1.recipe1.why",
+                        "tags": [
+                            "simple",
+                            "protein_anchor"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_1",
+                        "titleKey": "Resources.DigestiveRepair.Day1.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day1.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "meal-sequence-protein-veg-first",
+                        "titleKey": "Resources.DigestiveRepair.Day2.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day2.blog1.why",
+                        "tags": [
+                            "meal_order",
+                            "glucose"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "plate-protein-veg-carb",
+                        "titleKey": "Resources.DigestiveRepair.Day2.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day2.recipe1.why",
+                        "tags": [
+                            "meal_order"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_2",
+                        "titleKey": "Resources.DigestiveRepair.Day2.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day2.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "late-dinner-reflux-sleep",
+                        "titleKey": "Resources.DigestiveRepair.Day3.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day3.blog1.why",
+                        "tags": [
+                            "kitchen_cutoff",
+                            "reflux",
+                            "sleep"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "early-dinner-light",
+                        "titleKey": "Resources.DigestiveRepair.Day3.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day3.recipe1.why",
+                        "tags": [
+                            "early_dinner"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_3",
+                        "titleKey": "Resources.DigestiveRepair.Day3.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day3.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 4,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "chewing-and-digestion",
+                        "titleKey": "Resources.DigestiveRepair.Day4.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day4.blog1.why",
+                        "tags": [
+                            "chewing"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "one-plate-simple",
+                        "titleKey": "Resources.DigestiveRepair.Day4.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day4.recipe1.why",
+                        "tags": [
+                            "simple_plate"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [
+                    {
+                        "slug": "mint-ginger-infusion",
+                        "titleKey": "Resources.DigestiveRepair.Day4.product1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day4.product1.why",
+                        "tags": [
+                            "comfort",
+                            "optional_tool"
+                        ],
+                        "minPlan": {
+                            "showInL1": false,
+                            "showInL2": false
+                        },
+                        "gating": {
+                            "minDay": 4,
+                            "requires": [
+                                {
+                                    "type": "completed_days_gte",
+                                    "value": 3
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_4",
+                        "titleKey": "Resources.DigestiveRepair.Day4.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day4.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 5,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "digestive-triggers-how-to-observe",
+                        "titleKey": "Resources.DigestiveRepair.Day5.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day5.blog1.why",
+                        "tags": [
+                            "trigger_scan"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "two-ingredient-meal",
+                        "titleKey": "Resources.DigestiveRepair.Day5.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day5.recipe1.why",
+                        "tags": [
+                            "low_complexity"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [
+                    {
+                        "slug": "digestive_support_pack",
+                        "titleKey": "Resources.DigestiveRepair.Day5.product1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day5.product1.why",
+                        "tags": [
+                            "optional_tool"
+                        ],
+                        "minPlan": {
+                            "showInL1": false,
+                            "showInL2": false
+                        },
+                        "gating": {
+                            "minDay": 5,
+                            "requires": [
+                                {
+                                    "type": "completed_days_gte",
+                                    "value": 3
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_5",
+                        "titleKey": "Resources.DigestiveRepair.Day5.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day5.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 6,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "water-with-meals",
+                        "titleKey": "Resources.DigestiveRepair.Day6.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day6.blog1.why",
+                        "tags": [
+                            "water_timing"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_6",
+                        "titleKey": "Resources.DigestiveRepair.Day6.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day6.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 7,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "reading-transit-signals",
+                        "titleKey": "Resources.DigestiveRepair.Day7.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day7.blog1.why",
+                        "tags": [
+                            "stool",
+                            "signals"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "simple-soup",
+                        "titleKey": "Resources.DigestiveRepair.Day7.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day7.recipe1.why",
+                        "tags": [
+                            "easy_digest"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [
+                    {
+                        "slug": "mini-course-digestive-basics",
+                        "titleKey": "Resources.DigestiveRepair.Day7.course1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day7.course1.why",
+                        "tags": [
+                            "basics"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_7",
+                        "titleKey": "Resources.DigestiveRepair.Day7.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day7.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 8,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "pre-meal-breathing",
+                        "titleKey": "Resources.DigestiveRepair.Day8.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day8.blog1.why",
+                        "tags": [
+                            "breath",
+                            "parasympathetic"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_8",
+                        "titleKey": "Resources.DigestiveRepair.Day8.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day8.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 9,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "single-variable-experiments",
+                        "titleKey": "Resources.DigestiveRepair.Day9.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day9.blog1.why",
+                        "tags": [
+                            "one_change"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_9",
+                        "titleKey": "Resources.DigestiveRepair.Day9.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day9.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 10,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "reflux-night-positioning",
+                        "titleKey": "Resources.DigestiveRepair.Day10.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day10.blog1.why",
+                        "tags": [
+                            "reflux"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_10",
+                        "titleKey": "Resources.DigestiveRepair.Day10.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day10.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 11,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "fiber-introduction",
+                        "titleKey": "Resources.DigestiveRepair.Day11.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day11.blog1.why",
+                        "tags": [
+                            "fiber"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "fiber-small-portion",
+                        "titleKey": "Resources.DigestiveRepair.Day11.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day11.recipe1.why",
+                        "tags": [
+                            "fiber"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_11",
+                        "titleKey": "Resources.DigestiveRepair.Day11.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day11.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 12,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "protein-anchor-stability",
+                        "titleKey": "Resources.DigestiveRepair.Day12.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day12.blog1.why",
+                        "tags": [
+                            "protein_anchor"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "protein-anchor-meal",
+                        "titleKey": "Resources.DigestiveRepair.Day12.recipe1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day12.recipe1.why",
+                        "tags": [
+                            "protein_anchor"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_12",
+                        "titleKey": "Resources.DigestiveRepair.Day12.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day12.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 13,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "minimal-adjustment-next",
+                        "titleKey": "Resources.DigestiveRepair.Day13.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day13.blog1.why",
+                        "tags": [
+                            "review_trigger"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_13",
+                        "titleKey": "Resources.DigestiveRepair.Day13.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day13.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 14,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "digestive-maintenance-minimum",
+                        "titleKey": "Resources.DigestiveRepair.Day14.blog1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day14.blog1.why",
+                        "tags": [
+                            "closure"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [
+                    {
+                        "slug": "next-step-digestive-advanced",
+                        "titleKey": "Resources.DigestiveRepair.Day14.course1.title",
+                        "whyKey": "Resources.DigestiveRepair.Day14.course1.why",
+                        "tags": [
+                            "next_step"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "community": [
+                    {
+                        "threadId": "digestive_repair_day_14",
+                        "titleKey": "Resources.DigestiveRepair.Day14.thread.title",
+                        "whyKey": "Resources.DigestiveRepair.Day14.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

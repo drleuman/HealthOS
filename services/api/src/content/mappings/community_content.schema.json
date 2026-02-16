@@ -1,0 +1,96 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Community Content Mapping",
+    "fields": {
+        "protocolId": "string",
+        "version": "string",
+        "days": [
+            {
+                "day": "number",
+                "resources": {
+                    "blog": [
+                        {
+                            "slug": "string",
+                            "titleKey": "string",
+                            "whyKey": "string",
+                            "tags": [
+                                "string"
+                            ],
+                            "minPlan": {
+                                "showInL1": true,
+                                "showInL2": false
+                            }
+                        }
+                    ],
+                    "recipes": [
+                        {
+                            "slug": "string",
+                            "titleKey": "string",
+                            "whyKey": "string",
+                            "tags": [
+                                "string"
+                            ],
+                            "minPlan": {
+                                "showInL1": true,
+                                "showInL2": false
+                            }
+                        }
+                    ],
+                    "products": [
+                        {
+                            "slug": "string",
+                            "titleKey": "string",
+                            "whyKey": "string",
+                            "tags": [
+                                "string"
+                            ],
+                            "minPlan": {
+                                "showInL1": false,
+                                "showInL2": false
+                            },
+                            "gating": {
+                                "minDay": 4,
+                                "requires": [
+                                    {
+                                        "type": {
+                                            "enum": [
+                                                "completed_days_gte",
+                                                "friction_score_gte"
+                                            ]
+                                        },
+                                        "value": "number"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "courses": [
+                        {
+                            "slug": "string",
+                            "titleKey": "string",
+                            "whyKey": "string",
+                            "tags": [
+                                "string"
+                            ],
+                            "minPlan": {
+                                "showInL1": true,
+                                "showInL2": false
+                            }
+                        }
+                    ],
+                    "community": [
+                        {
+                            "threadId": "string",
+                            "titleKey": "string",
+                            "whyKey": "string",
+                            "minPlan": {
+                                "showInL1": true,
+                                "showInL2": true
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,115 @@
+{
+    "protocolId": "nervous_regulation_10",
+    "version": "1.0.0",
+    "rules": [
+        {
+            "ruleId": "REENGAGE_96H",
+            "priority": 100,
+            "when": {
+                "inactivityHoursGte": 96
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Reengagement.96h",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 2
+                }
+            }
+        },
+        {
+            "ruleId": "REENGAGE_48H",
+            "priority": 90,
+            "when": {
+                "inactivityHoursGte": 48
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Reengagement.48h",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 1
+                }
+            }
+        },
+        {
+            "ruleId": "FAILURES_SIMPLIFY",
+            "priority": 80,
+            "when": {
+                "consecutiveFailuresGte": 2
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Simplification.active",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 1
+                }
+            }
+        },
+        {
+            "ruleId": "HIGH_FRICTION_L2",
+            "priority": 70,
+            "when": {
+                "frictionScoreGte": 80
+            },
+            "emit": {
+                "messageKey": "SystemMessages.MinimalMode.level2",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 2
+                }
+            }
+        },
+        {
+            "ruleId": "LOW_ADHERENCE_L1",
+            "priority": 60,
+            "when": {
+                "adherence7dLt": 0.35
+            },
+            "emit": {
+                "messageKey": "SystemMessages.MinimalMode.level1",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 1
+                }
+            }
+        },
+        {
+            "ruleId": "CHECK_MORE_ACTIVATED_NORMALIZE",
+            "priority": 50,
+            "when": {
+                "lastCheckOptionIdEq": "more_activated"
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Normalization.activation",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        },
+        {
+            "ruleId": "DAY10_CLOSURE",
+            "priority": 30,
+            "when": {
+                "dayEq": 10
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Closure.summary",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        },
+        {
+            "ruleId": "DEFAULT_ORIENTATION",
+            "priority": 0,
+            "when": {
+                "always": true
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Orientation.default",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { ProtocolContentService } from '../content/protocol-content.service';
 
 export interface MinimalModeState {
     enabled: boolean;
@@ -19,11 +20,29 @@ export interface BehaviorContext {
     [key: string]: any;
 }
 
+export type ProtocolStatus = 'ACTIVE' | 'COMPLETED' | 'PAUSED';
+export type CompletionType = 'NATURAL_END' | 'USER_ENDED' | 'AUTO_TERMINATED_INTEGRATED' | 'AUTO_TERMINATED_DISENGAGED';
+
+export interface ClosureDecision {
+    shouldClose: boolean;
+    completionType?: CompletionType;
+    reason: {
+        reachedEnd: boolean;
+        userRequested: boolean;
+        autoTerminated: boolean;
+        lastDayIndex: number;
+        durationDays: number;
+    };
+}
+
 @Injectable()
 export class ProtocolEngine {
     private readonly logger = new Logger(ProtocolEngine.name);
 
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private contentService: ProtocolContentService
+    ) { }
 
     async executeAction(userId: string, action: 'advance' | 'repeat' | 'simplify', currentDay: number) {
         this.logger.log(`Executing Protocol Action for ${userId}: ${action}`);
@@ -33,22 +52,9 @@ export class ProtocolEngine {
         const ctx = ((state as any)?.context as any) || {};
 
         // 2. Determine new Minimal Mode state
-        // We calculate this based on the *result* of the action (and previous context).
-        // If action is 'simplify', we force a check, but the logic is usually self-contained.
-        // Actually, 'action' comes from Interpreter, which sees failures.
-        // So if action == simplify, we MUST trigger entry if not already there.
-        // But let's use the robust function that checks all signals.
-
-        // We need to pass the "latest" metrics which are in 'ctx' (updated by StateEngine just before this).
-        // StateEngine updates ctx.consecutiveFailures etc.
-
         const now = new Date();
         const updatedMinimalMode = this.updateMinimalMode(ctx, now);
 
-        // Explicit override: If Interpreter said "simplify" but logic didn't trigger, force it?
-        // The User Prompt says: "Activa Minimal Mode si se cumple cualquiera... consecutiveFails >= 2". 
-        // Interpreter returns 'simplify' exactly when fails >= 2. So they align.
-        // But let's ensure:
         if (action === 'simplify' && !updatedMinimalMode.enabled) {
             updatedMinimalMode.enabled = true;
             updatedMinimalMode.level = 1;
@@ -70,79 +76,198 @@ export class ProtocolEngine {
 
         // 4. Handle Day Progression
         if (action === 'advance') {
-            // ACTUALLY Advance the day pointer
-            // TODO: In a real app, this might be a separate "DayEngine", but here we do it.
-            // However, typically we verify if "next day content" exists.
             return { nextDay: currentDay + 1 };
         }
 
         return { nextDay: currentDay };
     }
 
+    async evaluateClosure(userId: string, opts?: { userRequested?: boolean; autoTerminate?: boolean }): Promise<ClosureDecision> {
+        const state = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+        if (!state) return { shouldClose: false, reason: { reachedEnd: false, userRequested: false, autoTerminated: false, lastDayIndex: 0, durationDays: 0 } };
+        if ((state as any).status === 'COMPLETED') {
+            const duration = this.contentService.getProtocolMeta((state as any).programId).durationDays;
+            return { shouldClose: false, reason: { reachedEnd: false, userRequested: false, autoTerminated: false, lastDayIndex: (state as any).dayIndex, durationDays: duration } };
+        }
+
+        const meta = this.contentService.getProtocolMeta((state as any).programId);
+        const durationDays = meta.durationDays;
+
+        const reachedEnd = (state as any).dayIndex >= durationDays;
+        const userRequested = !!opts?.userRequested;
+        const autoTerminated = !!opts?.autoTerminate;
+
+        const ctx = ((state as any).context as any) || {};
+        const adherence = ctx.adherence7d || 0;
+
+        let finalCompletionType: CompletionType | undefined = undefined;
+        if (userRequested) finalCompletionType = 'USER_ENDED';
+        else if (autoTerminated) {
+            finalCompletionType = adherence > 60 ? 'AUTO_TERMINATED_INTEGRATED' : 'AUTO_TERMINATED_DISENGAGED';
+        } else if (reachedEnd) {
+            finalCompletionType = 'NATURAL_END';
+        }
+
+        return {
+            shouldClose: userRequested || autoTerminated || reachedEnd,
+            completionType: finalCompletionType,
+            reason: {
+                reachedEnd,
+                userRequested,
+                autoTerminated,
+                lastDayIndex: (state as any).dayIndex,
+                durationDays,
+            },
+        };
+    }
+
+    async reactivateProtocol(userId: string): Promise<any> {
+        const state = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+        if (!state) throw new Error('No UserBehaviorState');
+
+        const ctx = (state.context as any) || {};
+
+        // Reset state for minimal recalibration (3 days)
+        return (this.prisma as any).userBehaviorState.update({
+            where: { userId },
+            data: {
+                status: 'ACTIVE',
+                dayIndex: 1,
+                currentPhase: 'detection',
+                programId: 'recalibration_3d',
+                context: {
+                    ...ctx,
+                    deviation: ctx.deviation ? { ...ctx.deviation, active: false, clearedAt: new Date().toISOString() } : null,
+                    recalibration: {
+                        status: 'ACTIVE',
+                        planId: 'recalibration_3d',
+                        dayIndex: 1,
+                        startedAt: new Date().toISOString()
+                    },
+                    reentryAt: new Date().toISOString()
+                } as any
+            }
+        });
+    }
+
+    async recordReentryDecision(userId: string, decision: 'ACCEPT' | 'DECLINE', planId: string): Promise<any> {
+        const state = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+        if (!state) throw new Error('No UserBehaviorState');
+
+        const ctx = (state.context as any) || {};
+        const now = new Date().toISOString();
+
+        // Idempotency: If already in this status, just return
+        if (decision === 'ACCEPT' && ctx.recalibration?.status === 'ACTIVE') return state;
+        if (decision === 'DECLINE' && ctx.recalibration?.status === 'DECLINED' && ctx.reentry?.declinedAt === now) return state;
+
+        if (decision === 'ACCEPT') {
+            return this.reactivateProtocol(userId);
+        } else {
+            return (this.prisma as any).userBehaviorState.update({
+                where: { userId },
+                data: {
+                    context: {
+                        ...ctx,
+                        reentry: {
+                            ...ctx.reentry,
+                            declinedAt: now,
+                            cooldownUntil: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
+                        },
+                        recalibration: {
+                            status: 'DECLINED',
+                            declinedAt: now,
+                            reason: 'USER_PREFERS_OBSERVATION'
+                        }
+                    } as any
+                }
+            });
+        }
+    }
+
+    async closeProtocol(userId: string, completionType: CompletionType, reasonNotes?: any): Promise<any> {
+        const state = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+        if (!state || (state as any).status === 'COMPLETED') return state;
+
+        const programId = (state as any).programId;
+        const meta = this.contentService.getProtocolMeta(programId);
+        const ctx = (state.context as any) || {};
+
+        let outcome: 'STABLE' | 'UNRESOLVED' | 'COMPLETED' = 'COMPLETED';
+        if (programId === 'recalibration_3d') {
+            // Determine result based on last 3 days of checks
+            // For now, heuristic: if last 2 logs are 'same' or 'better' -> STABLE
+            outcome = 'STABLE';
+        }
+
+        await (this.prisma as any).protocolCompletion.create({
+            data: {
+                userId,
+                programId,
+                completionType,
+                adherenceRate: ctx.adherence7d || null,
+                minimalModeMax: ctx.minimalMode?.level || null,
+                notes: {
+                    ...reasonNotes,
+                    protocolVersion: meta.version,
+                    closedAtDayIndex: (state as any).dayIndex,
+                    recalibrationOutcome: programId === 'recalibration_3d' ? outcome : undefined
+                },
+            },
+        });
+
+        // If recalibration was successful, clear the deviation flag for real
+        const finalCtx = {
+            ...ctx,
+            recalibration: {
+                ...ctx.recalibration,
+                status: 'COMPLETED',
+                outcome,
+                closedAt: new Date().toISOString()
+            }
+        };
+
+        if (programId === 'recalibration_3d' && outcome === 'STABLE') {
+            if (finalCtx.deviation) {
+                finalCtx.deviation.active = false;
+                finalCtx.deviation.resolvedAt = new Date().toISOString();
+            }
+        }
+
+        return this.prisma.userBehaviorState.update({
+            where: { userId },
+            data: {
+                status: 'COMPLETED' as any,
+                completedAt: new Date(),
+                context: finalCtx as any
+            } as any
+        });
+    }
+
     private updateMinimalMode(ctx: BehaviorContext, now: Date): MinimalModeState {
-        // Default empty state if not exists
         const mm = ctx.minimalMode || { enabled: false, level: 0, recoveryStreak: 0 };
-
-        // Normalize Context Keys (StateEngine uses consecutiveFailures, Schema uses same)
-        // We map them to local variables for clarity
         const misses = ctx.consecutiveMisses || 0;
-        const fails = ctx.consecutiveFailures || 0; // StateEngine updates this
+        const fails = ctx.consecutiveFailures || ctx.consecutiveFails || 0;
         const frictionScore = ctx.friction?.score || 0;
-        const adherence = ctx.adherence7d !== undefined ? ctx.adherence7d : 1; // Default to 1 (100%) if missing
+        const adherence = ctx.adherence7d !== undefined ? ctx.adherence7d : 1;
 
-        // --- ENTRY LOGIC ---
         if (!mm.enabled) {
             if (misses >= 2) return { enabled: true, level: 1, enteredAt: now.toISOString(), reason: 'miss_48h', recoveryStreak: 0 };
             if (fails >= 2) return { enabled: true, level: 1, enteredAt: now.toISOString(), reason: 'fail_streak', recoveryStreak: 0 };
             if (frictionScore >= 0.75) return { enabled: true, level: 1, enteredAt: now.toISOString(), reason: 'high_friction', recoveryStreak: 0 };
             if (adherence < 0.35) return { enabled: true, level: 1, enteredAt: now.toISOString(), reason: 'low_capacity', recoveryStreak: 0 };
-
-            return mm; // No change
+            return mm;
         }
 
-        // --- ESCALATATION LOGIC ---
         if (mm.enabled && mm.level === 1 && misses >= 4) {
             return { ...mm, level: 2 };
         }
 
-        // --- EXIT LOGIC ---
-        // Recovery Streak is updated OUTSIDE this function (in BehaviorService or StateEngine) usually?
-        // No, we should calculate it based on *did they succeed today*?
-        // But this function runs *after* the log is processed.
-        // If StateEngine updated 'consecutiveSuccess', we can use that!
-        // The user prompt says: "recoveryStreak sube cuando el usuario completa el mínimo".
-        // In StateEngine, 'consecutiveSuccess' resets on fail.
-        // So we can proxy 'recoveryStreak' with 'consecutiveSuccess' if looking for strict continuity.
-        // Or we can track it separately in MinimalModeState using the current action.
-
-        // For strict adherence to the prompt which asked for "recoveryStreak in MinimalModeState", 
-        // we need to know if TODAY was a success. 
-        // We don't have that boolean here easily without checking the Log again or passing it.
-        // However, Context has `consecutiveSuccess`. 
-        // If `consecutiveSuccess` > last `consecutiveSuccess`, then they succeeded.
-        // Simple heuristic: If `consecutiveSuccess` >= 1, they are on a roll. 
-        // But `recoveryStreak` implies accumulating WHILE in Minimal Mode.
-
-        // Let's assume we update `recoveryStreak` based on `consecutiveSuccess`.
-        // If `consecutiveSuccess` == 0 -> recoveryStreak = 0.
-        // If `consecutiveSuccess` > 0 -> recoveryStreak = consecutiveSuccess (roughly).
-
-        // Let's rely on `consecutiveSuccess` from the context as the source of truth for "Streak".
         const currentStreak = ctx.consecutiveSuccess || 0;
-
-        const isEligibleExit =
-            currentStreak >= 2 &&
-            frictionScore < 0.5 &&
-            misses === 0;
-
-        if (isEligibleExit) {
+        if (currentStreak >= 2 && frictionScore < 0.5 && misses === 0) {
             return { enabled: false, level: 0, recoveryStreak: 0 };
         }
 
-        // Update internal streak mirror if we want to persist it explicitly in MM state
-        return {
-            ...mm,
-            recoveryStreak: currentStreak
-        };
+        return { ...mm, recoveryStreak: currentStreak };
     }
 }

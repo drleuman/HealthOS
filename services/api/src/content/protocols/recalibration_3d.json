@@ -1,0 +1,103 @@
+{
+    "id": "recalibration_3d",
+    "name": "Recalibración Mínima",
+    "version": "1.0",
+    "days": [
+        {
+            "day": 1,
+            "title": "Protocol.recal_3d.d1.title",
+            "learn": {
+                "title": "Protocol.recal_3d.d1.learn_title",
+                "body": "Protocol.recal_3d.d1.learn_body"
+            },
+            "actions": [
+                {
+                    "id": "morning_light_min",
+                    "label": "Protocol.recal_3d.actions.morning_light_min"
+                }
+            ],
+            "check": {
+                "id": "perception_check",
+                "prompt": "Protocol.recal_3d.checks.perception",
+                "options": [
+                    {
+                        "id": "better",
+                        "label": "Common.better"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Common.worse"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "title": "Protocol.recal_3d.d2.title",
+            "learn": {
+                "title": "Protocol.recal_3d.d2.learn_title",
+                "body": "Protocol.recal_3d.d2.learn_body"
+            },
+            "actions": [
+                {
+                    "id": "pm_darkness_min",
+                    "label": "Protocol.recal_3d.actions.pm_darkness_min"
+                }
+            ],
+            "check": {
+                "id": "perception_check",
+                "prompt": "Protocol.recal_3d.checks.perception",
+                "options": [
+                    {
+                        "id": "better",
+                        "label": "Common.better"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Common.worse"
+                    }
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "title": "Protocol.recal_3d.d3.title",
+            "learn": {
+                "title": "Protocol.recal_3d.d3.learn_title",
+                "body": "Protocol.recal_3d.d3.learn_body"
+            },
+            "actions": [
+                {
+                    "id": "anchor_stablization",
+                    "label": "Protocol.recal_3d.actions.anchor_stablization"
+                }
+            ],
+            "check": {
+                "id": "perception_check",
+                "prompt": "Protocol.recal_3d.checks.perception",
+                "options": [
+                    {
+                        "id": "better",
+                        "label": "Common.better"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Common.worse"
+                    }
+                ]
+            }
+        }
+    ]
+}

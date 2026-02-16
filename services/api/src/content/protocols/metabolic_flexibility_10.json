@@ -1,0 +1,248 @@
+{
+    "id": "metabolic_flexibility_10",
+    "version": "1.0.0",
+    "domain": "metabolic",
+    "phases": {
+        "detection": [
+            1,
+            2,
+            3
+        ],
+        "stabilization": [
+            4,
+            5,
+            6,
+            7
+        ],
+        "expansion": [
+            8,
+            9,
+            10
+        ]
+    },
+    "duration_days": 10,
+    "timeBudgetMinutes": 6,
+    "days": [
+        {
+            "day": 1,
+            "title": "Baseline hunger rhythm",
+            "learn": "Baseline hunger rhythm observation",
+            "do": {
+                "actions": [
+                    {
+                        "id": "fixed_breakfast_time",
+                        "type": "anchor",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.fixed_breakfast_time"
+                    }
+                ]
+            },
+            "check": {
+                "id": "morning_hunger",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.morning_hunger",
+                "options": [
+                    "none",
+                    "normal",
+                    "intense"
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "learn": "Glucose anticipatory response",
+            "do": {
+                "actions": [
+                    {
+                        "id": "no_caloric_drinks_morning",
+                        "type": "restriction",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.no_caloric_drinks_morning"
+                    }
+                ]
+            },
+            "check": {
+                "id": "energy_midmorning",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.energy_midmorning",
+                "options": [
+                    "stable",
+                    "sleepy",
+                    "wired"
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "learn": "Meal order effect",
+            "do": {
+                "actions": [
+                    {
+                        "id": "protein_first_meal",
+                        "type": "sequence",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.protein_first_meal"
+                    }
+                ]
+            },
+            "check": {
+                "id": "postmeal_state",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.postmeal_state",
+                "options": [
+                    "clear",
+                    "heavy",
+                    "foggy"
+                ]
+            }
+        },
+        {
+            "day": 4,
+            "learn": "Metabolic boundary setting",
+            "do": {
+                "actions": [
+                    {
+                        "id": "no_snacking_between_meals",
+                        "type": "boundary",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.no_snacking_between_meals"
+                    }
+                ]
+            },
+            "check": {
+                "id": "hunger_between_meals",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.hunger_between_meals",
+                "options": [
+                    "none",
+                    "mild",
+                    "urgent"
+                ]
+            }
+        },
+        {
+            "day": 5,
+            "learn": "Temporal consistency effect",
+            "do": {
+                "actions": [
+                    {
+                        "id": "consistent_lunch_time",
+                        "type": "anchor",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.consistent_lunch_time"
+                    }
+                ]
+            },
+            "check": {
+                "id": "afternoon_energy",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.afternoon_energy",
+                "options": [
+                    "stable",
+                    "dip",
+                    "crash"
+                ]
+            }
+        },
+        {
+            "day": 6,
+            "learn": "Postprandial glucose clearance",
+            "do": {
+                "actions": [
+                    {
+                        "id": "walk_after_meal_10min",
+                        "type": "buffer",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.walk_after_meal_10min"
+                    }
+                ]
+            },
+            "check": {
+                "id": "postmeal_alertness",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.postmeal_alertness",
+                "options": [
+                    "alert",
+                    "neutral",
+                    "sleepy"
+                ]
+            }
+        },
+        {
+            "day": 7,
+            "learn": "Circadian-metabolic alignment",
+            "do": {
+                "actions": [
+                    {
+                        "id": "early_dinner_window",
+                        "type": "circadian_support",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.early_dinner_window"
+                    }
+                ]
+            },
+            "check": {
+                "id": "night_hunger",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.night_hunger",
+                "options": [
+                    "none",
+                    "light",
+                    "strong"
+                ]
+            }
+        },
+        {
+            "day": 8,
+            "learn": "Macronutrient timing",
+            "do": {
+                "actions": [
+                    {
+                        "id": "carbs_evening_only",
+                        "type": "distribution",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.carbs_evening_only"
+                    }
+                ]
+            },
+            "check": {
+                "id": "sleep_onset",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.sleep_onset",
+                "options": [
+                    "fast",
+                    "normal",
+                    "delayed"
+                ]
+            }
+        },
+        {
+            "day": 9,
+            "learn": "Metabolic predictability",
+            "do": {
+                "actions": [
+                    {
+                        "id": "repeatable_breakfast",
+                        "type": "stability",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.repeatable_breakfast"
+                    }
+                ]
+            },
+            "check": {
+                "id": "morning_clarity",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.morning_clarity",
+                "options": [
+                    "clear",
+                    "average",
+                    "slow"
+                ]
+            }
+        },
+        {
+            "day": 10,
+            "learn": "Integrated metabolic rhythm",
+            "do": {
+                "actions": [
+                    {
+                        "id": "fixed_meal_structure",
+                        "type": "integration",
+                        "label": "Protocol.metabolic_flexibility_10.Actions.fixed_meal_structure"
+                    }
+                ]
+            },
+            "check": {
+                "id": "daily_energy_variation",
+                "prompt": "Protocol.metabolic_flexibility_10.Checks.daily_energy_variation",
+                "options": [
+                    "minimal",
+                    "moderate",
+                    "high"
+                ]
+            }
+        }
+    ]
+}

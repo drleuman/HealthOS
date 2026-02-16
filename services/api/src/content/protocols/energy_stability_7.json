@@ -1,0 +1,177 @@
+{
+    "id": "energy_stability_7",
+    "version": "1.0.0",
+    "domain": "stability",
+    "phases": {
+        "detection": [
+            1,
+            2,
+            3
+        ],
+        "stabilization": [
+            4,
+            5,
+            6
+        ],
+        "closure": [
+            7
+        ]
+    },
+    "duration_days": 7,
+    "days": [
+        {
+            "day": 1,
+            "title": "Protocol.energy_stability_7.title",
+            "learn": {
+                "id": "energy_stability_7.learn.day1",
+                "titleKey": "Protocol.energy_stability_7.title_day1",
+                "summaryKey": "Protocol.energy_stability_7.learn_day1"
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "eat_within_60min",
+                        "type": "anchor",
+                        "label": "Protocol.energy_stability_7.Actions.eat_within_60min"
+                    }
+                ]
+            },
+            "check": {
+                "id": "morning_energy",
+                "prompt": "Protocol.energy_stability_7.Checks.morning_energy",
+                "options": [
+                    "low",
+                    "stable",
+                    "high"
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "day_title": "Protein loading",
+            "learn": "Protein at breakfast stabilizes glucose response.",
+            "do": {
+                "actions": [
+                    {
+                        "id": "protein_breakfast",
+                        "type": "nutrition",
+                        "label": "Protocol.energy_stability_7.Actions.protein_breakfast"
+                    }
+                ]
+            },
+            "check": {
+                "id": "midday_crash",
+                "prompt": "Protocol.energy_stability_7.Checks.midday_crash",
+                "options": [
+                    "yes",
+                    "no"
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "learn": "Isolated sugars and energy variability",
+            "do": {
+                "actions": [
+                    {
+                        "id": "no_sugar_isolated",
+                        "type": "restriction",
+                        "label": "Protocol.energy_stability_7.Actions.no_sugar_isolated"
+                    }
+                ]
+            },
+            "check": {
+                "id": "energy_stability",
+                "prompt": "Protocol.energy_stability_7.Checks.energy_stability",
+                "options": [
+                    "variable",
+                    "stable"
+                ]
+            }
+        },
+        {
+            "day": 4,
+            "learn": "Hydration before caffeine",
+            "do": {
+                "actions": [
+                    {
+                        "id": "water_before_caffeine",
+                        "type": "sequence",
+                        "label": "Protocol.energy_stability_7.Actions.water_before_caffeine"
+                    }
+                ]
+            },
+            "check": {
+                "id": "afternoon_energy",
+                "prompt": "Protocol.energy_stability_7.Checks.afternoon_energy",
+                "options": [
+                    "crash",
+                    "stable"
+                ]
+            }
+        },
+        {
+            "day": 5,
+            "learn": "Anticipatory eating",
+            "do": {
+                "actions": [
+                    {
+                        "id": "eat_before_hunger",
+                        "type": "timing",
+                        "label": "Protocol.energy_stability_7.Actions.eat_before_hunger"
+                    }
+                ]
+            },
+            "check": {
+                "id": "focus_clarity",
+                "prompt": "Protocol.energy_stability_7.Checks.focus_clarity",
+                "options": [
+                    "foggy",
+                    "clear"
+                ]
+            }
+        },
+        {
+            "day": 6,
+            "learn": "Steady state maintenance",
+            "do": {
+                "actions": [
+                    {
+                        "id": "steady_meal_timing",
+                        "type": "anchor",
+                        "label": "Protocol.energy_stability_7.Actions.steady_meal_timing"
+                    }
+                ]
+            },
+            "check": {
+                "id": "post_activity_energy",
+                "prompt": "Protocol.energy_stability_7.Checks.post_activity_energy",
+                "options": [
+                    "depleted",
+                    "recovered"
+                ]
+            }
+        },
+        {
+            "day": 7,
+            "learn": "Pattern integration",
+            "do": {
+                "actions": [
+                    {
+                        "id": "repeat_best_day_pattern",
+                        "type": "consolidation",
+                        "label": "Protocol.energy_stability_7.Actions.repeat_best_day_pattern"
+                    }
+                ]
+            },
+            "check": {
+                "id": "overall_energy",
+                "prompt": "Protocol.energy_stability_7.Checks.overall_energy",
+                "options": [
+                    "same",
+                    "better"
+                ]
+            }
+        }
+    ]
+}

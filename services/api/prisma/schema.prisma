@@ -23,6 +23,8 @@ model User {
   behaviorState UserBehaviorState?
   interactions OperatorInteraction[]
   notifications NotificationEvent[]
+  replies       CommunityReply[]
+  completions   ProtocolCompletion[]
 }
 
 model NotificationEvent {
@@ -90,6 +92,7 @@ model DailyLog {
   day             Int
   actionCompleted Boolean
   selfReportEffect Json?   // Structured perception check result (e.g. { "energy": "higher" })
+  context          Json?
   createdAt       DateTime @default(now())
 
   @@index([userId, day])
@@ -165,13 +168,50 @@ model UserBehaviorSnapshot {
 }
 
 model UserBehaviorState {
-  userId     String   @id
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  state      String
-  context    Json?    // Stores behavioral metrics: friction_type, circadian_phase, failures, etc.
-  currentPhase String? // 'detection', 'disruption', 'stabilization', etc.
-  cognitiveState String? // 'oriented', 'resistant', 'overwhelmed', etc.
-  updatedAt  DateTime @updatedAt
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  programId       String
+  dayIndex        Int      @default(1)
+  status          ProtocolStatus @default(ACTIVE)
+  
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+  
+  state           String   @default("oriented")
+  context         Json?    
+  currentPhase    String?
+  cognitiveState  String?
+  updatedAt       DateTime @updatedAt
+}
+
+enum ProtocolStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+model ProtocolCompletion {
+  id             String   @id @default(cuid())
+  userId         String
+  programId      String
+  completedAt    DateTime @default(now())
+  completionType CompletionType @default(NATURAL_END)
+  adherenceRate  Float?
+  minimalModeMax Int?
+  notes          Json?
+  user           User    @relation(fields: [userId], references: [id])
+
+  @@index([userId, programId, completedAt])
+  @@unique([userId, programId, completedAt])
+}
+
+enum CompletionType {
+  NATURAL_END
+  USER_ENDED
+  AUTO_TERMINATED_INTEGRATED
+  AUTO_TERMINATED_DISENGAGED
 }
 
 model BehaviorAnalysis {
@@ -211,3 +251,52 @@ model Experiment {
   createdAt    DateTime @default(now())
 }
 
+
+model CommunityThread {
+  id              String   @id @default(uuid())
+  title           String
+  excerpt         String?  @db.Text
+  scope           String   // 'program_day', 'area', 'general'
+  protocolId      String?
+  day             Int?
+  areaId          String?
+  lastActivityAt  DateTime @default(now())
+  createdAt       DateTime @default(now())
+  
+  replies        CommunityReply[]
+
+  @@index([scope, protocolId, day])
+  @@index([areaId])
+  @@index([lastActivityAt])
+}
+
+model CommunityReply {
+  id        String   @id @default(uuid())
+  threadId  String
+  thread    CommunityThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  // Moderation / Clinical Framing
+  moderationFlag   String?
+  moderationAction String?
+  overlayKey       String?
+
+  @@index([threadId])
+  @@index([userId])
+}
+
+model ProtocolTransition {
+  id           Int      @id @default(autoincrement())
+  fromProtocol String   @db.VarChar(64)
+  signalType   String   @db.VarChar(64)
+  nextProtocol String   @db.VarChar(64)
+  priority     Int      @default(100)
+  enabled      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([fromProtocol, signalType, enabled, priority(sort: Desc)], name: "idx_protocol_transitions_lookup")
+}

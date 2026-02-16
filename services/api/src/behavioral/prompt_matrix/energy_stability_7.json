@@ -1,0 +1,46 @@
+{
+    "rules": [
+        {
+            "id": "INACTIVITY_48H",
+            "priority": 1000,
+            "when": {
+                "inactiveHoursGte": 48
+            },
+            "i18nKey": "SystemMessages.Reengagement.energy_inactive"
+        },
+        {
+            "id": "FAIL_2",
+            "priority": 900,
+            "when": {
+                "consecutiveFailuresGte": 2
+            },
+            "i18nKey": "SystemMessages.Simplification.energy_reduce"
+        },
+        {
+            "id": "CRASH_NORMALIZE",
+            "priority": 800,
+            "when": {
+                "checkEq": "midday_crash",
+                "feedbackEq": "worse"
+            },
+            "i18nKey": "SystemMessages.Normalization.energy_crash"
+        },
+        {
+            "id": "LOW_MORNING",
+            "priority": 780,
+            "when": {
+                "checkEq": "morning_energy",
+                "feedbackEq": "low"
+            },
+            "i18nKey": "SystemMessages.Normalization.low_morning_energy"
+        },
+        {
+            "id": "IMPROVEMENT",
+            "priority": 500,
+            "when": {
+                "feedbackEq": "better"
+            },
+            "i18nKey": "SystemMessages.Closure.energy_stable"
+        }
+    ]
+}

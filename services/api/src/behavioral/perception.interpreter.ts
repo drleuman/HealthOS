@@ -15,6 +15,7 @@ export interface PerceptionInput {
         gapHours: number;
         timeToLogMinutes?: number;
         checkEffectHistory: string[]; // e.g. ['same', 'worse', 'same']
+        checkEffectHistoryWithTime?: Array<{ effect: string; at: string }>; // For temporal windowing
         navigationFlags?: { historyViewed: boolean, detailsExpanded: boolean };
     };
     context?: any;
@@ -26,6 +27,13 @@ export interface PerceptionOutput {
     phaseProgress: string;   // BIL
     recommendedResponse: string; // BIL
     protocolAction: 'advance' | 'repeat' | 'simplify'; // New for Protocol Engine
+    deviation?: {
+        type: 'DRIFT' | 'LATENT_INSTABILITY' | 'CRITICAL_DISCONNECT';
+        severity: number;
+        ruleId: string;
+        evidence?: any;
+        at: string;
+    } | null;
 }
 
 import { resolvePhase, PhaseState, Phase } from './protocol-phase.engine';
@@ -40,14 +48,24 @@ export class PerceptionInterpreter {
     async interpret(input: PerceptionInput): Promise<PerceptionOutput> {
         this.logger.log(`Interpreting input for user ${input.userId}: ${input.actionStatus}`);
 
+        const isCompleted = input.context?.protocolStatus === 'COMPLETED';
+
         // 1. Detect Behavioral Signal (The "Meaning")
         const signal = this.detectSignal(input);
 
         // 2. Infer Cognitive State (The "Mindset")
         const cognitiveState = this.inferCognitiveState(signal, input);
 
-        // 3. Determine Phase Progress (Biological) using ProtocolPhaseEngine
-        // Need to calculate metrics for PhaseState
+        // 3. Handle Deviation Detection for Observation Mode
+        let deviation = null;
+        if (isCompleted) {
+            deviation = this.detectDeviation(input);
+            if (deviation) {
+                this.logger.warn(`Deviation detected for COMPLETED user ${input.userId}: ${deviation.type}`);
+            }
+        }
+
+        // 4. Determine Phase Progress (Biological) using ProtocolPhaseEngine
         const adherence = this.calculateAdherence(input.metrics);
         const perceptionTrend = this.calculatePerceptionTrend(input.metrics.checkEffectHistory);
 
@@ -61,26 +79,95 @@ export class PerceptionInterpreter {
             failures: input.metrics.consecutiveFailures
         };
 
-        const phaseProgress = resolvePhase(phaseState);
+        const phaseProgress = isCompleted ? 'maintenance' : resolvePhase(phaseState);
 
-        // 4. Decide Protocol Action (Advance/Repeat/Simplify) using DayProgressionEngine
-        // Map input feedback to "better" | "same" | "worse"
+        // 5. Decide Protocol Action (Advance/Repeat/Simplify) using DayProgressionEngine
         const perception = (input.feedback === 'better' || input.feedback === 'same' || input.feedback === 'worse')
             ? input.feedback
             : undefined;
 
-        const protocolAction = decideProgress(adherence, input.metrics.consecutiveFailures, perception);
+        const protocolAction = isCompleted ? 'repeat' : decideProgress(adherence, input.metrics.consecutiveFailures, perception);
 
-        // 5. Decide System Response (The "Speech Act")
-        const responseType = this.decideResponse(signal, cognitiveState, protocolAction);
+        // 6. Decide System Response (The "Speech Act")
+        // If deviation detected in completed mode, we might want a specific response
+        const responseType = isCompleted
+            ? (deviation ? 're-entry_trigger' : 'observation')
+            : this.decideResponse(signal, cognitiveState, protocolAction);
 
         return {
             signal,
             cognitiveState,
             phaseProgress,
             recommendedResponse: responseType,
-            protocolAction
+            protocolAction,
+            deviation
         };
+    }
+
+    private detectDeviation(input: PerceptionInput): PerceptionOutput['deviation'] {
+        const nowIso = new Date().toISOString();
+        const historyWithTime = [...(input.metrics.checkEffectHistoryWithTime || [])]
+            .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime()); // Ensure DESC
+
+        const isSpontaneous = !!input.context?.isSpontaneousReturn;
+        const WINDOW_DAYS = 7;
+
+        // SIGNAL: DRIFT (3 consecutive worse within 7 days + density check)
+        if (historyWithTime.length >= 3) {
+            const recent3 = historyWithTime.slice(0, 3);
+            if (recent3.every(h => h.effect === 'worse')) {
+                const firstAt = new Date(recent3[2].at).getTime();
+                const lastAt = new Date(recent3[0].at).getTime();
+                const daysDiff = (lastAt - firstAt) / (1000 * 60 * 60 * 24);
+                const spanHours = (lastAt - firstAt) / 36e5;
+
+                // Density Check: either dense in 72h OR several logs in the 7d window
+                const logsInWindow = historyWithTime.filter(h =>
+                    (lastAt - new Date(h.at).getTime()) / (1000 * 60 * 60 * 24) <= WINDOW_DAYS
+                ).length;
+
+                const hasDensity = spanHours <= 72 || logsInWindow >= 4;
+
+                if (daysDiff <= WINDOW_DAYS && hasDensity) {
+                    return {
+                        type: 'DRIFT',
+                        severity: 0.8,
+                        ruleId: 'DEV_DRIFT_3W_7D_DENSE',
+                        evidence: {
+                            recent: recent3.map(r => r.effect),
+                            windowDays: WINDOW_DAYS,
+                            spanHours,
+                            logsInWindow
+                        },
+                        at: nowIso
+                    };
+                }
+            }
+        }
+
+        // SIGNAL: LATENT_INSTABILITY (Spontaneous return + negative feedback)
+        if (isSpontaneous && input.feedback === 'worse') {
+            return {
+                type: 'LATENT_INSTABILITY',
+                severity: 0.6,
+                ruleId: 'DEV_LATENT_SPONTANEOUS_WORSE',
+                evidence: { minGapDaysForSpontaneous: 5 },
+                at: nowIso
+            };
+        }
+
+        // SIGNAL: CRITICAL_DISCONNECT (Gap hours high during observation after a fail)
+        if (input.metrics.gapHours > 168 && input.feedback === 'worse') {
+            return {
+                type: 'CRITICAL_DISCONNECT',
+                severity: 0.9,
+                ruleId: 'DEV_CRITICAL_GAP168_WORSE',
+                evidence: { gapHours: input.metrics.gapHours },
+                at: nowIso
+            };
+        }
+
+        return null;
     }
 
     private calculateAdherence(metrics: PerceptionInput['metrics']): number {

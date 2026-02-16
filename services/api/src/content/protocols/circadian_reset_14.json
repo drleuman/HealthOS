@@ -1,0 +1,732 @@
+{
+    "id": "circadian_reset_14",
+    "version": "1.0.0",
+    "tags": [
+        "circadian",
+        "sleep",
+        "energy"
+    ],
+    "localeFallback": "es",
+    "timeBudgetMinutes": {
+        "min": 6,
+        "max": 12
+    },
+    "title": "Reset circadiano (14 días)",
+    "durationDays": 14,
+    "phases": [
+        {
+            "id": "detect",
+            "title": "Detección",
+            "dayRange": [
+                1,
+                3
+            ]
+        },
+        {
+            "id": "stabilize",
+            "title": "Estabilización",
+            "dayRange": [
+                4,
+                10
+            ]
+        },
+        {
+            "id": "expand",
+            "title": "Expansión",
+            "dayRange": [
+                11,
+                14
+            ]
+        }
+    ],
+    "days": [
+        {
+            "day": 1,
+            "title": "Luz de mañana",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day1",
+                "minutes": 3,
+                "summary": "La luz temprana ajusta el reloj interno y facilita sueño, energía y apetito."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "morning_light",
+                        "label": "Protocol.CircadianReset.Actions.morning_light.label",
+                        "minMinutes": 10,
+                        "rules": [
+                            "Antes de las 11:00",
+                            "Sin gafas de sol si es posible",
+                            "Si está nublado: 15–20 min"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "energy_2h_after",
+                "prompt": "Protocol.CircadianReset.Checks.energy_2h_after.prompt",
+                "options": [
+                    {
+                        "id": "better",
+                        "label": "Common.CheckOptions.better"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Common.CheckOptions.worse"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si no puedes salir: usa una ventana abierta o un balcón.",
+                    "Lo importante es la regularidad, no la perfección."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_1",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 2,
+            "title": "Retrasar cafeína",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day2",
+                "minutes": 3,
+                "summary": "Retrasar la cafeína permite que el despertar sea más estable y reduce el bajón posterior."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "delay_caffeine",
+                        "label": "Protocol.CircadianReset.Actions.delay_caffeine.label",
+                        "minMinutes": 1,
+                        "rules": [
+                            "Espera 60–90 min tras despertar",
+                            "Si tienes dependencia: retrasa 15–30 min hoy"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "headache",
+                "prompt": "Protocol.CircadianReset.Checks.headache.prompt",
+                "options": [
+                    {
+                        "id": "none",
+                        "label": "Protocol.CircadianReset.Checks.headache.none"
+                    },
+                    {
+                        "id": "mild",
+                        "label": "Protocol.CircadianReset.Checks.headache.mild"
+                    },
+                    {
+                        "id": "strong",
+                        "label": "Protocol.CircadianReset.Checks.headache.strong"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Un leve dolor de cabeza puede aparecer al mover el horario.",
+                    "Hidrátate y usa luz temprana para facilitar el ajuste."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_2",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 3,
+            "title": "Cena más temprano",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day3",
+                "minutes": 4,
+                "summary": "Una cena temprana reduce activación nocturna y facilita conciliación y continuidad del sueño."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "earlier_dinner",
+                        "label": "Protocol.CircadianReset.Actions.earlier_dinner.label",
+                        "minMinutes": 1,
+                        "rules": [
+                            "Intenta cenar 2–3 h antes de dormir",
+                            "Si hoy no es posible: adelanta 30 min"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "sleep_latency",
+                "prompt": "Protocol.CircadianReset.Checks.sleep_latency.prompt",
+                "options": [
+                    {
+                        "id": "faster",
+                        "label": "Protocol.CircadianReset.Checks.sleep_latency.faster"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "slower",
+                        "label": "Protocol.CircadianReset.Checks.sleep_latency.slower"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si llegas tarde: prioriza una cena ligera.",
+                    "Evita pantallas brillantes después de cenar si puedes."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_3",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 4,
+            "title": "Reducir luz azul nocturna",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day4",
+                "minutes": 4,
+                "summary": "La luz intensa por la noche retrasa el reloj; bajar brillo y tonos fríos facilita melatonina."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "reduce_blue_light",
+                        "label": "Protocol.CircadianReset.Actions.reduce_blue_light.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "Baja brillo 60–90 min antes de dormir",
+                            "Activa modo noche / cálido",
+                            "Si hay pantallas: distancia y luz ambiental suave"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "night_waking",
+                "prompt": "Protocol.CircadianReset.Checks.night_waking.prompt",
+                "options": [
+                    {
+                        "id": "0",
+                        "label": "Protocol.CircadianReset.Checks.night_waking.zero"
+                    },
+                    {
+                        "id": "1_2",
+                        "label": "Protocol.CircadianReset.Checks.night_waking.one_two"
+                    },
+                    {
+                        "id": "3_plus",
+                        "label": "Protocol.CircadianReset.Checks.night_waking.three_plus"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si compartes espacio: usa una lámpara cálida y baja.",
+                    "No pasa nada si no es perfecto; buscamos tendencia."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_4",
+                "toolUnlock": "blue_light_glasses"
+            }
+        },
+        {
+            "day": 5,
+            "title": "Movimiento suave por la mañana",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day5",
+                "minutes": 3,
+                "summary": "Movimiento suave temprano refuerza el arranque diurno sin elevar demasiado el estrés."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "gentle_movement_am",
+                        "label": "Protocol.CircadianReset.Actions.gentle_movement_am.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "Caminata breve o movilidad",
+                            "Mantén intensidad baja"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "midday_crash",
+                "prompt": "Protocol.CircadianReset.Checks.midday_crash.prompt",
+                "options": [
+                    {
+                        "id": "less",
+                        "label": "Protocol.CircadianReset.Checks.midday_crash.less"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "more",
+                        "label": "Protocol.CircadianReset.Checks.midday_crash.more"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si hoy no puedes: 2 minutos cuentan.",
+                    "La consistencia importa más que el volumen."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_5",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 6,
+            "title": "Luz brillante al despertar",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day6",
+                "minutes": 4,
+                "summary": "Aumentar la señal de día por la mañana reduce la señal de noche durante el día."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "bright_light_am",
+                        "label": "Protocol.CircadianReset.Actions.bright_light_am.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "Refuerza luz natural o interior brillante",
+                            "Prioriza la primera hora despierto"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "alertness_am",
+                "prompt": "Protocol.CircadianReset.Checks.alertness_am.prompt",
+                "options": [
+                    {
+                        "id": "higher",
+                        "label": "Protocol.CircadianReset.Checks.alertness_am.higher"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "lower",
+                        "label": "Protocol.CircadianReset.Checks.alertness_am.lower"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si el exterior no es posible: una ventana ayuda, aunque sea menos potente.",
+                    "Evita mirar directamente a fuentes muy intensas."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_6",
+                "toolUnlock": "bright_light_lamp"
+            }
+        },
+        {
+            "day": 7,
+            "title": "Revisión de semana 1",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day7",
+                "minutes": 3,
+                "summary": "Revisar señales y fricciones ayuda a ajustar sin aumentar carga."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "week1_review",
+                        "label": "Protocol.CircadianReset.Actions.week1_review.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "Identifica el paso más fácil",
+                            "Identifica el paso más difícil"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "overall_week",
+                "prompt": "Protocol.CircadianReset.Checks.overall_week.prompt",
+                "options": [
+                    {
+                        "id": "improving",
+                        "label": "Protocol.CircadianReset.Checks.overall_week.improving"
+                    },
+                    {
+                        "id": "neutral",
+                        "label": "Protocol.CircadianReset.Checks.overall_week.neutral"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Common.CheckOptions.worse"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si fue irregular, no invalida la semana.",
+                    "Buscamos localizar una palanca útil para la semana 2."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_7",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 8,
+            "title": "Orden de alimentos",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day8",
+                "minutes": 4,
+                "summary": "El orden de alimentos puede suavizar picos y reducir somnolencia post-comida."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "food_order",
+                        "label": "Protocol.CircadianReset.Actions.food_order.label",
+                        "minMinutes": 1,
+                        "rules": [
+                            "Primero proteína/verdura, luego carbohidrato",
+                            "Si comes fuera: aplica en una comida"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "post_meal_energy",
+                "prompt": "Protocol.CircadianReset.Checks.post_meal_energy.prompt",
+                "options": [
+                    {
+                        "id": "stable",
+                        "label": "Protocol.CircadianReset.Checks.post_meal_energy.stable"
+                    },
+                    {
+                        "id": "dip",
+                        "label": "Protocol.CircadianReset.Checks.post_meal_energy.dip"
+                    },
+                    {
+                        "id": "variable",
+                        "label": "Protocol.CircadianReset.Checks.post_meal_energy.variable"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "No es dieta; es secuencia.",
+                    "Un solo cambio por comida es suficiente."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_8",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 9,
+            "title": "Caminata post-comida",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day9",
+                "minutes": 3,
+                "summary": "Movimiento breve tras comer mejora señal metabólica y reduce bajón."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "post_meal_walk",
+                        "label": "Protocol.CircadianReset.Actions.post_meal_walk.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "5–10 min tras la comida principal",
+                            "Ritmo cómodo"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "afternoon_focus",
+                "prompt": "Protocol.CircadianReset.Checks.afternoon_focus.prompt",
+                "options": [
+                    {
+                        "id": "better",
+                        "label": "Common.CheckOptions.better"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "worse",
+                        "label": "Common.CheckOptions.worse"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si no puedes salir: pasos en casa cuentan.",
+                    "Si llueve: pasillo/escala."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_9",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 10,
+            "title": "Corte de cafeína",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day10",
+                "minutes": 3,
+                "summary": "Un corte horario reduce presión de sueño alterada por cafeína residual."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "caffeine_cutoff",
+                        "label": "Protocol.CircadianReset.Actions.caffeine_cutoff.label",
+                        "minMinutes": 1,
+                        "rules": [
+                            "Evita cafeína tras las 14:00",
+                            "Si es difícil: adelanta el último café 60 min"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "sleep_onset",
+                "prompt": "Protocol.CircadianReset.Checks.sleep_onset.prompt",
+                "options": [
+                    {
+                        "id": "easier",
+                        "label": "Protocol.CircadianReset.Checks.sleep_onset.easier"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "harder",
+                        "label": "Protocol.CircadianReset.Checks.sleep_onset.harder"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Descafeinado puede contar como transición.",
+                    "Observa dos días antes de concluir."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_10",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 11,
+            "title": "Bajada de estímulos",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day11",
+                "minutes": 4,
+                "summary": "Reducir estímulos al final del día facilita transición a descanso."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "wind_down",
+                        "label": "Protocol.CircadianReset.Actions.wind_down.label",
+                        "minMinutes": 5,
+                        "rules": [
+                            "Elige 1 señal de cierre: luz baja, lectura, ducha",
+                            "Evita multitarea intensa"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "evening_anxiety",
+                "prompt": "Protocol.CircadianReset.Checks.evening_anxiety.prompt",
+                "options": [
+                    {
+                        "id": "lower",
+                        "label": "Protocol.CircadianReset.Checks.evening_anxiety.lower"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "higher",
+                        "label": "Protocol.CircadianReset.Checks.evening_anxiety.higher"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si hay niños/turnos: usa una señal mínima de 60 segundos.",
+                    "Cierre no es productividad; es transición."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_11",
+                "toolUnlock": "sleep_mask"
+            }
+        },
+        {
+            "day": 12,
+            "title": "Descarga breve (3 min)",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day12",
+                "minutes": 3,
+                "summary": "Una descarga breve reduce activación sin convertirlo en ritual complejo."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "downshift_3min",
+                        "label": "Protocol.CircadianReset.Actions.downshift_3min.label",
+                        "minMinutes": 3,
+                        "rules": [
+                            "Respiración lenta o estiramiento suave",
+                            "Solo 3 minutos"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "night_quality",
+                "prompt": "Protocol.CircadianReset.Checks.night_quality.prompt",
+                "options": [
+                    {
+                        "id": "deeper",
+                        "label": "Protocol.CircadianReset.Checks.night_quality.deeper"
+                    },
+                    {
+                        "id": "same",
+                        "label": "Common.CheckOptions.same"
+                    },
+                    {
+                        "id": "lighter",
+                        "label": "Protocol.CircadianReset.Checks.night_quality.lighter"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Si te activa: cambia a estiramiento o luz baja.",
+                    "El objetivo es bajar un grado, no dormir de inmediato."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_12",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 13,
+            "title": "Ajuste personal",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day13",
+                "minutes": 4,
+                "summary": "Seleccionar una palanca principal reduce carga y aumenta consistencia."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "personal_tune",
+                        "label": "Protocol.CircadianReset.Actions.personal_tune.label",
+                        "minMinutes": 2,
+                        "rules": [
+                            "Elige 1 palanca para sostener 14 días más",
+                            "Define cuándo la harás"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "best_lever",
+                "prompt": "Protocol.CircadianReset.Checks.best_lever.prompt",
+                "options": [
+                    {
+                        "id": "light",
+                        "label": "Protocol.CircadianReset.Checks.best_lever.light"
+                    },
+                    {
+                        "id": "caffeine",
+                        "label": "Protocol.CircadianReset.Checks.best_lever.caffeine"
+                    },
+                    {
+                        "id": "dinner",
+                        "label": "Protocol.CircadianReset.Checks.best_lever.dinner"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Una sola palanca sostenida supera cinco cambios intermitentes.",
+                    "Elige la más fácil de repetir."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_13",
+                "toolUnlock": null
+            }
+        },
+        {
+            "day": 14,
+            "title": "Cierre y plan",
+            "learn": {
+                "type": "text",
+                "id": "circadian.learn.day14",
+                "minutes": 4,
+                "summary": "Cierre operativo: conservar lo útil, descartar lo que añade fricción."
+            },
+            "do": {
+                "actions": [
+                    {
+                        "id": "closure_plan",
+                        "label": "Protocol.CircadianReset.Actions.closure_plan.label",
+                        "minMinutes": 3,
+                        "rules": [
+                            "Define tu versión mínima (1 palanca)",
+                            "Define tu versión estándar (2 palancas)"
+                        ]
+                    }
+                ]
+            },
+            "check": {
+                "id": "next_step",
+                "prompt": "Protocol.CircadianReset.Checks.next_step.prompt",
+                "options": [
+                    {
+                        "id": "repeat",
+                        "label": "Protocol.CircadianReset.Checks.next_step.repeat"
+                    },
+                    {
+                        "id": "maintain",
+                        "label": "Protocol.CircadianReset.Checks.next_step.maintain"
+                    },
+                    {
+                        "id": "switch",
+                        "label": "Protocol.CircadianReset.Checks.next_step.switch"
+                    }
+                ]
+            },
+            "support": {
+                "faqs": [
+                    "Mantener no requiere intensidad, requiere estabilidad.",
+                    "Si no cambió nada, revisa fricciones: sueño, turnos, estrés."
+                ],
+                "communityGroupKey": "community.circadian_reset.day_14",
+                "toolUnlock": null
+            }
+        }
+    ]
+}

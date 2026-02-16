@@ -25,13 +25,13 @@ export function TopNav() {
                         <Link href="/learn" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
                             {t('learn')}
                         </Link>
-                        <Link href="/blog" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        <Link href="/community/blog" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
                             {t('blog')}
                         </Link>
-                        <Link href="/courses" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        <Link href="/community/courses" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
                             {t('courses')}
                         </Link>
-                        <Link href="/products" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
+                        <Link href="/community/products" className="text-sm font-medium text-slate-300 hover:text-slate-50 transition-colors">
                             {t('products')}
                         </Link>
                     </div>

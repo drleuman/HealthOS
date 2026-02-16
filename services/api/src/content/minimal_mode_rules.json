@@ -1,0 +1,36 @@
+{
+    "system": "HealthOS Minimal Mode Spec v1",
+    "levels": {
+        "1": {
+            "name": "Reduced Load",
+            "rules": {
+                "keep": [
+                    "first_action",
+                    "daily_check"
+                ],
+                "hide": [
+                    "secondary_actions",
+                    "advanced_support"
+                ]
+            }
+        },
+        "2": {
+            "name": "Minimum Viable",
+            "rules": {
+                "keep": [
+                    "first_action"
+                ],
+                "hide": [
+                    "daily_check",
+                    "secondary_actions",
+                    "advanced_support"
+                ]
+            }
+        }
+    },
+    "behavior": {
+        "preserve_titles": true,
+        "preserve_ids": true,
+        "track_as_stimulus": true
+    }
+}

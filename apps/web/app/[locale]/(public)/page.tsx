@@ -1,19 +1,23 @@
-import { Hero } from '@/components/landing/Hero';
-import { FeatureGrid4 } from '@/components/landing/FeatureGrid4';
-import { HowItWorksSplit } from '@/components/landing/HowItWorksSplit';
-import { ContentTriColumn } from '@/components/landing/ContentTriColumn';
-import { WhatNotCard } from '@/components/landing/WhatNotCard';
-import { InstrumentCTA } from '@/components/landing/InstrumentCTA';
+import HeroBlock from '@/components/public/landing/HeroBlock';
+import GoalSelector from '@/components/public/landing/GoalSelector';
+import HowItWorks from '@/components/public/landing/HowItWorks';
+import EcosystemTabs from '@/components/public/landing/EcosystemTabs';
+import TrustStrip from '@/components/public/landing/TrustStrip';
+import FinalCTA from '@/components/public/landing/FinalCTA';
+import { loadCommunityCatalog } from '@healthos/shared';
 
-export default function LandingPage() {
+// Page is an Async Server Component
+export default async function LandingPage({ params: { locale } }: { params: { locale: string } }) {
+  const catalog = loadCommunityCatalog();
+
   return (
-    <div className="flex flex-col bg-slate-950 min-h-screen selection:bg-sky-500/30 selection:text-sky-200">
-      <Hero />
-      <FeatureGrid4 />
-      <HowItWorksSplit />
-      <ContentTriColumn />
-      <WhatNotCard />
-      <InstrumentCTA />
-    </div>
+    <main className="flex flex-col bg-slate-950 min-h-screen selection:bg-indigo-500/30 selection:text-indigo-200">
+      <HeroBlock />
+      <GoalSelector />
+      <HowItWorks />
+      <EcosystemTabs catalog={catalog} locale={locale} />
+      <TrustStrip />
+      <FinalCTA />
+    </main>
   );
 }

@@ -36,4 +36,25 @@ export class HealthController {
   async log(@Body() body: DayLogInput, @User() user: UserPayload) {
     return this.svc.logDay(user.email, body);
   }
+
+  @UseGuards(SubscriptionGuard)
+  @RequiredPlan('member')
+  @Post('user/protocol/close')
+  async close(@Body() body: { completionType?: string; reason?: string }, @User() user: UserPayload) {
+    return this.svc.closeProtocol(user.email, body);
+  }
+
+  @UseGuards(SubscriptionGuard)
+  @RequiredPlan('member')
+  @Post('user/protocol/reactivate')
+  async reactivate(@User() user: UserPayload) {
+    return this.svc.reactivateProtocol(user.email);
+  }
+
+  @UseGuards(SubscriptionGuard)
+  @RequiredPlan('member')
+  @Post('user/reentry/decision')
+  async reentryDecision(@Body() body: { decision: 'ACCEPT' | 'DECLINE', planId: string }, @User() user: UserPayload) {
+    return this.svc.handleReentryDecision(user.email, body.decision, body.planId);
+  }
 }

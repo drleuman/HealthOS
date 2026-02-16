@@ -1,0 +1,136 @@
+{
+    "protocolId": "digestive_repair_14",
+    "version": "1.0.0",
+    "rules": [
+        {
+            "id": "REENGAGE_96H",
+            "priority": 100,
+            "when": {
+                "inactivityHoursGte": 96
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Reengagement.96h",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 2
+                }
+            }
+        },
+        {
+            "id": "REENGAGE_48H",
+            "priority": 90,
+            "when": {
+                "inactivityHoursGte": 48
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Reengagement.48h",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 1
+                }
+            }
+        },
+        {
+            "id": "FAILURES_SIMPLIFY",
+            "priority": 80,
+            "when": {
+                "consecutiveFailuresGte": 2
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Simplification.active",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 1
+                }
+            }
+        },
+        {
+            "id": "HIGH_FRICTION_L2",
+            "priority": 70,
+            "when": {
+                "frictionScoreGte": 8
+            },
+            "emit": {
+                "messageKey": "SystemMessages.MinimalMode.level2",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 2
+                }
+            }
+        },
+        {
+            "id": "LOW_ADHERENCE_L1",
+            "priority": 60,
+            "when": {
+                "adherence7dLt": 0.35
+            },
+            "emit": {
+                "messageKey": "SystemMessages.MinimalMode.level1",
+                "minimalMode": {
+                    "enter": true,
+                    "level": 1
+                }
+            }
+        },
+        {
+            "id": "CHECK_HIGHER_NORMALIZE",
+            "priority": 50,
+            "when": {
+                "lastCheckOptionIn": [
+                    "higher",
+                    "heavier",
+                    "harder",
+                    "worse"
+                ]
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Normalization.digestive_variability",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        },
+        {
+            "id": "CHECK_IMPROVED_OR_LOWER",
+            "priority": 40,
+            "when": {
+                "lastCheckOptionIn": [
+                    "improved",
+                    "lower",
+                    "lighter",
+                    "easier"
+                ]
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Orientation.continue",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        },
+        {
+            "id": "DAY14_CLOSURE",
+            "priority": 30,
+            "when": {
+                "dayEq": 14
+            },
+            "emit": {
+                "messageKey": "SystemMessages.Closure.summary",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        },
+        {
+            "id": "DEFAULT_ORIENTATION",
+            "priority": 0,
+            "when": {},
+            "emit": {
+                "messageKey": "SystemMessages.Orientation.default",
+                "minimalMode": {
+                    "enter": false
+                }
+            }
+        }
+    ]
+}

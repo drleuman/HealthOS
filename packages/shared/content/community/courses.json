@@ -1,0 +1,50 @@
+[
+    {
+        "id": "nervous_system_deep_dive",
+        "slug": "nervous-system-deep-dive",
+        "type": "course",
+        "featured": true,
+        "modulesCount": 12,
+        "durationMinutes": 240,
+        "title": {
+            "es": "Nervous System Deep Dive",
+            "en": "Nervous System Deep Dive"
+        },
+        "excerpt": {
+            "es": "Teoría avanzada para personalización de protocolos.",
+            "en": "Advanced theory for protocol customization."
+        }
+    },
+    {
+        "id": "digestive_repair_course",
+        "slug": "digestive-repair-course",
+        "type": "course",
+        "featured": true,
+        "modulesCount": 8,
+        "durationMinutes": 180,
+        "title": {
+            "es": "Reparando la Integridad Digestiva",
+            "en": "Repairing Gut Integrity"
+        },
+        "excerpt": {
+            "es": "Más allá del protocolo básico de reseteo.",
+            "en": "Beyond the basic reset protocol."
+        }
+    },
+    {
+        "id": "circadian_biology",
+        "slug": "circadian-biology-101",
+        "type": "course",
+        "featured": false,
+        "modulesCount": 5,
+        "durationMinutes": 120,
+        "title": {
+            "es": "Biología Circadiana 101",
+            "en": "Circadian Biology 101"
+        },
+        "excerpt": {
+            "es": "Entendiendo los relojes periféricos.",
+            "en": "Understanding peripheral clocks."
+        }
+    }
+]

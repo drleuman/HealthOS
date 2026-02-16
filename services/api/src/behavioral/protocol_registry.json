@@ -1,0 +1,63 @@
+{
+    "protocols": [
+        {
+            "id": "circadian_reset_14",
+            "version": "1.0.0",
+            "defaultLocale": "es",
+            "category": "sleep",
+            "tags": [
+                "circadian",
+                "energy"
+            ],
+            "enabled": true
+        },
+        {
+            "id": "nervous_system_reset_10",
+            "version": "1.0.0",
+            "defaultLocale": "es",
+            "category": "stress",
+            "tags": [
+                "nervous_system",
+                "recovery"
+            ],
+            "enabled": true
+        },
+        {
+            "id": "digestive_reset_14",
+            "version": "1.0.0",
+            "defaultLocale": "es",
+            "category": "digestive",
+            "tags": [
+                "gut",
+                "digestion"
+            ],
+            "enabled": true
+        },
+        {
+            "id": "energy_stability_7",
+            "version": "1.0.0",
+            "defaultLocale": "es",
+            "category": "stability",
+            "tags": [
+                "energy",
+                "glucose",
+                "cortisol",
+                "fatigue"
+            ],
+            "enabled": true
+        },
+        {
+            "id": "metabolic_flexibility_10",
+            "version": "1.0.0",
+            "defaultLocale": "es",
+            "category": "metabolic",
+            "tags": [
+                "glucose",
+                "energy",
+                "metabolic_flexibility",
+                "hunger_regulation"
+            ],
+            "enabled": true
+        }
+    ]
+}

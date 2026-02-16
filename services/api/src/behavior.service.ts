@@ -36,29 +36,60 @@ export class BehaviorService {
         // Extract feedback value (assuming payload structure)
         const feedbackValue = logData.selfReportEffect?.value || logData.selfReportEffect;
 
-        const log = await this.prisma.dailyLog.create({
+        // Fetch current state for gap calculation and status check
+        const currentState = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+        const context = (currentState?.context as any) || {};
+
+        let isSpontaneousReturn = false;
+        if ((currentState as any)?.status === 'COMPLETED') {
+            const lastLogBeforeThis = await this.prisma.dailyLog.findFirst({
+                where: { userId },
+                orderBy: { createdAt: 'desc' }
+            });
+            if (lastLogBeforeThis) {
+                const msGap = new Date().getTime() - lastLogBeforeThis.createdAt.getTime();
+                const daysGap = msGap / (1000 * 60 * 60 * 24);
+                if (daysGap >= 5) {
+                    isSpontaneousReturn = true;
+                    this.logger.log(`Detected spontaneous return for user ${userId} after ${daysGap.toFixed(1)} days.`);
+                }
+            }
+        }
+
+        const log = await (this.prisma as any).dailyLog.create({
             data: {
                 userId,
                 day: logData.day,
                 actionCompleted: logData.actionCompleted,
-                selfReportEffect: logData.selfReportEffect // Store full JSON
+                selfReportEffect: logData.selfReportEffect,
+                context: isSpontaneousReturn ? { spontaneous_return: true } : undefined
             }
         });
 
-        // 2. Fetch User Context + Metrics
-        const currentState = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
-        const context = (currentState?.context as any) || {};
+        // 2. Fetch User Context + Metrics (already fetched above as context)
+        // 2. Build Metrics for Analysis (UIG)
+        const lastLogs = await this.prisma.dailyLog.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+            take: 5
+        });
 
-        // Calculate Metrics for UIG (Derived from Context + Current input)
-        // In a real impl, we'd query history. For MVP, we use the rolling counters in context.
+        const historyWithTime = lastLogs
+            .filter(l => l.selfReportEffect)
+            .map(l => ({ effect: l.selfReportEffect as string, at: l.createdAt.toISOString() }));
+
+        const lastActive = currentState?.updatedAt || new Date();
+        const gapHours = Math.floor((new Date().getTime() - lastActive.getTime()) / (1000 * 60 * 60));
+
         const metrics = {
-            consecutiveCompletions: context.consecutiveSuccess || 0,
-            consecutiveFailures: context.consecutiveFailures || 0,
-            consecutiveMisses: context.consecutiveMisses || 0,
-            stagnationDays: context.stagnationDays || 0,
-            gapHours: 24, // Placeholder: Compute from lastActive
+            consecutiveCompletions: (context as any).consecutiveSuccess || 0,
+            consecutiveFailures: (context as any).consecutiveFailures || 0,
+            consecutiveMisses: (context as any).consecutiveMisses || 0,
+            stagnationDays: (context as any).stagnationDays || 0,
+            gapHours,
             timeToLogMinutes: 0, // Placeholder
             checkEffectHistory: context.checkEffectHistory || [],
+            checkEffectHistoryWithTime: historyWithTime,
             navigationFlags: { historyViewed: false, detailsExpanded: false } // Placeholder
         };
 
@@ -72,18 +103,43 @@ export class BehaviorService {
             metrics,
             context: {
                 ...context,
-                isAdaptationExpected: logData.programContext?.isAdaptation
+                isAdaptationExpected: logData.programContext?.isAdaptation,
+                isSpontaneousReturn,
+                protocolStatus: (currentState as any)?.status
             }
         });
 
         // 4. Update Behavioral State
-        const newState = await this.stateEngine.updateState(userId, analysis, context);
+        await this.stateEngine.updateState(userId, analysis, context, metrics);
 
         // 5. Execute Protocol Action (Advance/Repeat/Simplify)
         const protocolResult = await this.protocolEngine.executeAction(userId, analysis.protocolAction, logData.day);
 
-        // 6. Generate System Message
-        const message = this.messageGenerationService.generateMessage(analysis);
+        // 5.5 Check for closure
+        const closure = await this.protocolEngine.evaluateClosure(userId);
+        if (closure.shouldClose && closure.completionType) {
+            await this.protocolEngine.closeProtocol(userId, closure.completionType);
+        }
+
+        // Fetch final state for message generation and return
+        const finalState = await this.prisma.userBehaviorState.findUnique({ where: { userId } });
+
+        // 6. Generate System Message (Pass status/completionType for matrix matching)
+        const finalCtx = (finalState?.context as any) || {};
+        const canSuggestReentry = !finalCtx.reentry?.cooldownUntil ||
+            new Date(finalCtx.reentry.cooldownUntil).getTime() <= Date.now();
+
+        const message = this.messageGenerationService.generateMessage({
+            ...analysis,
+            protocolId: logData.programContext?.programId || 'circadian_reset_14',
+            day: logData.day,
+            protocolStatus: (finalState as any)?.status || 'ACTIVE',
+            completionType: closure.completionType,
+            minimalModeLevel: (finalState?.context as any)?.minimalMode?.level || 0,
+            isSpontaneousReturn,
+            deviationType: analysis.deviation?.type,
+            canSuggestReentry
+        } as any);
 
         // 7. Audit Trail (BehaviorAnalysis)
         await this.prisma.behaviorAnalysis.create({
@@ -96,7 +152,7 @@ export class BehaviorService {
                 detectedCognitiveState: analysis.cognitiveState,
                 phaseProgress: analysis.phaseProgress,
                 systemResponseType: analysis.recommendedResponse,
-                generatedMessage: message
+                generatedMessage: message.key
             }
         });
 
@@ -106,7 +162,7 @@ export class BehaviorService {
             protocolAction: analysis.protocolAction,
             nextDay: protocolResult.nextDay,
             systemMessage: message,
-            newState
+            newState: finalState
         };
     }
 
@@ -255,6 +311,28 @@ export class BehaviorService {
 
                     const state = await this.determineState(snapshot);
 
+                    // Auto-termination check (14 days inactivity)
+                    const lastLog = await this.prisma.dailyLog.findFirst({
+                        where: { userId },
+                        orderBy: { createdAt: 'desc' }
+                    });
+
+                    const daysInactive = lastLog
+                        ? (now.getTime() - lastLog.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+                        : 0;
+
+                    if (daysInactive >= 14) {
+                        const closure = await this.protocolEngine.evaluateClosure(userId, { autoTerminate: true });
+                        if (closure.shouldClose && closure.completionType) {
+                            await this.protocolEngine.closeProtocol(userId, closure.completionType, {
+                                autoReason: `Inactivity for ${Math.floor(daysInactive)} days`
+                            });
+                            this.logger.log(`Auto-terminated protocol for user ${userId} due to inactivity.`);
+                            processed++;
+                            continue; // Skip normal upsert if terminated
+                        }
+                    }
+
                     await prismaAny.userBehaviorState.upsert({
                         where: { userId },
                         update: { state },
@@ -330,6 +408,56 @@ export class BehaviorService {
                 value: log.selfReportEffect
             })),
             lastRecordedAt: logs.length > 0 ? logs[0].createdAt.toISOString() : null
+        };
+    }
+
+    async manualClose(userId: string, opts: { userRequested: boolean; reason?: string }) {
+        const closure = await this.protocolEngine.evaluateClosure(userId, opts);
+        if (!closure.shouldClose || !closure.completionType) {
+            return { ok: false, reason: 'Closure criteria not met' };
+        }
+
+        const finalState = await this.protocolEngine.closeProtocol(userId, closure.completionType, { manualReason: opts.reason });
+
+        // Generate message for closure
+        const message = this.messageGenerationService.generateMessage({
+            protocolId: finalState.programId,
+            day: finalState.dayIndex,
+            protocolStatus: 'COMPLETED',
+            completionType: closure.completionType,
+            adherence7d: (finalState.context as any)?.adherence7d || 0,
+            consecutiveFailures: (finalState.context as any)?.consecutiveFailures || 0,
+            inactivityHours: 0,
+            frictionScore: (finalState.context as any)?.friction?.score || 0,
+            minimalModeLevel: (finalState.context as any)?.minimalMode?.level || 0,
+            phaseId: finalState.currentPhase || 'closure'
+        } as any);
+
+        return {
+            ok: true,
+            status: 'COMPLETED',
+            systemMessage: message,
+            newState: finalState
+        };
+    }
+
+    async reactivateProtocol(userId: string) {
+        const finalState = await this.protocolEngine.reactivateProtocol(userId);
+
+        // Generate a fresh message for the re-entry
+        const message = this.messageGenerationService.generateMessage({
+            protocolId: (finalState as any).programId,
+            day: finalState.dayIndex,
+            protocolStatus: 'ACTIVE',
+            minimalModeLevel: (finalState.context as any)?.minimalMode?.level || 0,
+            phaseId: finalState.currentPhase || 'detection'
+        } as any);
+
+        return {
+            ok: true,
+            status: 'ACTIVE',
+            systemMessage: message,
+            newState: finalState
         };
     }
 }

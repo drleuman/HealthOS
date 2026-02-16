@@ -1,0 +1,372 @@
+{
+    "protocolId": "nervous_regulation_10",
+    "version": "1.0.0",
+    "days": [
+        {
+            "day": 1,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-baseline-activation",
+                        "titleKey": "Resources.NervousRegulation.Day1.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day1.blog1.why",
+                        "tags": [
+                            "baseline",
+                            "activation"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_1",
+                        "titleKey": "Resources.NervousRegulation.Day1.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day1.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-physiological-sigh",
+                        "titleKey": "Resources.NervousRegulation.Day2.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day2.blog1.why",
+                        "tags": [
+                            "breath",
+                            "downshift"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_2",
+                        "titleKey": "Resources.NervousRegulation.Day2.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day2.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-caffeine-boundaries",
+                        "titleKey": "Resources.NervousRegulation.Day3.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day3.blog1.why",
+                        "tags": [
+                            "caffeine",
+                            "boundaries"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_3",
+                        "titleKey": "Resources.NervousRegulation.Day3.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day3.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 4,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-wind-down-ritual",
+                        "titleKey": "Resources.NervousRegulation.Day4.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day4.blog1.why",
+                        "tags": [
+                            "evening",
+                            "wind_down"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_4",
+                        "titleKey": "Resources.NervousRegulation.Day4.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day4.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 5,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-body-scan-2min",
+                        "titleKey": "Resources.NervousRegulation.Day5.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day5.blog1.why",
+                        "tags": [
+                            "scan",
+                            "tension"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_5",
+                        "titleKey": "Resources.NervousRegulation.Day5.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day5.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 6,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-micro-breaks-day",
+                        "titleKey": "Resources.NervousRegulation.Day6.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day6.blog1.why",
+                        "tags": [
+                            "micro_breaks",
+                            "load"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_6",
+                        "titleKey": "Resources.NervousRegulation.Day6.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day6.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 7,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-week1-review",
+                        "titleKey": "Resources.NervousRegulation.Day7.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day7.blog1.why",
+                        "tags": [
+                            "review",
+                            "week1"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [
+                    {
+                        "slug": "mini-course-nervous-basics",
+                        "titleKey": "Resources.NervousRegulation.Day7.course1.title",
+                        "whyKey": "Resources.NervousRegulation.Day7.course1.why",
+                        "tags": [
+                            "basics"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_7",
+                        "titleKey": "Resources.NervousRegulation.Day7.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day7.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 8,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-boundary-1-thing",
+                        "titleKey": "Resources.NervousRegulation.Day8.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day8.blog1.why",
+                        "tags": [
+                            "boundary",
+                            "one_change"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_8",
+                        "titleKey": "Resources.NervousRegulation.Day8.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day8.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 9,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-sleep-entry",
+                        "titleKey": "Resources.NervousRegulation.Day9.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day9.blog1.why",
+                        "tags": [
+                            "sleep",
+                            "downshift"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_9",
+                        "titleKey": "Resources.NervousRegulation.Day9.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day9.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 10,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "nervous-maintenance-minimum",
+                        "titleKey": "Resources.NervousRegulation.Day10.blog1.title",
+                        "whyKey": "Resources.NervousRegulation.Day10.blog1.why",
+                        "tags": [
+                            "closure",
+                            "maintenance"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [
+                    {
+                        "slug": "next-step-advanced-stress",
+                        "titleKey": "Resources.NervousRegulation.Day10.course1.title",
+                        "whyKey": "Resources.NervousRegulation.Day10.course1.why",
+                        "tags": [
+                            "next_step"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "community": [
+                    {
+                        "threadId": "nervous_regulation_day_10",
+                        "titleKey": "Resources.NervousRegulation.Day10.thread.title",
+                        "whyKey": "Resources.NervousRegulation.Day10.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

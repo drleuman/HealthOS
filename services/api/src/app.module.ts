@@ -36,6 +36,9 @@ import { ProtocolEngine } from './behavioral/protocol.engine';
 import { MessageGenerationService } from './behavioral/message-generation.service';
 import { ProtocolContentService } from './content/protocol-content.service';
 import { SystemMessageService } from './behavioral/system-message.service';
+import { CommunityController } from './community.controller';
+import { CommunityService } from './community.service';
+import { ClinicalInterpretationService } from './behavioral/clinical-interpretation.service';
 
 @Module({
   imports: [
@@ -55,7 +58,8 @@ import { SystemMessageService } from './behavioral/system-message.service';
     JobsController,
     TrackingController,
     BehaviorController,
-    OpsController
+    OpsController,
+    CommunityController
   ],
   providers: [
     PrismaService,
@@ -81,6 +85,8 @@ import { SystemMessageService } from './behavioral/system-message.service';
     MessageGenerationService,
     ProtocolContentService,
     SystemMessageService,
+    CommunityService,
+    ClinicalInterpretationService,
     {
       provide: ProgramRegistry,
       useFactory: (fileRegistry: FileProgramRegistry) => {

@@ -1,0 +1,221 @@
+{
+    "protocolId": "circadian_reset_14",
+    "version": "1.0.0",
+    "thresholds": {
+        "inactivity48h": 48,
+        "inactivity96h": 96,
+        "consecutiveFailures2": 2,
+        "adherenceLow35": 0.35,
+        "frictionHigh70": 70
+    },
+    "inputSchema": {
+        "protocolId": "string",
+        "day": "number",
+        "phaseId": "string",
+        "adherence7d": "number",
+        "consecutiveFailures": "number",
+        "inactivityHours": "number",
+        "frictionScore": "number",
+        "lastCheckOptionId": "string?",
+        "minimalModeLevel": "0|1|2"
+    },
+    "rules": [
+        {
+            "id": "CLOSURE_NATURAL_END",
+            "priority": 900,
+            "when": {
+                "protocolStatusBecomes": "COMPLETED",
+                "completionType": "NATURAL_END"
+            },
+            "i18nKey": "SystemMessages.Closure.circadian_end"
+        },
+        {
+            "id": "CLOSURE_USER_ENDED",
+            "priority": 950,
+            "when": {
+                "protocolStatusBecomes": "COMPLETED",
+                "completionType": "USER_ENDED"
+            },
+            "i18nKey": "SystemMessages.Closure.user_ended"
+        },
+        {
+            "id": "CLOSURE_AUTO_INTEGRATED",
+            "priority": 910,
+            "when": {
+                "protocolStatusBecomes": "COMPLETED",
+                "completionType": "AUTO_TERMINATED_INTEGRATED"
+            },
+            "i18nKey": "SystemMessages.Closure.auto_integrated"
+        },
+        {
+            "id": "CLOSURE_AUTO_DISENGAGED",
+            "priority": 905,
+            "when": {
+                "protocolStatusBecomes": "COMPLETED",
+                "completionType": "AUTO_TERMINATED_DISENGAGED"
+            },
+            "i18nKey": "SystemMessages.Closure.auto_disengaged"
+        },
+        {
+            "id": "REENTRY_DRIFT",
+            "priority": 930,
+            "when": {
+                "protocolStatus": "COMPLETED",
+                "deviationTypeEq": "DRIFT",
+                "canSuggestReentryEq": true
+            },
+            "i18nKey": "SystemMessages.Reentry.drift_detected"
+        },
+        {
+            "id": "REENTRY_INSTABILITY",
+            "priority": 925,
+            "when": {
+                "protocolStatus": "COMPLETED",
+                "deviationTypeEq": "LATENT_INSTABILITY",
+                "canSuggestReentryEq": true
+            },
+            "i18nKey": "SystemMessages.Reentry.instability_detected"
+        },
+        {
+            "id": "OBSERVATION_SPONTANEOUS_RETURN",
+            "priority": 920,
+            "when": {
+                "protocolStatus": "COMPLETED",
+                "isSpontaneousReturnEq": true
+            },
+            "i18nKey": "SystemMessages.Transition.next_options"
+        },
+        {
+            "id": "OBSERVATION_SILENCE_REMINDER",
+            "priority": 510,
+            "when": {
+                "protocolStatus": "COMPLETED",
+                "dayEq": 15
+            },
+            "i18nKey": "SystemMessages.Transition.silence_is_data"
+        },
+        {
+            "id": "TRANSITION_DEFAULT",
+            "priority": 500,
+            "when": {
+                "protocolStatus": "COMPLETED"
+            },
+            "i18nKey": "SystemMessages.Transition.next_options"
+        },
+        {
+            "id": "minimal_mode_l2",
+            "priority": 1,
+            "when": {
+                "minimalModeLevel": 2
+            },
+            "emit": {
+                "messageKey": "SystemMessages.minimal.ON_L2"
+            }
+        },
+        {
+            "id": "minimal_mode_l1",
+            "priority": 2,
+            "when": {
+                "minimalModeLevel": 1
+            },
+            "emit": {
+                "messageKey": "SystemMessages.minimal.ON_L1"
+            }
+        },
+        {
+            "id": "inactivity_96h",
+            "priority": 3,
+            "when": {
+                "inactivityHoursGte": 96
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.RE_ENGAGEMENT_96H"
+            }
+        },
+        {
+            "id": "inactivity_48h",
+            "priority": 4,
+            "when": {
+                "inactivityHoursGte": 48
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.RE_ENGAGEMENT_48H"
+            }
+        },
+        {
+            "id": "failures_2",
+            "priority": 5,
+            "when": {
+                "consecutiveFailuresGte": 2
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.SIMPLIFICATION"
+            }
+        },
+        {
+            "id": "low_adherence_after_day3",
+            "priority": 6,
+            "when": {
+                "adherence7dLt": 0.35,
+                "dayGt": 3
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.SIMPLIFICATION"
+            }
+        },
+        {
+            "id": "high_friction",
+            "priority": 7,
+            "when": {
+                "frictionScoreGte": 70
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.SIMPLIFICATION"
+            }
+        },
+        {
+            "id": "normalization_worse",
+            "priority": 8,
+            "when": {
+                "lastCheckOptionIdEq": "worse"
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.NORMALIZATION_WORSE"
+            }
+        },
+        {
+            "id": "orientation_day1",
+            "priority": 9,
+            "when": {
+                "dayEq": 1
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.ORIENTATION"
+            }
+        },
+        {
+            "id": "closure_day14",
+            "priority": 10,
+            "when": {
+                "dayEq": 14
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.CLOSURE"
+            }
+        },
+        {
+            "id": "default_transition",
+            "priority": 99,
+            "when": {
+                "always": true
+            },
+            "emit": {
+                "messageKey": "SystemMessages.circadian.TRANSITION"
+            }
+        }
+    ],
+    "notes": {
+        "determinism": "Rules are evaluated in ascending priority. First match wins.",
+        "ser_integrity": "Notification or operator stimulus windows must be tracked as separate discard categories in SERService."
+    }
+}

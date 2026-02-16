@@ -1,0 +1,94 @@
+[
+    {
+        "id": "blue_blockers",
+        "slug": "blue-blockers",
+        "type": "product",
+        "featured": true,
+        "priceCents": 4500,
+        "currency": "EUR",
+        "title": {
+            "es": "Gafas Blue Blockers (noche)",
+            "en": "Blue Blockers (night)"
+        },
+        "excerpt": {
+            "es": "Bloquea luz azul-cian (400-500nm) para proteger melatonina.",
+            "en": "Blocks blue-cyan light (400-500nm) to protect melatonin."
+        },
+        "image": {
+            "src": "/img/products/blue-blockers.jpg",
+            "alt": {
+                "es": "Gafas bloqueadoras",
+                "en": "Blocking glasses"
+            }
+        }
+    },
+    {
+        "id": "mouth_tape",
+        "slug": "mouth-tape",
+        "type": "product",
+        "featured": true,
+        "priceCents": 1200,
+        "currency": "EUR",
+        "title": {
+            "es": "Cinta bucal (micropore)",
+            "en": "Mouth Tape"
+        },
+        "excerpt": {
+            "es": "Fomenta respiración nasal nocturna suavemente.",
+            "en": "Encourages gentle nasal breathing at night."
+        },
+        "image": {
+            "src": "/img/products/mouth-tape.jpg",
+            "alt": {
+                "es": "Cinta bucal",
+                "en": "Mouth tape"
+            }
+        }
+    },
+    {
+        "id": "magnesium_complex",
+        "slug": "magnesium",
+        "type": "product",
+        "featured": false,
+        "priceCents": 2800,
+        "currency": "EUR",
+        "title": {
+            "es": "Magnesio Bisglicinato",
+            "en": "Magnesium Bisglycinate"
+        },
+        "excerpt": {
+            "es": "Alta biodisponibilidad para relajación muscular.",
+            "en": "High bioavailability for muscle relaxation."
+        },
+        "image": {
+            "src": "/img/products/magnesium.jpg",
+            "alt": {
+                "es": "Bote de magnesio",
+                "en": "Magnesium jar"
+            }
+        }
+    },
+    {
+        "id": "red_light_bulb",
+        "slug": "red-light",
+        "type": "product",
+        "featured": false,
+        "priceCents": 1500,
+        "currency": "EUR",
+        "title": {
+            "es": "Bombilla Roja (670nm)",
+            "en": "Red Light Bulb (670nm)"
+        },
+        "excerpt": {
+            "es": "Iluminación ambiental sin señal de alerta.",
+            "en": "Ambient lighting without alertness signal."
+        },
+        "image": {
+            "src": "/img/products/red-bulb.jpg",
+            "alt": {
+                "es": "Bombilla roja",
+                "en": "Red bulb"
+            }
+        }
+    }
+]

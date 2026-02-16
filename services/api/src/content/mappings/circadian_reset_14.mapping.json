@@ -1,0 +1,581 @@
+{
+    "protocolId": "circadian_reset_14",
+    "version": "1.0.0",
+    "days": [
+        {
+            "day": 1,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-why-morning-light",
+                        "titleKey": "Resources.CircadianReset.Day1.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day1.blog1.why",
+                        "tags": [
+                            "morning_light",
+                            "clock"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_1",
+                        "titleKey": "Resources.CircadianReset.Day1.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day1.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 2,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-delay-caffeine-window",
+                        "titleKey": "Resources.CircadianReset.Day2.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day2.blog1.why",
+                        "tags": [
+                            "caffeine",
+                            "timing"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "circadian-breakfast-stable",
+                        "titleKey": "Resources.CircadianReset.Day2.recipe1.title",
+                        "whyKey": "Resources.CircadianReset.Day2.recipe1.why",
+                        "tags": [
+                            "breakfast",
+                            "stability"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_2",
+                        "titleKey": "Resources.CircadianReset.Day2.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day2.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 3,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-early-dinner-sleep",
+                        "titleKey": "Resources.CircadianReset.Day3.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day3.blog1.why",
+                        "tags": [
+                            "dinner",
+                            "sleep"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [
+                    {
+                        "slug": "circadian-early-dinner-template",
+                        "titleKey": "Resources.CircadianReset.Day3.recipe1.title",
+                        "whyKey": "Resources.CircadianReset.Day3.recipe1.why",
+                        "tags": [
+                            "early_dinner"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_3",
+                        "titleKey": "Resources.CircadianReset.Day3.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day3.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 4,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-gentle-morning-movement",
+                        "titleKey": "Resources.CircadianReset.Day4.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day4.blog1.why",
+                        "tags": [
+                            "movement",
+                            "morning"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_4",
+                        "titleKey": "Resources.CircadianReset.Day4.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day4.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 5,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-midday-light-reset",
+                        "titleKey": "Resources.CircadianReset.Day5.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day5.blog1.why",
+                        "tags": [
+                            "midday_light",
+                            "energy"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_5",
+                        "titleKey": "Resources.CircadianReset.Day5.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day5.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 6,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-night-darkness-blue-light",
+                        "titleKey": "Resources.CircadianReset.Day6.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day6.blog1.why",
+                        "tags": [
+                            "darkness",
+                            "screens"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [
+                    {
+                        "slug": "tool-blue-light-glasses",
+                        "titleKey": "Resources.CircadianReset.Day6.product1.title",
+                        "whyKey": "Resources.CircadianReset.Day6.product1.why",
+                        "tags": [
+                            "optional_tool",
+                            "blue_light"
+                        ],
+                        "minPlan": {
+                            "showInL1": false,
+                            "showInL2": false
+                        },
+                        "gating": {
+                            "minDay": 6,
+                            "requires": [
+                                {
+                                    "type": "completed_days_gte",
+                                    "value": 3
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_6",
+                        "titleKey": "Resources.CircadianReset.Day6.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day6.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 7,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-week1-review-minimum",
+                        "titleKey": "Resources.CircadianReset.Day7.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day7.blog1.why",
+                        "tags": [
+                            "review",
+                            "week1"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [
+                    {
+                        "slug": "mini-course-circadian-basics",
+                        "titleKey": "Resources.CircadianReset.Day7.course1.title",
+                        "whyKey": "Resources.CircadianReset.Day7.course1.why",
+                        "tags": [
+                            "basics"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_7",
+                        "titleKey": "Resources.CircadianReset.Day7.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day7.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 8,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-sleep-pressure-daytime",
+                        "titleKey": "Resources.CircadianReset.Day8.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day8.blog1.why",
+                        "tags": [
+                            "sleep_pressure",
+                            "walk"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_8",
+                        "titleKey": "Resources.CircadianReset.Day8.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day8.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 9,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-temperature-cooling",
+                        "titleKey": "Resources.CircadianReset.Day9.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day9.blog1.why",
+                        "tags": [
+                            "temperature",
+                            "sleep_onset"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [
+                    {
+                        "slug": "tool-sleep-mask",
+                        "titleKey": "Resources.CircadianReset.Day9.product1.title",
+                        "whyKey": "Resources.CircadianReset.Day9.product1.why",
+                        "tags": [
+                            "optional_tool",
+                            "darkness"
+                        ],
+                        "minPlan": {
+                            "showInL1": false,
+                            "showInL2": false
+                        },
+                        "gating": {
+                            "minDay": 9,
+                            "requires": [
+                                {
+                                    "type": "completed_days_gte",
+                                    "value": 3
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_9",
+                        "titleKey": "Resources.CircadianReset.Day9.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day9.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 10,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-nap-policy",
+                        "titleKey": "Resources.CircadianReset.Day10.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day10.blog1.why",
+                        "tags": [
+                            "naps",
+                            "sleep_pressure"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_10",
+                        "titleKey": "Resources.CircadianReset.Day10.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day10.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 11,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-week2-adjustments",
+                        "titleKey": "Resources.CircadianReset.Day11.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day11.blog1.why",
+                        "tags": [
+                            "adjustments",
+                            "week2"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_11",
+                        "titleKey": "Resources.CircadianReset.Day11.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day11.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 12,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-caffeine-troubleshooting",
+                        "titleKey": "Resources.CircadianReset.Day12.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day12.blog1.why",
+                        "tags": [
+                            "caffeine",
+                            "troubleshoot"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_12",
+                        "titleKey": "Resources.CircadianReset.Day12.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day12.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 13,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-social-jetlag-weekend",
+                        "titleKey": "Resources.CircadianReset.Day13.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day13.blog1.why",
+                        "tags": [
+                            "weekend",
+                            "social_jetlag"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_13",
+                        "titleKey": "Resources.CircadianReset.Day13.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day13.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "day": 14,
+            "resources": {
+                "blog": [
+                    {
+                        "slug": "circadian-maintenance-minimum",
+                        "titleKey": "Resources.CircadianReset.Day14.blog1.title",
+                        "whyKey": "Resources.CircadianReset.Day14.blog1.why",
+                        "tags": [
+                            "closure",
+                            "maintenance"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "recipes": [],
+                "products": [],
+                "courses": [
+                    {
+                        "slug": "next-step-advanced-sleep",
+                        "titleKey": "Resources.CircadianReset.Day14.course1.title",
+                        "whyKey": "Resources.CircadianReset.Day14.course1.why",
+                        "tags": [
+                            "next_step"
+                        ],
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": false
+                        }
+                    }
+                ],
+                "community": [
+                    {
+                        "threadId": "circadian_reset_day_14",
+                        "titleKey": "Resources.CircadianReset.Day14.thread.title",
+                        "whyKey": "Resources.CircadianReset.Day14.thread.why",
+                        "minPlan": {
+                            "showInL1": true,
+                            "showInL2": true
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

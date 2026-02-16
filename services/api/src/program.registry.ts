@@ -32,10 +32,28 @@ export class FileProgramRegistry extends ProgramRegistry {
     private readonly programsDir = path.join(process.cwd(), '..', '..', 'packages', 'shared', 'content', 'programs');
     private readonly logger = new Logger(FileProgramRegistry.name);
 
+    private readonly aliases: Record<string, string> = {
+        'nervous_regulation_10': 'nervous_system_reset_10',
+        'DigestiveRepair': 'digestive_reset_14'
+    };
+
     async getProgram(id: string): Promise<ProgramDef> {
-        const file = path.join(this.programsDir, `${id}.json`);
+        const resolvedId = this.aliases[id] || id;
+
+        if (id !== resolvedId) {
+            this.logger.debug(`Alias resolved: ${id} -> ${resolvedId}`);
+        }
+
+        const file = path.join(this.programsDir, `${resolvedId}.json`);
+
         if (!fs.existsSync(file)) {
-            this.logger.error(`Program file not found: ${file}`);
+            // Check if it's the original ID before failing
+            const fallback = path.join(this.programsDir, `${id}.json`);
+            if (fs.existsSync(fallback)) {
+                return JSON.parse(fs.readFileSync(fallback, 'utf-8'));
+            }
+
+            this.logger.error(`Program file not found: ${file} (original: ${id})`);
             throw new Error(`Program not found: ${id}`);
         }
         return JSON.parse(fs.readFileSync(file, 'utf-8'));

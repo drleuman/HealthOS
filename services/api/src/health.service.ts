@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import type { AssessmentInput, DayLogInput, RoutePayload, TodayPayload } from '@healthos/shared';
+import type { AssessmentInput, DayLogInput, RoutePayload, TodayPayload, SystemMessage, ActionItem, CommunityThreadPreview, DeviationType } from '@healthos/shared';
 import { decideProgram } from './decision.engine';
 import { ProgramRegistry } from './program.registry';
 import { BehaviorService } from './behavior.service';
 import { MicroInterventionService } from './micro-intervention.service';
+import { ProtocolEngine } from './behavioral/protocol.engine';
 import { Prisma } from '@prisma/client';
+
+import { CommunityService } from './community.service';
 
 @Injectable()
 export class HealthService {
@@ -13,7 +16,9 @@ export class HealthService {
     private prisma: PrismaService,
     private registry: ProgramRegistry,
     private behaviorService: BehaviorService,
-    private microInterventionService: MicroInterventionService
+    private microInterventionService: MicroInterventionService,
+    private protocolEngine: ProtocolEngine,
+    private communityService: CommunityService
   ) { }
 
   // ... (lines 18-265)
@@ -118,112 +123,245 @@ export class HealthService {
     }
   };
 
-  async getToday(email: string): Promise<TodayPayload & { behavior?: any, microIntervention?: any }> {
+  async getToday(email: string): Promise<TodayPayload> {
     try {
       const user = await this.ensureUser(email);
       const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
 
       const behaviorStateObj = await this.behaviorService.getUserState(user.id);
-      const intervention = await this.microInterventionService.getIntervention(user.id, behaviorStateObj.state);
+
+      // We don't necessarily need microIntervention for the core contract if it's not in the type, 
+      // but let's keep logic if we want to add it to 'protocol.learn' or similar. 
+      // The new contract has 'protocol.learn'.
+      // const intervention = await this.microInterventionService.getIntervention(user.id, behaviorStateObj.state);
 
       if (!state) {
-        // Default/Fallback State
+        // Fallback / Initial State
+        const defaultSysMsg: SystemMessage = {
+          i18nKey: 'SystemMessages.Onboarding.welcome',
+          params: {},
+          selectedRuleId: 'ONBOARDING_WELCOME',
+          reason: {}
+        };
+
         return {
+          uiMode: 'PROTOCOL',
+          status: 'ACTIVE',
+          protocolId: 'circadian_reset_14',
           day: 1,
-          program_id: 'circadian_reset_14',
-          // Return as any because format changed
-          tasks: ['get_light_10min'] as any,
-          actions: [this.ACTION_DEFINITIONS['get_light_10min']],
-          progress_week: 0,
-          community_group: 'starter',
-          recommendation: null,
-          behavior: { state: behaviorStateObj.state, updatedAt: behaviorStateObj.updatedAt },
-          microIntervention: intervention
-        } as any;
+          systemMessage: defaultSysMsg,
+          behavior: {
+            deviation: null,
+            reentry: { eligible: false },
+            recalibration: { status: 'NONE' },
+            minimalMode: null
+          },
+          protocol: {
+            actions: [{ id: 'get_light_10min', labelKey: 'Actions.get_light_10min.label', type: 'light', status: 'pending' }],
+            check: null,
+            learn: null,
+            progress: 0
+          },
+          community: { threads: [], primaryThreadId: null }
+        };
       }
 
       const program = await this.registry.getProgram(state.programId);
       const currentDay = Math.min(state.currentDay, program.duration_days);
       const lesson = program.days.find(d => d.day === currentDay) || program.days[0];
 
-      const rawTaskKeys = [lesson.action, 'simple_meal_today', 'breathing_3min'];
+      // --- 1. Mode Determination ---
+      const behaviorCtx = (behaviorStateObj?.context as any) || {};
 
-      // Map keys to full Action objects
-      const actions = rawTaskKeys.map(k => ({
-        type: k,
-        ...this.ACTION_DEFINITIONS[k] || { title: k }
-      }));
-
-      // Map Check key to full Check object
-      const checkDef = lesson.check ? this.CHECK_DEFINITIONS[lesson.check] : null;
-      const checkObj = checkDef ? { id: lesson.check, ...checkDef } : null;
-
-      const completed = await this.prisma.dailyLog.count({ where: { userId: user.id, actionCompleted: true } });
-      let recommendationSlug = (completed >= 3 && lesson.tool_unlock) ? lesson.tool_unlock : null;
-      let recommendation = recommendationSlug ? (this.RECOMMENDATION_TRANSLATIONS[recommendationSlug] || recommendationSlug) : null;
-
-      if (recommendationSlug) {
-        const existingRec = await this.prisma.recommendation.findFirst({
-          where: { userId: user.id, slug: recommendationSlug }
-        });
-        if (!existingRec) {
-          await this.prisma.recommendation.create({
-            data: {
-              userId: user.id,
-              type: 'tool',
-              slug: recommendationSlug,
-              reason: `Desbloqueado tras ${completed} días completados en ${state.programId}`
-            }
-          }).catch(() => { });
-        }
+      let uiMode: 'PROTOCOL' | 'OBSERVATION' | 'RECALIBRATION' = 'PROTOCOL';
+      if (behaviorStateObj?.status === 'COMPLETED') {
+        uiMode = 'OBSERVATION';
+      } else if (behaviorStateObj?.programId === 'recalibration_3d' || behaviorCtx.recalibration?.status === 'ACTIVE') {
+        uiMode = 'RECALIBRATION';
       }
 
+      // --- 2. Protocol Actions & Checks (Only for PROTOCOL/RECALIBRATION) ---
+      let protocolData = undefined;
+
+      if (uiMode !== 'OBSERVATION') {
+        const rawTaskKeys = [lesson.action, 'simple_meal_today', 'breathing_3min'];
+
+        // Check completion status from DB
+        const logs = await this.prisma.dailyLog.findMany({
+          where: { userId: user.id, day: currentDay, createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } }
+        });
+        const completedAction = logs.some(l => l.actionCompleted); // Simplified for MVP
+
+        const actions: ActionItem[] = rawTaskKeys.map(k => {
+          const def = this.ACTION_DEFINITIONS[k] || { title: k };
+          return {
+            id: k,
+            labelKey: `Actions.${k}.label`, // Enforce key convention
+            type: def.type || 'generic',
+            status: completedAction ? 'completed' : 'pending',
+            meta: { minutes: def.minutes, window: def.window }
+          };
+        });
+
+        // Map Check
+        const checkDef = lesson.check ? this.CHECK_DEFINITIONS[lesson.check] : null;
+        let checkObj = null;
+        if (checkDef) {
+          checkObj = {
+            id: lesson.check,
+            labelKey: `Checks.${lesson.check}.question`,
+            options: checkDef.options.map((opt, i) => ({
+              id: `opt_${i}`, // or specific IDs if we had them
+              labelKey: `Checks.${lesson.check}.options.${i}`
+            }))
+          };
+        }
+
+        const completedCount = await this.prisma.dailyLog.count({ where: { userId: user.id, actionCompleted: true } });
+
+        protocolData = {
+          actions,
+          check: checkObj,
+          learn: lesson.learn ? {
+            id: 'daily_lesson',
+            titleKey: `Protocol.${program.id}.Day${currentDay}.title`,
+            summaryKey: `Protocol.${program.id}.Day${currentDay}.learn`
+          } : null,
+          progress: Math.min(100, Math.floor((completedCount / program.duration_days) * 100))
+        };
+      }
+
+      // --- 3. System Message Construction ---
+      // We need to fetch the LATEST message generated by behavior service or fallback
+      // For now, let's use the one from the behavior state context if available, or generate a default one.
+      // Ideally, the behavior service should have stored the 'last message' in the state context.
+      // If not, we might need to regenerate it (expensive) or use a fallback.
+
+      // Checking behavior service output... it stores `generatedMessage` in `BehaviorAnalysis`.
+      // It DOES NOT explicitely store it in `UserBehaviorState.context` in the file I read.
+      // However, `logDay` returns it.
+      // For `getToday`, we should probably look at the latest `BehaviorAnalysis` or `DailyLog` message?
+      // OR, the contract suggests the frontend is stateless regarding message, so we must provide it.
+      // Let's defer to a safe default or 'Daily Update' if we can't find a specific triggered message.
+
+      // Let's check `behaviorCtx.lastMessage`. If not present, we use a basic one.
+
+      const sysMsgI18nKey = (behaviorCtx as any)?.lastMessage?.key || `SystemMessages.${program.id}.day_${currentDay}`;
+      const sysMsgParams = (behaviorCtx as any)?.lastMessage?.params || {};
+      const sysMsgReason = (behaviorCtx as any)?.lastMessage?.reason || {};
+      const sysMsgRule = (behaviorCtx as any)?.lastMessage?.selectedRuleId || 'daily_default';
+
+      const systemMessage: SystemMessage = {
+        i18nKey: sysMsgI18nKey,
+        params: sysMsgParams,
+        selectedRuleId: sysMsgRule,
+        reason: sysMsgReason
+      };
+
+      // --- 4. Deviation & Behavior ---
+      // Ensure strict mapping
+      const deviationRaw = behaviorCtx.deviation;
+      const deviation = deviationRaw ? {
+        active: true,
+        type: (deviationRaw.type?.toUpperCase() || 'DRIFT') as DeviationType, // Force UPPERCASE to matching Enum
+        severity: deviationRaw.severity,
+        cooldownUntil: deviationRaw.cooldownUntil,
+        evalCount: deviationRaw.evalCount,
+        suggestionCount: deviationRaw.suggestionCount
+      } : null;
+
+      // --- 5. Community (Real Data) ---
+      const threads: CommunityThreadPreview[] = [];
+
+      let threadFilter: any = {};
+      if (uiMode === 'OBSERVATION') {
+        // In Observation, show general community or specific observation threads
+        threadFilter = { scope: 'general', limit: 3 };
+      } else {
+        // In Protocol/Recalibration, show day-specific threads
+        threadFilter = {
+          scope: 'program_day',
+          protocolId: program.id, // Use canonical ID
+          day: currentDay,
+          limit: 1
+        };
+      }
+
+      const communityThreads = await this.communityService.getThreads(threadFilter);
+
+      // If PROTOCOL mode and no thread exists for this day, ensure one exists (MVP auto-create)
+      if (uiMode !== 'OBSERVATION' && communityThreads.length === 0) {
+        const newThread = await this.communityService.ensureProtocolThread(
+          program.id, // Use canonical ID
+          currentDay,
+          `Día ${currentDay}: ${lesson.title}` // Fallback title
+        );
+        communityThreads.push(newThread as any);
+      }
+
+      // Map to Preview
+      communityThreads.forEach((t: any) => {
+        threads.push({
+          id: t.id,
+          scope: t.scope as any,
+          titleKey: t.scope === 'program_day'
+            ? `Protocol.${program.id}.Day${t.day}.title` // Reuse existing protocol titles
+            : (t.title || 'Community.threads.general'),
+          lastActivityAt: t.lastActivityAt.toISOString(),
+          replyCount: t._count?.replies || 0
+        });
+      });
+
+      // --- 6. Legacy/Optional ---
+      const completed = await this.prisma.dailyLog.count({ where: { userId: user.id, actionCompleted: true } });
+      const recommendation = (completed >= 3 && lesson.tool_unlock) ? lesson.tool_unlock : null;
+
       const jobResults = await this.prisma.jobResult.findMany({
-        where: {
-          userId: user.id,
-          createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
-        },
+        where: { userId: user.id, createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } },
         orderBy: { createdAt: 'desc' },
         take: 3,
       });
 
-      const banners = jobResults.map((jr: any) => ({
-        id: jr.id,
-        type: jr.jobType,
-        message: jr.message,
-        data: jr.data,
-      }));
-
-      const lastLog = await this.prisma.dailyLog.findFirst({
-        where: { userId: user.id },
-        orderBy: { createdAt: 'desc' },
-      });
-
       return {
+        uiMode,
+        status: (behaviorStateObj.status as any) || 'ACTIVE',
+        protocolId: program.id, // Use canonical ID
         day: currentDay,
-        program_id: state.programId,
-        tasks: [] as any, // Deprecated in favor of actions
-        actions,
-        check: checkObj,
-        progress_week: Math.min(100, Math.floor((completed / program.duration_days) * 100)),
-        community_group: `${state.programId}_day_${currentDay}`,
-        recommendation,
-        banners,
-        behavior: { state: behaviorStateObj.state, updatedAt: behaviorStateObj.updatedAt },
-        microIntervention: intervention,
-        lastRecordAt: lastLog?.createdAt || null,
-        biological_phase: lesson.biological_phase || null,
-        system_message: lesson.system_message || null
-      } as any;
+        systemMessage,
+        behavior: {
+          deviation,
+          reentry: {
+            eligible: !!behaviorCtx.deviation?.active && behaviorStateObj.status === 'COMPLETED',
+            cooldownUntil: behaviorCtx.reentry?.cooldownUntil || null
+          },
+          recalibration: {
+            status: behaviorCtx.recalibration?.status || 'NONE',
+            dayIndex: behaviorCtx.recalibration?.dayIndex,
+            outcome: behaviorCtx.recalibration?.outcome
+          },
+          minimalMode: behaviorCtx.minimalMode || null
+        },
+        protocol: protocolData,
+        community: {
+          threads,
+          primaryThreadId: threads.length > 0 ? threads[0].id : null,
+          threadOfDayId: threads.find(t => t.scope === 'program_day')?.id || null, // Bonus: explicit ID for day thread
+          labelKey: 'App.Community.view_group'
+        }
+      };
 
-    } catch (e) {
+    } catch (e: any) {
+      console.error("getToday error", e);
+      // Fail-safe fallback matching strict type
       return {
+        uiMode: 'PROTOCOL',
+        status: 'ACTIVE',
+        protocolId: 'error_fallback',
         day: 1,
-        program_id: 'circadian_reset_14 (MOCK)',
-        tasks: ['get_light_10min', 'simple_meal_today', 'breathing_3min'],
-        progress_week: 0,
-        community_group: 'mock_group',
-        recommendation: 'blue_light_glasses',
+        systemMessage: { i18nKey: 'SystemMessages.Error.fallback', params: {}, selectedRuleId: 'ERROR', reason: {} },
+        behavior: { deviation: null, reentry: { eligible: false }, recalibration: { status: 'NONE' }, minimalMode: null },
+        protocol: { actions: [], check: null, learn: null, progress: 0 },
+        community: { threads: [], primaryThreadId: null }
       };
     }
   }
@@ -309,15 +447,68 @@ export class HealthService {
         }
       });
 
+      // Map GenerateMessage to SystemMessage
+      const rawMsg = behaviorResult.systemMessage;
+      const systemMessage: SystemMessage = {
+        i18nKey: rawMsg.key,
+        params: rawMsg.params,
+        selectedRuleId: rawMsg.selectedRuleId,
+        reason: rawMsg.reason
+      };
+
       return {
         ok: true,
         streak: nextStreak,
         currentDay: behaviorResult.nextDay,
-        message: behaviorResult.systemMessage
+        message: systemMessage // Return strict structure
       };
     } catch (e: any) {
       console.error('logDay Error:', e);
       return { ok: false, error: 'Failed to process log' };
     }
+  }
+
+  async closeProtocol(email: string, input: { completionType?: string; reason?: string }) {
+    const user = await this.ensureUser(email);
+    return this.behaviorService.manualClose(user.id, {
+      userRequested: true,
+      reason: input.reason
+    });
+  }
+
+  async reactivateProtocol(email: string) {
+    const user = await this.ensureUser(email);
+    const updatedState = await this.protocolEngine.reactivateProtocol(user.id);
+
+    // Sync with legacy userState
+    await this.prisma.userState.update({
+      where: { userId: user.id },
+      data: {
+        programId: updatedState.programId,
+        currentDay: updatedState.dayIndex,
+        lastActive: new Date()
+      }
+    });
+
+    return { ok: true, state: updatedState };
+  }
+
+  async handleReentryDecision(email: string, decision: 'ACCEPT' | 'DECLINE', planId: string) {
+    const user = await this.ensureUser(email);
+    const result = await this.protocolEngine.recordReentryDecision(user.id, decision, planId);
+
+    if (decision === 'ACCEPT') {
+      // Sync legacy state
+      await this.prisma.userState.update({
+        where: { userId: user.id },
+        data: {
+          programId: result.programId,
+          currentDay: result.dayIndex,
+          lastActive: new Date()
+        }
+      });
+    }
+
+    return { ok: true, result };
   }
 }

@@ -1,0 +1,62 @@
+[
+    {
+        "id": "hrv_science",
+        "slug": "understanding-hrv",
+        "type": "blog",
+        "featured": true,
+        "readingMinutes": 5,
+        "title": {
+            "es": "Entendiendo tu Variabilidad Cardiaca",
+            "en": "Understanding Your Heart Rate Variability"
+        },
+        "excerpt": {
+            "es": "Cómo usar el HRV para medir la carga alostática real, no solo el estrés percibido.",
+            "en": "Using HRV to measure true allostatic load, not just perceived stress."
+        }
+    },
+    {
+        "id": "light_cortisol",
+        "slug": "light-science",
+        "type": "blog",
+        "featured": true,
+        "readingMinutes": 7,
+        "title": {
+            "es": "La ciencia de la luz y el cortisol",
+            "en": "The Science of Light and Cortisol"
+        },
+        "excerpt": {
+            "es": "10 minutos antes de las 9am cambian la arquitectura del sueño.",
+            "en": "10 minutes before 9am change your sleep architecture."
+        }
+    },
+    {
+        "id": "migrating_motor_complex",
+        "slug": "meal-spacing",
+        "type": "blog",
+        "featured": true,
+        "readingMinutes": 4,
+        "title": {
+            "es": "El Complejo Motor Migratorio",
+            "en": "The Migrating Motor Complex"
+        },
+        "excerpt": {
+            "es": "Limpieza digestiva que solo se activa en ayuno.",
+            "en": "Digestive cleaning that only activates during fasting."
+        }
+    },
+    {
+        "id": "breath_mechanics",
+        "slug": "breath-work-co2",
+        "type": "blog",
+        "featured": false,
+        "readingMinutes": 6,
+        "title": {
+            "es": "Tolerancia al CO2 y Ansiedad",
+            "en": "CO2 Tolerance and Anxiety"
+        },
+        "excerpt": {
+            "es": "Por qué respirar menos aire oxigena más.",
+            "en": "Why breathing less air oxygenates more."
+        }
+    }
+]

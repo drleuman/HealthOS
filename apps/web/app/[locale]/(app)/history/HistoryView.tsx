@@ -68,6 +68,18 @@ export default function HistoryView() {
     const [loading, setLoading] = useState(true);
     const [payload, setPayload] = useState<HistoryPayload | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [filter, setFilter] = useState<'7d' | '30d' | 'all'>('7d');
+
+    const filteredItems = useMemo(() => {
+        if (!payload?.items) return [];
+        if (filter === 'all') return payload.items;
+
+        const now = Date.now();
+        const days = filter === '7d' ? 7 : 30;
+        const limit = now - (days * 24 * 60 * 60 * 1000);
+
+        return payload.items.filter(it => new Date(it.ts).getTime() >= limit);
+    }, [payload?.items, filter]);
 
     async function load() {
         setLoading(true);
@@ -131,6 +143,24 @@ export default function HistoryView() {
                     </button>
                 </div>
 
+                <div className="flex gap-2">
+                    {['7d', '30d', 'all'].map((f) => (
+                        <button
+                            key={f}
+                            type="button"
+                            onClick={() => setFilter(f as any)}
+                            className={[
+                                "rounded-full border px-3 py-1 text-[11px] font-medium transition-colors",
+                                filter === f
+                                    ? "border-slate-400 bg-slate-400/10 text-slate-100"
+                                    : "border-slate-800 bg-slate-900/40 text-slate-400 hover:text-slate-200"
+                            ].join(' ')}
+                        >
+                            {t(`filter_${f}`)}
+                        </button>
+                    ))}
+                </div>
+
                 <Card>
                     {loading ? (
                         <div className="text-sm text-slate-400">{t('loading')}</div>
@@ -147,53 +177,57 @@ export default function HistoryView() {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            {/* Confirmation (neutral, no “rewards”) */}
+                            {/* Confirmation (neutral) */}
                             {justRecordedAt ? (
-                                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-3">
-                                    <div className="text-sm text-slate-200">
-                                        {t('confirm_recorded')}
-                                    </div>
-                                    <div className="mt-1 text-xs text-slate-500">
-                                        {t('confirm_time', { when: fmtTime(justRecordedAt) })}
-                                    </div>
+                                <div className="rounded-xl bg-slate-500/5 px-4 py-2 text-[11px] text-slate-400 border border-slate-800 flex items-center gap-2">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-slate-500/40" />
+                                    {t('confirm_recorded')} · {fmtTime(justRecordedAt)}
                                 </div>
                             ) : null}
 
                             {/* List */}
-                            {items.length ? (
+                            {filteredItems.length ? (
                                 <div className="space-y-2">
-                                    {items.map((it) => (
-                                        <div
-                                            key={it.id}
-                                            className="flex items-start justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900/20 p-3"
-                                        >
-                                            <div className="min-w-0">
-                                                <div className="flex flex-wrap items-center gap-2">
-                                                    <div className="text-sm font-medium text-slate-100">
-                                                        <ItemLabel item={it} />
+                                    {filteredItems.map((it, idx) => {
+                                        const isNew = idx === 0 && justRecordedAt;
+                                        return (
+                                            <div
+                                                key={it.id}
+                                                className={[
+                                                    "flex items-start justify-between gap-4 rounded-xl border p-4 transition-colors",
+                                                    isNew ? "border-slate-500 bg-slate-900/30" : "border-slate-800 bg-slate-900/10"
+                                                ].join(' ')}
+                                            >
+                                                <div className="min-w-0">
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <div className="text-sm font-semibold text-slate-100">
+                                                            <ItemLabel item={it} />
+                                                        </div>
+                                                        {typeof it.day === 'number' ? <Pill>{t('day', { day: it.day })}</Pill> : null}
                                                     </div>
-                                                    {typeof it.day === 'number' ? <Pill>{t('day', { day: it.day })}</Pill> : null}
+
+                                                    {it.value != null ? (
+                                                        <div className="mt-1.5 text-sm text-slate-400">
+                                                            {typeof it.value === 'string' ? it.value : JSON.stringify(it.value)}
+                                                        </div>
+                                                    ) : null}
+
+                                                    <div className="mt-3 text-[10px] uppercase tracking-wider text-slate-500 font-medium">
+                                                        {fmtTime(it.ts)}
+                                                    </div>
                                                 </div>
 
-                                                {it.value != null ? (
-                                                    <div className="mt-1 text-sm text-slate-400">
-                                                        {typeof it.value === 'string' ? it.value : JSON.stringify(it.value)}
-                                                    </div>
-                                                ) : null}
-
-                                                <div className="mt-2 text-xs text-slate-500">
-                                                    {fmtTime(it.ts)}
+                                                <div className="text-[10px] uppercase tracking-widest font-bold text-slate-600 border border-slate-800 px-1.5 py-0.5 rounded bg-slate-950/20">
+                                                    {t('observed')}
                                                 </div>
                                             </div>
-
-                                            <Pill>{t('observed')}</Pill>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             ) : (
-                                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-3">
-                                    <div className="text-sm text-slate-200">{t('empty_title')}</div>
-                                    <div className="mt-1 text-sm text-slate-400">{t('empty_body')}</div>
+                                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 text-center">
+                                    <div className="text-sm font-medium text-slate-300">{t('empty_title')}</div>
+                                    <div className="mt-1 text-xs text-slate-500">{t('empty_body')}</div>
                                 </div>
                             )}
                         </div>
