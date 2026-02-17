@@ -18,8 +18,10 @@ export function ContentTriColumn() {
                 {/* Col A: Blog (1-6) */}
                 <div className="lg:col-span-6 space-y-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-slate-200">Blog</h3>
-                        <Link href="/blog" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">Ver todo →</Link>
+                        <h3 className="text-xl font-semibold text-slate-200">{t('blog')}</h3>
+                        <Link href="/blog" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+                            {t('view_all')} →
+                        </Link>
                     </div>
                     {[1, 2, 3].map((i) => (
                         <div key={i} className="group flex gap-4 p-4 rounded-xl border border-slate-800/40 bg-slate-900/20 hover:bg-slate-900/40 hover:border-slate-700 transition-all cursor-pointer">
@@ -35,13 +37,20 @@ export function ContentTriColumn() {
                 {/* Col B: Courses (7-12) */}
                 <div className="lg:col-span-6 space-y-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-slate-200">Cursos</h3>
-                        <Link href="/courses" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">Ver todo →</Link>
+                        <h3 className="text-xl font-semibold text-slate-200">{t('courses')}</h3>
+                        <Link href="/courses" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+                            {t('view_all')} →
+                        </Link>
                     </div>
                     <div className="grid gap-6">
                         {[1, 2].map((i) => (
                             <div key={i} className="group relative rounded-2xl border border-slate-800/60 bg-slate-900/40 p-6 hover:bg-slate-900/60 transition-all overflow-hidden">
-                                <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl pointer-events-none">🎓</div>
+                                <div className="absolute top-0 right-0 p-4 opacity-10 text-slate-400 pointer-events-none">
+                                    <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                                        <path d="M4.26 10.147L12 14.25l7.74-4.103a.75.75 0 011.11.649v6.524a.75.75 0 01-.11.393L12 21.75l-8.74-4.103a.75.75 0 01-.11-.393v-6.524a.75.75 0 011.11-.649z" />
+                                        <path d="M12 14.25L12 4.14a.75.75 0 00-.51-.714C8.442 2.457 5.757 2.25 3 2.25l1.096 1.096c.642.642.872 1.558.625 2.427L4.26 10.147z" />
+                                    </svg>
+                                </div>
                                 <h4 className="text-lg font-bold text-slate-100 mb-2">Fundamentos de HealthOS</h4>
                                 <p className="text-sm text-slate-400 mb-4 line-clamp-2">Aprende los principios básicos de la observación pasiva.</p>
                                 <div className="flex items-center gap-4 text-xs text-slate-500 font-mono mb-4">
@@ -50,7 +59,7 @@ export function ContentTriColumn() {
                                     <span>Principiante</span>
                                 </div>
                                 <span className="inline-flex items-center text-sm font-medium text-sky-400 group-hover:translate-x-1 transition-transform">
-                                    Ver curso →
+                                    {t('view_course')} →
                                 </span>
                             </div>
                         ))}
@@ -62,9 +71,11 @@ export function ContentTriColumn() {
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-semibold text-slate-200 flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            Actividad en la comunidad
+                            {t('community_activity')}
                         </h3>
-                        <Link href="/community" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">Unirse →</Link>
+                        <Link href="/community" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+                            {t('join')} →
+                        </Link>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[1, 2, 3].map((i) => (
@@ -75,7 +86,7 @@ export function ContentTriColumn() {
                                 </div>
                                 <p className="text-sm text-slate-300 italic">"Me ayudó mucho entender que no se trata de optimizar..."</p>
                                 <div className="mt-3 text-xs text-slate-500 font-medium hover:text-sky-400 cursor-pointer transition-colors">
-                                    Abrir hilo ↗
+                                    {t('open_thread')} ↗
                                 </div>
                             </div>
                         ))}

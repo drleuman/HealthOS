@@ -26,8 +26,8 @@ export function InstrumentCTA() {
                     {/* Right: Box CTA (Col 9-12) */}
                     <div className="lg:col-span-4 w-full">
                         <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 text-center space-y-4 shadow-xl">
-                            <div className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">Instrumento v1.0</div>
-                            <p className="text-sm text-slate-300">Acceso beta disponible.</p>
+                            <div className="text-[10px] uppercase tracking-widest text-slate-500 font-mono">{t('instrument_v1')}</div>
+                            <p className="text-sm text-slate-300">{t('beta_access')}</p>
                             <Link
                                 href="/auth"
                                 className="block w-full py-3 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold transition-colors shadow-lg shadow-sky-900/20"

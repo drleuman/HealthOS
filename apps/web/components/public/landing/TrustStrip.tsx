@@ -17,9 +17,9 @@ export default function TrustStrip() {
             <figure className="mt-16 text-center">
                 {/* SVG/Icon Placeholder */}
                 <div className="flex justify-center gap-10 text-slate-500 text-sm font-semibold uppercase tracking-wider">
-                    <span>Evidence-Based</span>
-                    <span>Community-Driven</span>
-                    <span>Long-Term</span>
+                    <span>{t('label_evidence')}</span>
+                    <span>{t('label_community')}</span>
+                    <span>{t('label_longterm')}</span>
                 </div>
             </figure>
         </section>

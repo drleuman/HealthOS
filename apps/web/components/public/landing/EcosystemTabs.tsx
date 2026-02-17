@@ -6,7 +6,8 @@ import { CommunityCatalog } from '@healthos/shared';
 
 // Helper for minimal item display
 const CatalogGrid = ({ items, type, locale }: { items: any[], type: string, locale: string }) => {
-    if (!items || items.length === 0) return <div className="text-slate-500 text-sm">Próximamente...</div>;
+    const t = useTranslations('Public.Landing.ecosystem');
+    if (!items || items.length === 0) return <div className="text-slate-500 text-sm">{t('coming_soon')}</div>;
 
     const featured = items.filter(i => i.featured).slice(0, 3);
     const displayItems = featured.length > 0 ? featured : items.slice(0, 3);

@@ -105,7 +105,7 @@ export default function RecalibrationPage() {
                         onClick={() => router.push(`/${locale}/app/today`)}
                         className="text-xs text-slate-500 hover:text-slate-300"
                     >
-                        Volver a hoy
+                        {t_common('back_to_today')}
                     </button>
                 </div>
             </div>

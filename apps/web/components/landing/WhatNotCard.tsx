@@ -16,7 +16,7 @@ export function WhatNotCard() {
                             {t('anti_title')}
                         </h2>
                         <p className="text-lg text-slate-300 leading-relaxed">
-                            No somos otra app de "biohacking" o productividad. HealthOS elimina el ruido para que puedas concentrarte en la señal real de tu cuerpo.
+                            {t('anti_description')}
                         </p>
                     </div>
 
@@ -28,8 +28,12 @@ export function WhatNotCard() {
                             t('anti_3'),
                             t('anti_4')
                         ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-4 text-slate-400">
-                                <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center text-slate-500 text-sm font-bold">✕</div>
+                            <div key={i} className="flex gap-4">
+                                <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center text-slate-500">
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
                                 <span className="text-sm font-medium">{item}</span>
                             </div>
                         ))}
