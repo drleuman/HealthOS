@@ -1,5 +1,18 @@
 {
     "App": {
+        "Onboarding": {
+            "initial_configuration": "INITIAL_CONFIGURATION",
+            "dataset_classification": "DATASET_CLASSIFICATION",
+            "select_primary": "SELECT_PRIMARY_OBSERVATION_CATEGORY",
+            "finalize": "Finalize registration",
+            "initializing": "Initializing...",
+            "categories": {
+                "SLEEP_CYCLE": "SLEEP_CYCLE",
+                "ENERGY_METABOLISM": "ENERGY_METABOLISM",
+                "PHYSICAL_ACTIVITY": "PHYSICAL_ACTIVITY",
+                "NUTRITIONAL_INTAKE": "NUTRITIONAL_INTAKE"
+            }
+        },
         "ControlCenter": {
             "title": "Control Center",
             "subtitle": "Clinical Instrumentation Layer",

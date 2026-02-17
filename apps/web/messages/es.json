@@ -1,5 +1,18 @@
 {
     "App": {
+        "Onboarding": {
+            "initial_configuration": "CONFIGURACIÓN_INICIAL",
+            "dataset_classification": "CLASIFICACIÓN_DEL_DATASET",
+            "select_primary": "SELECCIONAR_CATEGORÍA_DE_OBSERVACIÓN",
+            "finalize": "Finalizar registro",
+            "initializing": "Inicializando...",
+            "categories": {
+                "SLEEP_CYCLE": "CICLO_DE_SUEÑO",
+                "ENERGY_METABOLISM": "METABOLISMO_ENERGÉTICO",
+                "PHYSICAL_ACTIVITY": "ACTIVIDAD_FÍSICA",
+                "NUTRITIONAL_INTAKE": "INGESTA_NUTRICIONAL"
+            }
+        },
         "ControlCenter": {
             "title": "Centro de Control",
             "subtitle": "Capa de Instrumentación Clínica",

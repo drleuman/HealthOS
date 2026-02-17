@@ -2,15 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const CATEGORIES = [
-  { id: 'sleep', label: 'SLEEP_CYCLE' },
-  { id: 'energy', label: 'ENERGY_METABOLISM' },
-  { id: 'activity', label: 'PHYSICAL_ACTIVITY' },
-  { id: 'nutrition', label: 'NUTRITIONAL_INTAKE' }
+  { id: 'sleep', labelKey: 'SLEEP_CYCLE' },
+  { id: 'energy', labelKey: 'ENERGY_METABOLISM' },
+  { id: 'activity', labelKey: 'PHYSICAL_ACTIVITY' },
+  { id: 'nutrition', labelKey: 'NUTRITIONAL_INTAKE' }
 ];
 
 export default function OnboardingScreen() {
+  const t = useTranslations('App.Onboarding');
   const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -31,15 +33,15 @@ export default function OnboardingScreen() {
       <div className="animate-fade w-full">
         {/* Header */}
         <div className="mb-6 border-b pb-4">
-          <small className="meta">INITIAL_CONFIGURATION</small>
+          <small className="meta">{t('initial_configuration')}</small>
           <h1 className="mt-2 text-accent" style={{ fontSize: '16px' }}>
-            DATASET_CLASSIFICATION
+            {t('dataset_classification')}
           </h1>
         </div>
 
         {/* Selection */}
         <div className="section">
-          <small className="meta block mb-4">SELECT_PRIMARY_OBSERVATION_CATEGORY</small>
+          <small className="meta block mb-4">{t('select_primary')}</small>
           <div className="flex flex-col gap-2">
             {CATEGORIES.map((cat) => (
               <button
@@ -69,7 +71,7 @@ export default function OnboardingScreen() {
                   fontFamily: 'var(--font-mono)',
                   color: selected === cat.id ? 'var(--text-primary)' : 'var(--text-secondary)'
                 }}>
-                  {cat.label}
+                  {t(`categories.${cat.labelKey}`)}
                 </span>
               </button>
             ))}
@@ -83,7 +85,7 @@ export default function OnboardingScreen() {
             disabled={!selected || submitting}
             className="btn btn-primary w-full"
           >
-            {submitting ? 'Initializing...' : 'Finalize registration'}
+            {submitting ? t('initializing') : t('finalize')}
           </button>
         </div>
       </div>
