@@ -1,5 +1,91 @@
 {
     "App": {
+        "ControlCenter": {
+            "title": "Control Center",
+            "subtitle": "Clinical Instrumentation Layer",
+            "nav": {
+                "observatory": "Observatory",
+                "laboratory": "Laboratory",
+                "pathways": "Pathways",
+                "predictor": "Predictor"
+            },
+            "status": {
+                "uplink_stable": "STATUS: UPLINK_STABLE",
+                "signal_deanonymized": "SIGNAL: DE-ANONYMIZED",
+                "rebuild_snapshots": "REBUILD SNAPSHOTS",
+                "reconstructing": "RECONSTRUCTING..."
+            },
+            "auth": {
+                "protocol": "Research Access Protocol",
+                "placeholder": "ENTER RESEARCH KEY",
+                "button": "De-Anonymize Signal"
+            },
+            "observatory": {
+                "title": "Population Observatory",
+                "subtitle": "Mapping organism-level physiological similarity to protocol effectiveness.",
+                "clustering_map": {
+                    "title": "Physiological Clustering Map",
+                    "conclusion": "Higher symptom entropy (Cluster B) correlates with 40% lower initial protocol adherence regardless of motivation scores.",
+                    "awaiting_signal": "AWAITING COHORT SIGNAL..."
+                },
+                "organism_effectiveness": {
+                    "title": "Organism Type Effectiveness",
+                    "conclusion": "Ectomorphic metabolism profiles show preferential stabilization on 'Sleep Protocol A' over 'Circadian Phase 1'.",
+                    "sample_n": "Sample N",
+                    "clusters": "Clusters",
+                    "types": {
+                        "metabolic_high": "Metabolic High",
+                        "circadian_drift": "Circadian Drift",
+                        "inflammatory_peak": "Inflammatory Peak"
+                    }
+                }
+            },
+            "laboratory": {
+                "title": "Protocol Laboratory",
+                "subtitle": "Detailed distribution analysis of behavioral outcomes and state stabilization.",
+                "outcome_distribution": {
+                    "title": "Outcome Signal Distribution",
+                    "conclusion": "Protocol 'Circadian_V3' shows a bimodal distribution; users either stabilize completely by Day 5 or experience volatility spikes by Day 9."
+                },
+                "stabilization_vector": {
+                    "title": "Stabilization Vector",
+                    "conclusion": "Population-wide stabilization follows a non-linear trajectory; nervous system activation spikes are predictive of adaptive failure 48h before behavior manifests.",
+                    "awaiting_stream": "Awaiting Stabilization Stream...",
+                    "t_minus_30": "T-30 Days",
+                    "today": "Today",
+                    "stability": "Stability",
+                    "activation": "Activation"
+                }
+            },
+            "pathways": {
+                "title": "Transition Matrix",
+                "subtitle": "Evaluating the effect size of sequential protocol assignments.",
+                "effect_matrix": {
+                    "title": "Inter-Protocol Effect Matrix",
+                    "conclusion": "Sequencing 'Detox' before 'Stabilize' produces a 2.1x higher effect size than the reverse sequence (Destabilization Risk)."
+                }
+            },
+            "predictor": {
+                "title": "Predictive Intelligence",
+                "subtitle": "Heuristic-based probability of early protocol abandonment or system failure.",
+                "early_failure": {
+                    "title": "Early Failure Probability",
+                    "conclusion": "Missing more than 1 'Action Check' in the first 72 hours is 85% predictive of complete system disengagement within 14 days.",
+                    "risk": "RISK"
+                },
+                "recalibration": {
+                    "title": "Recalibration Performance",
+                    "conclusion": "The Recalibration Engine currently resolves 88% of 'System Drifts' within 3 days.",
+                    "resolution_rate": "Resolution Rate",
+                    "total_events": "Total Events"
+                }
+            },
+            "actions": {
+                "confirm_rebuild": "This will recompute all biological snapshots for the current population. Continue?",
+                "rebuild_complete": "Rebuild Complete",
+                "rebuild_failed": "Rebuild Failed"
+            }
+        },
         "Community": {
             "Groups": {
                 "DigestiveRepair": {

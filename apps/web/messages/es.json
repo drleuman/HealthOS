@@ -1,5 +1,91 @@
 {
     "App": {
+        "ControlCenter": {
+            "title": "Centro de Control",
+            "subtitle": "Capa de Instrumentación Clínica",
+            "nav": {
+                "observatory": "Observatorio",
+                "laboratory": "Laboratorio",
+                "pathways": "Trayectorias",
+                "predictor": "Predictor"
+            },
+            "status": {
+                "uplink_stable": "ESTADO: ENLACE_ESTABLE",
+                "signal_deanonymized": "SEÑAL: DESANONIMIZADA",
+                "rebuild_snapshots": "RECONSTRUIR INSTANTÁNEAS",
+                "reconstructing": "RECONSTRUYENDO..."
+            },
+            "auth": {
+                "protocol": "Protocolo de Acceso a Investigación",
+                "placeholder": "INTRODUCIR CLAVE DE INVESTIGACIÓN",
+                "button": "Desanonimizar Señal"
+            },
+            "observatory": {
+                "title": "Observatorio Poblacional",
+                "subtitle": "Mapeo de similitud fisiológica a nivel de organismo con la efectividad del protocolo.",
+                "clustering_map": {
+                    "title": "Mapa de Agrupamiento Fisiológico",
+                    "conclusion": "Una mayor entropía de síntomas (Clúster B) se correlaciona con una adherencia inicial al protocolo un 40% menor, independientemente de las puntuaciones de motivación.",
+                    "awaiting_signal": "ESPERANDO SEÑAL DE COHORTE..."
+                },
+                "organism_effectiveness": {
+                    "title": "Efectividad por Tipo de Organismo",
+                    "conclusion": "Los perfiles metabólicos ectomorfos muestran una estabilización preferente en el 'Protocolo de Sueño A' sobre la 'Fase Circadiana 1'.",
+                    "sample_n": "Muestra N",
+                    "clusters": "Clústeres",
+                    "types": {
+                        "metabolic_high": "Metabólico Alto",
+                        "circadian_drift": "Deriva Circadiana",
+                        "inflammatory_peak": "Pico Inflamatorio"
+                    }
+                }
+            },
+            "laboratory": {
+                "title": "Laboratorio de Protocolos",
+                "subtitle": "Análisis detallado de la distribución de resultados conductuales y estabilización del estado.",
+                "outcome_distribution": {
+                    "title": "Distribución de Señal de Resultado",
+                    "conclusion": "El protocolo 'Circadiano_V3' muestra una distribución bimodal; los usuarios se estabilizan completamente para el Día 5 o experimentan picos de volatilidad para el Día 9."
+                },
+                "stabilization_vector": {
+                    "title": "Vector de Estabilización",
+                    "conclusion": "La estabilización poblacional sigue una trayectoria no lineal; los picos de activación del sistema nervioso son predictivos de fallo adaptativo 48h antes de que la conducta se manifieste.",
+                    "awaiting_stream": "Esperando Flujo de Estabilización...",
+                    "t_minus_30": "T-30 Días",
+                    "today": "Hoy",
+                    "stability": "Estabilidad",
+                    "activation": "Activación"
+                }
+            },
+            "pathways": {
+                "title": "Matriz de Transición",
+                "subtitle": "Evaluando el tamaño del efecto de las asignaciones secuenciales de protocolos.",
+                "effect_matrix": {
+                    "title": "Matriz de Efecto Inter-Protocolo",
+                    "conclusion": "Secuenciar 'Detox' antes de 'Estabilizar' produce un tamaño de efecto 2.1x mayor que la secuencia inversa (Riesgo de Desestabilización)."
+                }
+            },
+            "predictor": {
+                "title": "Inteligencia Predictiva",
+                "subtitle": "Probabilidad heurística de abandono temprano del protocolo o fallo del sistema.",
+                "early_failure": {
+                    "title": "Probabilidad de Fallo Temprano",
+                    "conclusion": "Omitir más de 1 'Comprobación de Acción' en las primeras 72 horas es un 85% predictivo de desconexión completa del sistema en 14 días.",
+                    "risk": "RIESGO"
+                },
+                "recalibration": {
+                    "title": "Rendimiento de Recalibración",
+                    "conclusion": "El Motor de Recalibración resuelve actualmente el 88% de las 'Derivas del Sistema' en 3 días.",
+                    "resolution_rate": "Tasa de Resolución",
+                    "total_events": "Eventos Totales"
+                }
+            },
+            "actions": {
+                "confirm_rebuild": "Esto recalculará todas las instantáneas biológicas para la población actual. ¿Continuar?",
+                "rebuild_complete": "Reconstrucción Completa",
+                "rebuild_failed": "Fallo en Reconstrucción"
+            }
+        },
         "Community": {
             "Groups": {
                 "DigestiveRepair": {

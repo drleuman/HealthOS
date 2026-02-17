@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import './control-center.css';
 
 // --- Sub-Components ---
@@ -40,7 +41,7 @@ const ResearchCard = ({
     </div>
 );
 
-const PopulationMap = ({ data }: { data: any[] }) => (
+const PopulationMap = ({ data, t }: { data: any[], t: any }) => (
     <div className="cc-population-map border border-dashed border-white/10 flex items-center justify-center overflow-hidden">
         {data.length > 0 ? (
             data.map((u, i) => {
@@ -64,7 +65,7 @@ const PopulationMap = ({ data }: { data: any[] }) => (
                 );
             })
         ) : (
-            <div className="text-xs opacity-20 italic">AWAITING COHORT SIGNAL...</div>
+            <div className="text-xs opacity-20 italic">{t('observatory.clustering_map.awaiting_signal')}</div>
         )}
         <div className="absolute bottom-2 left-2 text-[8px] uppercase opacity-30">Symp Vector X -&gt;</div>
         <div className="absolute top-2 left-2 text-[8px] uppercase opacity-30 vertical-text" style={{ writingMode: 'vertical-lr' }}>Symp Vector Y -&gt;</div>
@@ -128,6 +129,7 @@ const TransitionMatrix = ({ data }: { data: any[] }) => {
 // --- Main Page ---
 
 export default function ControlCenterPage() {
+    const t = useTranslations('App.ControlCenter');
     const [activeTab, setActiveTab] = useState('observatory');
     const [data, setData] = useState<any>({
         population: [],
@@ -183,16 +185,16 @@ export default function ControlCenterPage() {
     };
 
     const handleRebuild = async () => {
-        if (!confirm('This will recompute all biological snapshots for the current population. Continue?')) return;
+        if (!confirm(t('actions.confirm_rebuild'))) return;
         setRebuilding(true);
         try {
             const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001';
             const headers = { 'x-research-secret': secret };
             await fetch(`${api}/internal/control-center/rebuild-snapshots`, { method: 'POST', headers });
             await fetchAll(secret);
-            alert('Rebuild Complete');
+            alert(t('actions.rebuild_complete'));
         } catch (err) {
-            alert('Rebuild Failed');
+            alert(t('actions.rebuild_failed'));
         } finally {
             setRebuilding(false);
         }
@@ -202,10 +204,10 @@ export default function ControlCenterPage() {
         return (
             <div className="cc-container items-center justify-center">
                 <div className="w-full max-w-sm p-8 bg-slate-900 border border-white/5 rounded-2xl">
-                    <h2 className="text-[10px] uppercase tracking-widest text-slate-500 mb-6 text-center">Research Access Protocol</h2>
+                    <h2 className="text-[10px] uppercase tracking-widest text-slate-500 mb-6 text-center">{t('auth.protocol')}</h2>
                     <input
                         type="password"
-                        placeholder="ENTER RESEARCH KEY"
+                        placeholder={t('auth.placeholder')}
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm mb-4 outline-none focus:border-blue-500 transition-colors"
                         value={secret}
                         onChange={(e) => setSecret(e.target.value)}
@@ -215,7 +217,7 @@ export default function ControlCenterPage() {
                         onClick={() => fetchAll(secret)}
                         className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg text-xs transition-colors uppercase tracking-wider"
                     >
-                        De-Anonymize Signal
+                        {t('auth.button')}
                     </button>
                 </div>
             </div>
@@ -226,8 +228,8 @@ export default function ControlCenterPage() {
         <div className="cc-container">
             <aside className="cc-sidebar">
                 <div className="px-4 mb-8">
-                    <div className="text-lg font-bold">Control Center</div>
-                    <div className="text-[9px] uppercase tracking-tighter opacity-40">Clinical Instrumentation Layer</div>
+                    <div className="text-lg font-bold">{t('title')}</div>
+                    <div className="text-[9px] uppercase tracking-tighter opacity-40">{t('subtitle')}</div>
                 </div>
 
                 <div
@@ -235,28 +237,28 @@ export default function ControlCenterPage() {
                     onClick={() => setActiveTab('observatory')}
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                    Observatory
+                    {t('nav.observatory')}
                 </div>
                 <div
                     className={`cc-nav-item ${activeTab === 'laboratory' ? 'active' : ''}`}
                     onClick={() => setActiveTab('laboratory')}
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86 1.406l-.152.153a3.508 3.508 0 01-2.048.834 3.502 3.502 0 01-2.127-.88L6.912 15a9 9 0 01-1.354-1.254l-1.503-2.14a2 2 0 01.313-2.738l5.312-4.133a2 2 0 012.7.312l.142.143a2 2 0 002.3 0l.143-.143a2 2 0 012.7-.312l5.312 4.133a2 2 0 01.313 2.738l-1.503 2.14a9.05 9.05 0 01-1.008 1.137l-.92.834z" /></svg>
-                    Laboratory
+                    {t('nav.laboratory')}
                 </div>
                 <div
                     className={`cc-nav-item ${activeTab === 'pathways' ? 'active' : ''}`}
                     onClick={() => setActiveTab('pathways')}
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                    Pathways
+                    {t('nav.pathways')}
                 </div>
                 <div
                     className={`cc-nav-item ${activeTab === 'predictor' ? 'active' : ''}`}
                     onClick={() => setActiveTab('predictor')}
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    Predictor
+                    {t('nav.predictor')}
                 </div>
 
                 <div className="mt-auto pt-4 border-t border-white/5">
@@ -266,13 +268,13 @@ export default function ControlCenterPage() {
                         className="w-full text-[10px] uppercase tracking-wider text-slate-500 hover:text-blue-400 transition-colors py-2 text-left flex items-center gap-2"
                     >
                         <svg className={`w-3 h-3 ${rebuilding ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                        {rebuilding ? 'RECONSTRUCTING...' : 'REBUILD SNAPSHOTS'}
+                        {rebuilding ? t('status.reconstructing') : t('status.rebuild_snapshots')}
                     </button>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-white/5 opacity-40">
-                    <div className="text-[10px] font-mono">STATUS: UPLINK_STABLE</div>
-                    <div className="text-[10px] font-mono">SIGNAL: DE-ANONYMIZED</div>
+                    <div className="text-[10px] font-mono">{t('status.uplink_stable')}</div>
+                    <div className="text-[10px] font-mono">{t('status.signal_deanonymized')}</div>
                 </div>
             </aside>
 
@@ -280,23 +282,27 @@ export default function ControlCenterPage() {
                 {activeTab === 'observatory' && (
                     <div className="fade-enter fade-enter-active">
                         <header className="cc-header">
-                            <h1>Population Observatory</h1>
-                            <p>Mapping organism-level physiological similarity to protocol effectiveness.</p>
+                            <h1>{t('observatory.title')}</h1>
+                            <p>{t('observatory.subtitle')}</p>
                         </header>
                         <div className="cc-grid">
                             <ResearchCard
-                                title="Physiological Clustering Map"
-                                conclusion="Higher symptom entropy (Cluster B) correlates with 40% lower initial protocol adherence regardless of motivation scores."
+                                title={t('observatory.clustering_map.title')}
+                                conclusion={t('observatory.clustering_map.conclusion')}
                             >
-                                <PopulationMap data={data.population} />
+                                <PopulationMap data={data.population} t={t} />
                             </ResearchCard>
                             <ResearchCard
-                                title="Organism Type Effectiveness"
-                                conclusion="Ectomorphic metabolism profiles show preferential stabilization on 'Sleep Protocol A' over 'Circadian Phase 1'."
-                                stats={[{ label: 'Sample N', value: data.population.length }, { label: 'Clusters', value: 3 }]}
+                                title={t('observatory.organism_effectiveness.title')}
+                                conclusion={t('observatory.organism_effectiveness.conclusion')}
+                                stats={[{ label: t('observatory.organism_effectiveness.sample_n'), value: data.population.length }, { label: t('observatory.organism_effectiveness.clusters'), value: 3 }]}
                             >
                                 <div className="space-y-4">
-                                    {['Metabolic High', 'Circadian Drift', 'Inflammatory Peak'].map(c => (
+                                    {[
+                                        t('observatory.organism_effectiveness.types.metabolic_high'),
+                                        t('observatory.organism_effectiveness.types.circadian_drift'),
+                                        t('observatory.organism_effectiveness.types.inflammatory_peak')
+                                    ].map(c => (
                                         <div key={c} className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                                             <span className="text-sm font-medium">{c}</span>
                                             <div className="flex items-center gap-2">
@@ -316,19 +322,19 @@ export default function ControlCenterPage() {
                 {activeTab === 'laboratory' && (
                     <div className="fade-enter fade-enter-active">
                         <header className="cc-header">
-                            <h1>Protocol Laboratory</h1>
-                            <p>Detailed distribution analysis of behavioral outcomes and state stabilization.</p>
+                            <h1>{t('laboratory.title')}</h1>
+                            <p>{t('laboratory.subtitle')}</p>
                         </header>
                         <div className="cc-grid">
                             <ResearchCard
-                                title="Outcome Signal Distribution"
-                                conclusion="Protocol 'Circadian_V3' shows a bimodal distribution; users either stabilize completely by Day 5 or experience volatility spikes by Day 9."
+                                title={t('laboratory.outcome_distribution.title')}
+                                conclusion={t('laboratory.outcome_distribution.conclusion')}
                             >
                                 <ProtocolEffectiveness data={data.effectiveness} />
                             </ResearchCard>
                             <ResearchCard
-                                title="Stabilization Vector"
-                                conclusion="Population-wide stabilization follows a non-linear trajectory; nervous system activation spikes are predictive of adaptive failure 48h before behavior manifests."
+                                title={t('laboratory.stabilization_vector.title')}
+                                conclusion={t('laboratory.stabilization_vector.conclusion')}
                             >
                                 <div className="h-64 flex items-end gap-1 border-b border-l border-white/10 p-4 relative">
                                     {data.stabilization?.length > 0 ? (
@@ -348,17 +354,17 @@ export default function ControlCenterPage() {
                                         ))
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center opacity-20 text-[10px] uppercase italic">
-                                            Awaiting Stabilization Stream...
+                                            {t('laboratory.stabilization_vector.awaiting_stream')}
                                         </div>
                                     )}
                                 </div>
                                 <div className="mt-4 flex justify-between text-[10px] uppercase opacity-40">
-                                    <span>T-30 Days</span>
+                                    <span>{t('laboratory.stabilization_vector.t_minus_30')}</span>
                                     <div className="flex gap-4">
-                                        <span className="flex items-center gap-1"><div className="w-2 h-2 bg-blue-500/60" /> Stability</span>
-                                        <span className="flex items-center gap-1"><div className="w-2 h-2 bg-red-500/30" /> Activation</span>
+                                        <span className="flex items-center gap-1"><div className="w-2 h-2 bg-blue-500/60" /> {t('laboratory.stabilization_vector.stability')}</span>
+                                        <span className="flex items-center gap-1"><div className="w-2 h-2 bg-red-500/30" /> {t('laboratory.stabilization_vector.activation')}</span>
                                     </div>
-                                    <span>Today</span>
+                                    <span>{t('laboratory.stabilization_vector.today')}</span>
                                 </div>
                             </ResearchCard>
                         </div>
@@ -368,13 +374,13 @@ export default function ControlCenterPage() {
                 {activeTab === 'pathways' && (
                     <div className="fade-enter fade-enter-active">
                         <header className="cc-header">
-                            <h1>Transition Matrix</h1>
-                            <p>Evaluating the effect size of sequential protocol assignments.</p>
+                            <h1>{t('pathways.title')}</h1>
+                            <p>{t('pathways.subtitle')}</p>
                         </header>
                         <div className="cc-grid">
                             <ResearchCard
-                                title="Inter-Protocol Effect Matrix"
-                                conclusion="Sequencing 'Detox' before 'Stabilize' produces a 2.1x higher effect size than the reverse sequence (Destabilization Risk)."
+                                title={t('pathways.effect_matrix.title')}
+                                conclusion={t('pathways.effect_matrix.conclusion')}
                             >
                                 <TransitionMatrix data={data.transitions} />
                             </ResearchCard>
@@ -385,13 +391,13 @@ export default function ControlCenterPage() {
                 {activeTab === 'predictor' && (
                     <div className="fade-enter fade-enter-active">
                         <header className="cc-header">
-                            <h1>Predictive Intelligence</h1>
-                            <p>Heuristic-based probability of early protocol abandonment or system failure.</p>
+                            <h1>{t('predictor.title')}</h1>
+                            <p>{t('predictor.subtitle')}</p>
                         </header>
                         <div className="cc-grid">
                             <ResearchCard
-                                title="Early Failure Probability"
-                                conclusion="Missing more than 1 'Action Check' in the first 72 hours is 85% predictive of complete system disengagement within 14 days."
+                                title={t('predictor.early_failure.title')}
+                                conclusion={t('predictor.early_failure.conclusion')}
                             >
                                 <div className="space-y-4">
                                     {data.earlyFailure.slice(0, 5).map((f: any) => (
@@ -399,7 +405,7 @@ export default function ControlCenterPage() {
                                             <span className="text-xs font-mono opacity-60">{f.userId.split('-')[0]}</span>
                                             <div className="flex items-center gap-4">
                                                 <span className="text-[10px] font-bold" style={{ color: f.failureProbability > 0.5 ? 'var(--research-danger)' : 'var(--research-success)' }}>
-                                                    {Math.round(f.failureProbability * 100)}% RISK
+                                                    {Math.round(f.failureProbability * 100)}% {t('predictor.early_failure.risk')}
                                                 </span>
                                                 <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden">
                                                     <div className="h-full bg-red-500" style={{ width: `${f.failureProbability * 100}%` }} />
@@ -410,19 +416,19 @@ export default function ControlCenterPage() {
                                 </div>
                             </ResearchCard>
                             <ResearchCard
-                                title="Recalibration Performance"
-                                conclusion="The Recalibration Engine currently resolves 88% of 'System Drifts' within 3 days."
+                                title={t('predictor.recalibration.title')}
+                                conclusion={t('predictor.recalibration.conclusion')}
                             >
                                 {data.recal && (
                                     <div className="flex items-center justify-around py-8">
                                         <div className="text-center">
                                             <div className="text-4xl font-bold text-emerald-400">{Math.round(data.recal.successRate * 100)}%</div>
-                                            <div className="text-[10px] uppercase opacity-40 mt-2">Resolution Rate</div>
+                                            <div className="text-[10px] uppercase opacity-40 mt-2">{t('predictor.recalibration.resolution_rate')}</div>
                                         </div>
                                         <div className="w-px h-12 bg-white/10" />
                                         <div className="text-center">
                                             <div className="text-4xl font-bold text-blue-400">{data.recal.totalRecalibrations}</div>
-                                            <div className="text-[10px] uppercase opacity-40 mt-2">Total Events</div>
+                                            <div className="text-[10px] uppercase opacity-40 mt-2">{t('predictor.recalibration.total_events')}</div>
                                         </div>
                                     </div>
                                 )}
