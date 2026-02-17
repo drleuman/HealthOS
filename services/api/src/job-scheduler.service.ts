@@ -7,6 +7,7 @@ import { OpsDigestService } from './analytics/ops-digest.service';
 import { PrismaService } from './prisma.service';
 
 import { NotificationHubService } from './notifications/notification-hub.service';
+import { StateTrajectoryService } from './behavioral/state-trajectory.service';
 
 @Injectable()
 export class JobScheduler implements OnModuleInit, OnModuleDestroy {
@@ -17,7 +18,8 @@ export class JobScheduler implements OnModuleInit, OnModuleDestroy {
         private behaviorService: BehaviorService,
         private opsDigestService: OpsDigestService,
         private prisma: PrismaService,
-        private notificationHub: NotificationHubService
+        private notificationHub: NotificationHubService,
+        private trajectoryService: StateTrajectoryService
     ) { }
 
     onModuleInit() {
@@ -128,8 +130,33 @@ export class JobScheduler implements OnModuleInit, OnModuleDestroy {
             }
         }, { timezone: 'Europe/Madrid' });
 
-        this.tasks.push(inactivityTask, summaryTask, behaviorTask, serTask, digestTask, notificationTask);
-        logger.info('Job scheduler initialized with 6 cron tasks (NotificationHub enabled)');
+        // Biological State Reconstruction (03:00 Europe/Madrid)
+        const snapshotTask = cron.schedule('0 3 * * *', async () => {
+            logger.info('Running Biological State Reconstruction');
+            try {
+                const activeUsers = await this.prisma.user.findMany({
+                    where: { state: { lastActive: { gte: new Date(Date.now() - 48 * 60 * 60 * 1000) } } },
+                    select: { id: true }
+                });
+
+                for (const user of activeUsers) {
+                    await this.trajectoryService.reconstructState(user.id);
+                }
+
+                await this.prisma.jobResult.create({
+                    data: {
+                        jobType: 'state_reconstruction',
+                        status: 'success',
+                        message: `Processed ${activeUsers.length} users`
+                    }
+                });
+            } catch (error) {
+                logger.error({ error }, 'State Reconstruction Job failed');
+            }
+        }, { timezone: 'Europe/Madrid' });
+
+        this.tasks.push(inactivityTask, summaryTask, behaviorTask, serTask, digestTask, notificationTask, snapshotTask);
+        logger.info('Job scheduler initialized with 7 cron tasks');
     }
 
     onModuleDestroy() {
@@ -156,5 +183,14 @@ export class JobScheduler implements OnModuleInit, OnModuleDestroy {
     async triggerSERAnalysis() {
         logger.info('Manually triggering SER analysis');
         return this.jobsService.runSERAnalysis();
+    }
+
+    async triggerStateReconstruction() {
+        logger.info('Manually triggering State Reconstruction');
+        const users = await this.prisma.user.findMany({ select: { id: true } });
+        for (const user of users) {
+            await this.trajectoryService.reconstructState(user.id);
+        }
+        return { processed: users.length };
     }
 }

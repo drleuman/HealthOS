@@ -54,16 +54,19 @@ export class StateTrajectoryService {
         const dominantState = this.determineDominantState(signals);
 
         // 4. Persist Snapshot
-        return this.prisma.dailyStateSnapshot.upsert({
+        const dayStart = new Date(date);
+        dayStart.setHours(0, 0, 0, 0);
+
+        return (this.prisma as any).dailyStateSnapshot.upsert({
             where: {
                 userId_date: {
                     userId,
-                    date: new Date(date.setHours(0, 0, 0, 0)),
+                    date: dayStart,
                 },
             },
             create: {
                 userId,
-                date: new Date(date.setHours(0, 0, 0, 0)),
+                date: dayStart,
                 ...signals,
                 dominantState,
             },
@@ -144,17 +147,19 @@ export class StateTrajectoryService {
 
     private calculateCompletionDurations(events: any[]): number[] {
         const durations: number[] = [];
-        const paired: Set<string> = new Set();
+        const sessions: Map<string, Date> = new Map();
 
-        events.forEach(e => {
-            if (e.event === 'day_started' && !paired.has(e.sessionId)) {
-                const end = events.find(f => f.event === 'day_completed' && f.sessionId === e.sessionId);
-                if (end) {
-                    durations.push((new Date(end.timestamp).getTime() - new Date(e.timestamp).getTime()) / 1000);
-                    paired.add(e.sessionId);
+        for (const e of events) {
+            if (e.event === 'day_started' && e.sessionId) {
+                sessions.set(e.sessionId, new Date(e.timestamp));
+            } else if (e.event === 'day_completed' && e.sessionId) {
+                const startTime = sessions.get(e.sessionId);
+                if (startTime) {
+                    durations.push((new Date(e.timestamp).getTime() - startTime.getTime()) / 1000);
+                    sessions.delete(e.sessionId); // avoid double counting
                 }
             }
-        });
+        }
         return durations;
     }
 

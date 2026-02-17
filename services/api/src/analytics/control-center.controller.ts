@@ -1,10 +1,14 @@
-import { Controller, Get, Headers, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Headers, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { ControlCenterService } from './control-center.service';
+import { StateTrajectoryService } from '../behavioral/state-trajectory.service';
 import { Public } from '../public.decorator';
 
 @Controller('internal/control-center')
 export class ControlCenterController {
-    constructor(private ccService: ControlCenterService) { }
+    constructor(
+        private ccService: ControlCenterService,
+        private trajectoryService: StateTrajectoryService
+    ) { }
 
     private validateSecret(secret: string) {
         const validSecret = process.env.ANALYTICS_SECRET || 'admin-secret-dev';
@@ -53,5 +57,18 @@ export class ControlCenterController {
     async getStabilizationTrajectory(@Headers('x-research-secret') secret: string) {
         this.validateSecret(secret);
         return this.ccService.getStabilizationTrajectory();
+    }
+
+    @Public()
+    @Post('rebuild-snapshots')
+    async rebuildSnapshots(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        // This is a heavy operation, we should ideally job-ify it, 
+        // but for research override we trigger it directly.
+        const users = await this.ccService.getPopulationMap();
+        for (const user of users) {
+            await this.trajectoryService.reconstructState(user.id);
+        }
+        return { status: 'rebuild_triggered', n: users.length };
     }
 }

@@ -43,19 +43,26 @@ const ResearchCard = ({
 const PopulationMap = ({ data }: { data: any[] }) => (
     <div className="cc-population-map border border-dashed border-white/10 flex items-center justify-center overflow-hidden">
         {data.length > 0 ? (
-            data.map((u, i) => (
-                <div
-                    key={u.id}
-                    className="cc-dot"
-                    style={{
-                        left: `${(u.organismProfile.symptomsVector[0] * 70 + Math.random() * 20)}%`,
-                        top: `${(u.organismProfile.symptomsVector[1] * 70 + Math.random() * 20)}%`,
-                        background: u.effectiveness > 0.7 ? 'var(--research-success)' : (u.effectiveness > 0.4 ? 'var(--research-warning)' : 'var(--research-danger)'),
-                        opacity: 0.6 + (u.effectiveness * 0.4)
-                    }}
-                    title={`User: ${u.profileType} | Effectiveness: ${Math.round(u.effectiveness * 100)}%`}
-                />
-            ))
+            data.map((u, i) => {
+                // Deterministic jitter using userId hash
+                const hash = u.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+                const jitterX = (hash % 100) / 5 - 10; // -10 to +10
+                const jitterY = ((hash * 7) % 100) / 5 - 10;
+
+                return (
+                    <div
+                        key={u.id}
+                        className="cc-dot"
+                        style={{
+                            left: `${(u.organismProfile.symptomsVector[0] * 70 + 15 + jitterX)}%`,
+                            top: `${(u.organismProfile.symptomsVector[1] * 70 + 15 + jitterY)}%`,
+                            background: u.effectiveness > 0.7 ? 'var(--research-success)' : (u.effectiveness > 0.4 ? 'var(--research-warning)' : 'var(--research-danger)'),
+                            opacity: 0.6 + (u.effectiveness * 0.4)
+                        }}
+                        title={`User: ${u.profileType} | Effectiveness: ${Math.round(u.effectiveness * 100)}%`}
+                    />
+                );
+            })
         ) : (
             <div className="text-xs opacity-20 italic">AWAITING COHORT SIGNAL...</div>
         )}
@@ -131,6 +138,7 @@ export default function ControlCenterPage() {
         stabilization: []
     });
     const [loading, setLoading] = useState(true);
+    const [rebuilding, setRebuilding] = useState(false);
     const [secret, setSecret] = useState('');
     const [authenticated, setAuthenticated] = useState(false);
 
@@ -171,6 +179,22 @@ export default function ControlCenterPage() {
             console.error(err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleRebuild = async () => {
+        if (!confirm('This will recompute all biological snapshots for the current population. Continue?')) return;
+        setRebuilding(true);
+        try {
+            const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001';
+            const headers = { 'x-research-secret': secret };
+            await fetch(`${api}/internal/control-center/rebuild-snapshots`, { method: 'POST', headers });
+            await fetchAll(secret);
+            alert('Rebuild Complete');
+        } catch (err) {
+            alert('Rebuild Failed');
+        } finally {
+            setRebuilding(false);
         }
     };
 
@@ -235,7 +259,18 @@ export default function ControlCenterPage() {
                     Predictor
                 </div>
 
-                <div className="mt-auto pt-8 border-t border-white/5 opacity-40">
+                <div className="mt-auto pt-4 border-t border-white/5">
+                    <button
+                        onClick={handleRebuild}
+                        disabled={rebuilding}
+                        className="w-full text-[10px] uppercase tracking-wider text-slate-500 hover:text-blue-400 transition-colors py-2 text-left flex items-center gap-2"
+                    >
+                        <svg className={`w-3 h-3 ${rebuilding ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        {rebuilding ? 'RECONSTRUCTING...' : 'REBUILD SNAPSHOTS'}
+                    </button>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-white/5 opacity-40">
                     <div className="text-[10px] font-mono">STATUS: UPLINK_STABLE</div>
                     <div className="text-[10px] font-mono">SIGNAL: DE-ANONYMIZED</div>
                 </div>
