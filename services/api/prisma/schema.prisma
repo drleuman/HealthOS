@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -13,29 +14,30 @@ model User {
   plan      String   @default("free")
   createdAt DateTime @default(now())
 
-  assessment Assessments?
-  state      UserState?
-  logs       DailyLog[]
-  recs       Recommendation[]
-  purchases  Purchase[]
-  jobResults JobResult[]
-  snapshots  UserBehaviorSnapshot[]
-  behaviorState UserBehaviorState?
-  interactions OperatorInteraction[]
-  notifications NotificationEvent[]
-  replies       CommunityReply[]
-  completions   ProtocolCompletion[]
+  assessment     Assessments?
+  state          UserState?
+  logs           DailyLog[]
+  recs           Recommendation[]
+  purchases      Purchase[]
+  jobResults     JobResult[]
+  snapshots      UserBehaviorSnapshot[]
+  behaviorState  UserBehaviorState?
+  interactions   OperatorInteraction[]
+  notifications  NotificationEvent[]
+  replies        CommunityReply[]
+  completions    ProtocolCompletion[]
+  stateSnapshots DailyStateSnapshot[]
 }
 
 model NotificationEvent {
   id              String   @id @default(uuid())
   userId          String
   user            User     @relation(fields: [userId], references: [id])
-  channel         String   // 'email'
-  type            String   // 'nudge_return', 'nudge_resume'
-  experimentGroup String   // 'treatment', 'control'
-  reason          String   // 'inactive48h', 'ser_gt_72h', etc.
-  status          String   // 'queued', 'sent', 'failed', 'skipped'
+  channel         String // 'email'
+  type            String // 'nudge_return', 'nudge_resume'
+  experimentGroup String // 'treatment', 'control'
+  reason          String // 'inactive48h', 'ser_gt_72h', etc.
+  status          String // 'queued', 'sent', 'failed', 'skipped'
   sentAt          DateTime @default(now())
   providerId      String?
   metadata        Json?
@@ -48,9 +50,9 @@ model NotificationEvent {
 model OperatorInteraction {
   id        String   @id @default(uuid())
   userId    String?
-  userEmail String   // Always stored for easy reconciliation/tracking
+  userEmail String // Always stored for easy reconciliation/tracking
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      String   // message, reminder, explanation, bug_help, other
+  type      String // message, reminder, explanation, bug_help, other
   note      String?
   createdAt DateTime @default(now())
 
@@ -60,40 +62,40 @@ model OperatorInteraction {
 }
 
 model Assessments {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   primaryGoal     String?
   sleepIssueType  Json?
   lowEnergyWindow String?
-  bedtime         DateTime?  // stored as DateTime with arbitrary date for simplicity
+  bedtime         DateTime? // stored as DateTime with arbitrary date for simplicity
   caffeineTime    DateTime?
   dinnerTime      DateTime?
   symptoms        Json?
   constraints     Json?
-  createdAt       DateTime @default(now())
+  createdAt       DateTime  @default(now())
 }
 
 model UserState {
-  userId      String  @id
-  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  profileType String
-  programId   String
-  currentDay  Int     @default(1)
-  streak      Int     @default(0)
-  lastActive  DateTime?
-  experimentGroup String @default("treatment") // 'treatment', 'control'
+  userId          String    @id
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileType     String
+  programId       String
+  currentDay      Int       @default(1)
+  streak          Int       @default(0)
+  lastActive      DateTime?
+  experimentGroup String    @default("treatment") // 'treatment', 'control'
 }
 
 model DailyLog {
-  id              String   @id @default(uuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  day             Int
-  actionCompleted Boolean
-  selfReportEffect Json?   // Structured perception check result (e.g. { "energy": "higher" })
+  id               String   @id @default(uuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day              Int
+  actionCompleted  Boolean
+  selfReportEffect Json? // Structured perception check result (e.g. { "energy": "higher" })
   context          Json?
-  createdAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
 
   @@index([userId, day])
 }
@@ -109,18 +111,18 @@ model Recommendation {
 }
 
 model Purchase {
-  id         String   @id @default(uuid())
-  userId     String?
-  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id          String   @id @default(uuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   productSlug String
-  orderId    String?  @unique
-  createdAt  DateTime @default(now())
+  orderId     String?  @unique
+  createdAt   DateTime @default(now())
 }
 
 model Program {
   id           String   @id
   durationDays Int
-  content      Json     // Stores the full program definition
+  content      Json // Stores the full program definition
   createdAt    DateTime @default(now())
 }
 
@@ -128,25 +130,25 @@ model JobResult {
   id        String   @id @default(uuid())
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  jobType   String   // 'inactivity_check', 'weekly_summary'
-  status    String   // 'success', 'error'
+  jobType   String // 'inactivity_check', 'weekly_summary'
+  status    String // 'success', 'error'
   message   String?
-  data      Json?    // Job-specific data
+  data      Json? // Job-specific data
   createdAt DateTime @default(now())
-  
+
   @@index([userId, jobType])
 }
 
 model Event {
   id        String   @id @default(uuid())
-  event     String   // Event name (e.g., 'day_completed', 'tool_purchased')
-  userId    String?  // Optional: some events may not have a user
-  sessionId String?  // Session identifier for tracking user journeys
+  event     String // Event name (e.g., 'day_completed', 'tool_purchased')
+  userId    String? // Optional: some events may not have a user
+  sessionId String? // Session identifier for tracking user journeys
   timestamp DateTime @default(now())
-  context   Json?    // Event-specific context (program, day, streak, etc.)
-  meta      Json?    // Platform, version, etc.
+  context   Json? // Event-specific context (program, day, streak, etc.)
+  meta      Json? // Platform, version, etc.
   createdAt DateTime @default(now())
-  
+
   @@index([event, timestamp])
   @@index([userId, event])
   @@index([sessionId])
@@ -168,22 +170,22 @@ model UserBehaviorSnapshot {
 }
 
 model UserBehaviorState {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  programId       String
-  dayIndex        Int      @default(1)
-  status          ProtocolStatus @default(ACTIVE)
-  
-  startedAt       DateTime @default(now())
-  completedAt     DateTime?
-  
-  state           String   @default("oriented")
-  context         Json?    
-  currentPhase    String?
-  cognitiveState  String?
-  updatedAt       DateTime @updatedAt
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  programId String
+  dayIndex  Int            @default(1)
+  status    ProtocolStatus @default(ACTIVE)
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  state          String   @default("oriented")
+  context        Json?
+  currentPhase   String?
+  cognitiveState String?
+  updatedAt      DateTime @updatedAt
 }
 
 enum ProtocolStatus {
@@ -193,18 +195,18 @@ enum ProtocolStatus {
 }
 
 model ProtocolCompletion {
-  id             String   @id @default(cuid())
+  id             String         @id @default(cuid())
   userId         String
   programId      String
-  completedAt    DateTime @default(now())
+  completedAt    DateTime       @default(now())
   completionType CompletionType @default(NATURAL_END)
   adherenceRate  Float?
   minimalModeMax Int?
   notes          Json?
-  user           User    @relation(fields: [userId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
 
-  @@index([userId, programId, completedAt])
   @@unique([userId, programId, completedAt])
+  @@index([userId, programId, completedAt])
 }
 
 enum CompletionType {
@@ -215,28 +217,28 @@ enum CompletionType {
 }
 
 model BehaviorAnalysis {
-  id              String   @id @default(uuid())
-  userId          String
-  day             Int
-  date            DateTime @default(now())
-  
+  id     String   @id @default(uuid())
+  userId String
+  day    Int
+  date   DateTime @default(now())
+
   // Raw Input (from log)
-  userAction      String   // 'completed', 'failed', 'partial'
-  userFeedback    String?  // 'worse', 'same', 'better'
-  
+  userAction   String // 'completed', 'failed', 'partial'
+  userFeedback String? // 'worse', 'same', 'better'
+
   // Interpreted Signals (The "Why")
-  primarySignal   String   // From BIL: 'adaptation_response', 'cognitive_confusion', etc.
+  primarySignal   String // From BIL: 'adaptation_response', 'cognitive_confusion', etc.
   secondarySignal String?
-  
+
   // Resulting State
   detectedCognitiveState String // 'uncertain', 'stabilized'
   phaseProgress          String // 'detection', 'disruption'
-  
+
   // System Output
-  systemResponseType     String // 'normalization', 'orientation', 'simplification'
-  generatedMessage       String?
-  
-  createdAt       DateTime @default(now())
+  systemResponseType String // 'normalization', 'orientation', 'simplification'
+  generatedMessage   String?
+
+  createdAt DateTime @default(now())
 
   @@index([userId, date])
 }
@@ -247,23 +249,22 @@ model Experiment {
   startedAt    DateTime @default(now())
   expiresAt    DateTime
   status       String   @default("active") // 'active', 'completed'
-  metadata     Json?    // stores the ProductDecision object
+  metadata     Json? // stores the ProductDecision object
   createdAt    DateTime @default(now())
 }
 
-
 model CommunityThread {
-  id              String   @id @default(uuid())
-  title           String
-  excerpt         String?  @db.Text
-  scope           String   // 'program_day', 'area', 'general'
-  protocolId      String?
-  day             Int?
-  areaId          String?
-  lastActivityAt  DateTime @default(now())
-  createdAt       DateTime @default(now())
-  
-  replies        CommunityReply[]
+  id             String   @id @default(uuid())
+  title          String
+  excerpt        String?  @db.Text
+  scope          String // 'program_day', 'area', 'general'
+  protocolId     String?
+  day            Int?
+  areaId         String?
+  lastActivityAt DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  replies CommunityReply[]
 
   @@index([scope, protocolId, day])
   @@index([areaId])
@@ -271,13 +272,13 @@ model CommunityThread {
 }
 
 model CommunityReply {
-  id        String   @id @default(uuid())
+  id        String          @id @default(uuid())
   threadId  String
   thread    CommunityThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  content   String   @db.Text
-  createdAt DateTime @default(now())
+  user      User            @relation(fields: [userId], references: [id])
+  content   String          @db.Text
+  createdAt DateTime        @default(now())
 
   // Moderation / Clinical Framing
   moderationFlag   String?
@@ -299,4 +300,29 @@ model ProtocolTransition {
   updatedAt    DateTime @updatedAt
 
   @@index([fromProtocol, signalType, enabled, priority(sort: Desc)], name: "idx_protocol_transitions_lookup")
+}
+
+model DailyStateSnapshot {
+  id     String   @id @default(uuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date   DateTime @default(now())
+
+  // Bio-Inferred Signals (0.0 - 1.0)
+  stability               Float
+  energyVariability       Float
+  recoveryLatency         Float
+  circadianAlignment      Float
+  nervousSystemActivation Float
+  metabolicRigidity       Float
+  interventionSensitivity Float
+  relapsePressure         Float
+
+  // Qualitative context inferred
+  dominantState String // 'stabilized', 'perturbation', 'crisis', 'adaptation'
+
+  metadata Json? // stores raw delta calculations
+
+  @@unique([userId, date])
+  @@index([userId, date])
 }

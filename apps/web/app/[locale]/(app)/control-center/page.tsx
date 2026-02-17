@@ -122,7 +122,14 @@ const TransitionMatrix = ({ data }: { data: any[] }) => {
 
 export default function ControlCenterPage() {
     const [activeTab, setActiveTab] = useState('observatory');
-    const [data, setData] = useState<any>({ population: [], effectiveness: [], transitions: [], earlyFailure: [], recal: null });
+    const [data, setData] = useState<any>({
+        population: [],
+        effectiveness: [],
+        transitions: [],
+        earlyFailure: [],
+        recal: null,
+        stabilization: []
+    });
     const [loading, setLoading] = useState(true);
     const [secret, setSecret] = useState('');
     const [authenticated, setAuthenticated] = useState(false);
@@ -141,15 +148,23 @@ export default function ControlCenterPage() {
             const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001';
             const headers = { 'x-research-secret': key };
 
-            const [pop, eff, trans, fail, recal] = await Promise.all([
+            const [pop, eff, trans, fail, recal, stab] = await Promise.all([
                 fetch(`${api}/internal/control-center/population-map`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/protocol-effectiveness`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/transition-matrix`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/early-failure-predictor`, { headers }).then(r => r.json()),
-                fetch(`${api}/internal/control-center/recalibration-stats`, { headers }).then(r => r.json())
+                fetch(`${api}/internal/control-center/recalibration-stats`, { headers }).then(r => r.json()),
+                fetch(`${api}/internal/control-center/stabilization-trajectory`, { headers }).then(r => r.json())
             ]);
 
-            setData({ population: pop, effectiveness: eff, transitions: trans, earlyFailure: fail, recal });
+            setData({
+                population: pop,
+                effectiveness: eff,
+                transitions: trans,
+                earlyFailure: fail,
+                recal,
+                stabilization: Array.isArray(stab) ? stab : []
+            });
             setAuthenticated(true);
             sessionStorage.setItem('research_secret', key);
         } catch (err) {
@@ -278,21 +293,37 @@ export default function ControlCenterPage() {
                             </ResearchCard>
                             <ResearchCard
                                 title="Stabilization Vector"
-                                conclusion="Recalibration cycles delay dropout by average 14 days, but causal benefit saturates after the 3rd intervention."
+                                conclusion="Population-wide stabilization follows a non-linear trajectory; nervous system activation spikes are predictive of adaptive failure 48h before behavior manifests."
                             >
-                                <div className="h-64 flex items-end gap-1 border-b border-l border-white/10 p-4">
-                                    {[...Array(20)].map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className="flex-1 bg-gradient-to-t from-blue-600 to-emerald-400 opacity-60 rounded-t-sm"
-                                            style={{ height: `${Math.sin(i / 3) * 30 + 50}%` }}
-                                        />
-                                    ))}
+                                <div className="h-64 flex items-end gap-1 border-b border-l border-white/10 p-4 relative">
+                                    {data.stabilization?.length > 0 ? (
+                                        data.stabilization.map((s: any, i: number) => (
+                                            <div key={i} className="flex-1 flex flex-col justify-end gap-1 h-full">
+                                                {/* Activation Spike (Inverted) */}
+                                                <div
+                                                    className="w-full bg-red-500/30 rounded-t-sm"
+                                                    style={{ height: `${s.avgActivation * 50}%` }}
+                                                />
+                                                {/* Stability Base */}
+                                                <div
+                                                    className="w-full bg-gradient-to-t from-blue-600 to-emerald-400 opacity-60 rounded-t-sm"
+                                                    style={{ height: `${s.avgStability * 50}%` }}
+                                                />
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-20 text-[10px] uppercase italic">
+                                            Awaiting Stabilization Stream...
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="mt-4 flex justify-between text-[10px] uppercase opacity-40">
-                                    <span>Baseline</span>
-                                    <span>Phase 1</span>
-                                    <span>Phase 2</span>
+                                    <span>T-30 Days</span>
+                                    <div className="flex gap-4">
+                                        <span className="flex items-center gap-1"><div className="w-2 h-2 bg-blue-500/60" /> Stability</span>
+                                        <span className="flex items-center gap-1"><div className="w-2 h-2 bg-red-500/30" /> Activation</span>
+                                    </div>
+                                    <span>Today</span>
                                 </div>
                             </ResearchCard>
                         </div>

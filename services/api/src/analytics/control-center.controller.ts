@@ -47,4 +47,11 @@ export class ControlCenterController {
         this.validateSecret(secret);
         return this.ccService.getRecalibrationEfficiency();
     }
+
+    @Public()
+    @Get('stabilization-trajectory')
+    async getStabilizationTrajectory(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getStabilizationTrajectory();
+    }
 }

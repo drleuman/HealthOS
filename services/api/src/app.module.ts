@@ -41,6 +41,7 @@ import { SystemMessageService } from './behavioral/system-message.service';
 import { CommunityController } from './community.controller';
 import { CommunityService } from './community.service';
 import { ClinicalInterpretationService } from './behavioral/clinical-interpretation.service';
+import { StateTrajectoryService } from './behavioral/state-trajectory.service';
 
 @Module({
   imports: [
@@ -91,6 +92,7 @@ import { ClinicalInterpretationService } from './behavioral/clinical-interpretat
     SystemMessageService,
     CommunityService,
     ClinicalInterpretationService,
+    StateTrajectoryService,
     {
       provide: ProgramRegistry,
       useFactory: (fileRegistry: FileProgramRegistry) => {

@@ -1,11 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { StateTrajectoryService } from '../behavioral/state-trajectory.service';
 
 @Injectable()
 export class ControlCenterService {
     private readonly logger = new Logger(ControlCenterService.name);
 
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private trajectoryService: StateTrajectoryService
+    ) { }
 
     /**
      * Population Map cluster analysis
@@ -158,5 +162,34 @@ export class ControlCenterService {
             successRate: recalCompletions.filter(c => (c.notes as any)?.recalibrationOutcome === 'STABLE').length / (recalCompletions.length || 1),
             avgPostRecalStability: 0.85, // Heuristic
         };
+    }
+
+    /**
+     * Get aggregate biological stabilization signal across the population
+     */
+    async getStabilizationTrajectory() {
+        const snapshots = await this.prisma.dailyStateSnapshot.findMany({
+            orderBy: { date: 'asc' },
+            take: 100,
+        });
+
+        // Group by date and average signals
+        const trajectory: Record<string, any> = {};
+        snapshots.forEach((s: any) => {
+            const d = s.date.toISOString().split('T')[0];
+            if (!trajectory[d]) {
+                trajectory[d] = { stability: 0, activation: 0, n: 0 };
+            }
+            trajectory[d].stability += s.stability;
+            trajectory[d].activation += s.nervousSystemActivation;
+            trajectory[d].n++;
+        });
+
+        return Object.entries(trajectory).map(([date, data]) => ({
+            date,
+            avgStability: data.stability / data.n,
+            avgActivation: data.activation / data.n,
+            populationSize: data.n
+        }));
     }
 }
