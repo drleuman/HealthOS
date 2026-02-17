@@ -59,8 +59,8 @@ const PopulationMap = ({ data }: { data: any[] }) => (
         ) : (
             <div className="text-xs opacity-20 italic">AWAITING COHORT SIGNAL...</div>
         )}
-        <div className="absolute bottom-2 left-2 text-[8px] uppercase opacity-30">Symp Vector X -></div>
-        <div className="absolute top-2 left-2 text-[8px] uppercase opacity-30 vertical-text" style={{ writingMode: 'vertical-lr' }}>Symp Vector Y -></div>
+        <div className="absolute bottom-2 left-2 text-[8px] uppercase opacity-30">Symp Vector X -&gt;</div>
+        <div className="absolute top-2 left-2 text-[8px] uppercase opacity-30 vertical-text" style={{ writingMode: 'vertical-lr' }}>Symp Vector Y -&gt;</div>
     </div>
 );
 
