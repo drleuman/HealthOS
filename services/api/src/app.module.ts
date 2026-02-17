@@ -29,6 +29,8 @@ import { KpiService } from './analytics/kpi.service';
 import { SERService } from './analytics/ser.service';
 import { ExperimentRegistry } from './analytics/experiment-registry';
 import { OpsDigestService } from './analytics/ops-digest.service';
+import { ControlCenterService } from './analytics/control-center.service';
+import { ControlCenterController } from './analytics/control-center.controller';
 import { AppController } from './app.controller';
 import { PerceptionInterpreter } from './behavioral/perception.interpreter';
 import { StateEngine } from './behavioral/state.engine';
@@ -59,6 +61,7 @@ import { ClinicalInterpretationService } from './behavioral/clinical-interpretat
     TrackingController,
     BehaviorController,
     OpsController,
+    ControlCenterController,
     CommunityController
   ],
   providers: [
@@ -75,6 +78,7 @@ import { ClinicalInterpretationService } from './behavioral/clinical-interpretat
     SERService,
     ExperimentRegistry,
     OpsDigestService,
+    ControlCenterService,
     SecretsValidator,
     TrackingService,
     FileProgramRegistry,

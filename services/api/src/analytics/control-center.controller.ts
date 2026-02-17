@@ -1,0 +1,50 @@
+import { Controller, Get, Headers, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
+import { ControlCenterService } from './control-center.service';
+import { Public } from '../public.decorator';
+
+@Controller('internal/control-center')
+export class ControlCenterController {
+    constructor(private ccService: ControlCenterService) { }
+
+    private validateSecret(secret: string) {
+        const validSecret = process.env.ANALYTICS_SECRET || 'admin-secret-dev';
+        if (!secret || secret !== validSecret) {
+            throw new UnauthorizedException('Invalid Research Secret');
+        }
+    }
+
+    @Public()
+    @Get('population-map')
+    async getPopulationMap(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getPopulationMap();
+    }
+
+    @Public()
+    @Get('protocol-effectiveness')
+    async getProtocolEffectiveness(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getProtocolEffectiveness();
+    }
+
+    @Public()
+    @Get('transition-matrix')
+    async getTransitionMatrix(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getTransitionMatrix();
+    }
+
+    @Public()
+    @Get('early-failure-predictor')
+    async getEarlyFailureMetrics(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getEarlyFailureMetrics();
+    }
+
+    @Public()
+    @Get('recalibration-stats')
+    async getRecalibrationStats(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getRecalibrationEfficiency();
+    }
+}
