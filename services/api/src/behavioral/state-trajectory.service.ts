@@ -236,7 +236,7 @@ export class StateTrajectoryService {
      * Get the trajectory for the Control Center
      */
     async getTrajectory(userId: string, limit: number = 30): Promise<any> {
-        return this.prisma.dailyStateSnapshot.findMany({
+        return (this.prisma as any).dailyStateSnapshot.findMany({
             where: { userId },
             orderBy: { date: 'asc' },
             take: limit,

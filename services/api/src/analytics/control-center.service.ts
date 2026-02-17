@@ -188,7 +188,7 @@ export class ControlCenterService {
      * Get aggregate biological stabilization signal across the population
      */
     async getStabilizationTrajectory() {
-        const snapshots = await this.prisma.dailyStateSnapshot.findMany({
+        const snapshots = await (this.prisma as any).dailyStateSnapshot.findMany({
             orderBy: { date: 'asc' },
             take: 100,
         });
