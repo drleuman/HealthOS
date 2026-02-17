@@ -1,10 +1,11 @@
-import { Controller, Post, Body, Get, Query, Headers, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Headers, UnauthorizedException, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { TrackingService, TrackingEvent } from './tracking.service';
 import { Public } from './public.decorator';
 import { logger } from './logger';
 import { JwtService } from '@nestjs/jwt';
 import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
+import { EventSignatureGuard } from './tracking/guards/event-signature.guard';
 
 @Controller('events')
 export class TrackingController {
@@ -21,6 +22,7 @@ export class TrackingController {
      */
     @Public()
     @Throttle({ default: { limit: 20, ttl: 60000 } }) // Stricter limit: 20 req/min
+    @UseGuards(EventSignatureGuard)
     @Post()
     async trackEvent(
         @Body() event: TrackingEvent,

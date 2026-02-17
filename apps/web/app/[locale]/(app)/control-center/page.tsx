@@ -137,7 +137,8 @@ export default function ControlCenterPage() {
         transitions: [],
         earlyFailure: [],
         recal: null,
-        stabilization: []
+        stabilization: [],
+        clusters: []
     });
     const [loading, setLoading] = useState(true);
     const [rebuilding, setRebuilding] = useState(false);
@@ -158,13 +159,14 @@ export default function ControlCenterPage() {
             const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001';
             const headers = { 'x-research-secret': key };
 
-            const [pop, eff, trans, fail, recal, stab] = await Promise.all([
+            const [pop, eff, trans, fail, recal, stab, clust] = await Promise.all([
                 fetch(`${api}/internal/control-center/population-map`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/protocol-effectiveness`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/transition-matrix`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/early-failure-predictor`, { headers }).then(r => r.json()),
                 fetch(`${api}/internal/control-center/recalibration-stats`, { headers }).then(r => r.json()),
-                fetch(`${api}/internal/control-center/stabilization-trajectory`, { headers }).then(r => r.json())
+                fetch(`${api}/internal/control-center/stabilization-trajectory`, { headers }).then(r => r.json()),
+                fetch(`${api}/internal/control-center/organism-clusters`, { headers }).then(r => r.json())
             ]);
 
             setData({
@@ -173,7 +175,8 @@ export default function ControlCenterPage() {
                 transitions: trans,
                 earlyFailure: fail,
                 recal,
-                stabilization: Array.isArray(stab) ? stab : []
+                stabilization: Array.isArray(stab) ? stab : [],
+                clusters: Array.isArray(clust) ? clust : []
             });
             setAuthenticated(true);
             sessionStorage.setItem('research_secret', key);
@@ -205,20 +208,26 @@ export default function ControlCenterPage() {
             <div className="cc-container items-center justify-center">
                 <div className="w-full max-w-sm p-8 bg-slate-900 border border-white/5 rounded-2xl">
                     <h2 className="text-[10px] uppercase tracking-widest text-slate-500 mb-6 text-center">{t('auth.protocol')}</h2>
-                    <input
-                        type="password"
-                        placeholder={t('auth.placeholder')}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm mb-4 outline-none focus:border-blue-500 transition-colors"
-                        value={secret}
-                        onChange={(e) => setSecret(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && fetchAll(secret)}
-                    />
-                    <button
-                        onClick={() => fetchAll(secret)}
-                        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg text-xs transition-colors uppercase tracking-wider"
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            fetchAll(secret);
+                        }}
                     >
-                        {t('auth.button')}
-                    </button>
+                        <input
+                            type="password"
+                            placeholder={t('auth.placeholder')}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm mb-4 outline-none focus:border-blue-500 transition-colors"
+                            value={secret}
+                            onChange={(e) => setSecret(e.target.value)}
+                        />
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg text-xs transition-colors uppercase tracking-wider"
+                        >
+                            {t('auth.button')}
+                        </button>
+                    </form>
                 </div>
             </div>
         );
@@ -295,24 +304,33 @@ export default function ControlCenterPage() {
                             <ResearchCard
                                 title={t('observatory.organism_effectiveness.title')}
                                 conclusion={t('observatory.organism_effectiveness.conclusion')}
-                                stats={[{ label: t('observatory.organism_effectiveness.sample_n'), value: data.population.length }, { label: t('observatory.organism_effectiveness.clusters'), value: 3 }]}
+                                stats={[{ label: t('observatory.organism_effectiveness.sample_n'), value: data.population.length }, { label: t('observatory.organism_effectiveness.clusters'), value: data.clusters.length }]}
                             >
                                 <div className="space-y-4">
-                                    {[
-                                        t('observatory.organism_effectiveness.types.metabolic_high'),
-                                        t('observatory.organism_effectiveness.types.circadian_drift'),
-                                        t('observatory.organism_effectiveness.types.inflammatory_peak')
-                                    ].map(c => (
-                                        <div key={c} className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                                            <span className="text-sm font-medium">{c}</span>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-blue-500" style={{ width: `${Math.random() * 80 + 20}%` }} />
+                                    {data.clusters.length > 0 ? (
+                                        data.clusters.map((c: any) => (
+                                            <div key={c.slug} className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                                <span className="text-sm font-medium">
+                                                    {t(`observatory.organism_effectiveness.types.${c.slug}`) === `observatory.organism_effectiveness.types.${c.slug}` ? c.slug : t(`observatory.organism_effectiveness.types.${c.slug}`)}
+                                                </span>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                                        <div
+                                                            className="h-full bg-blue-500"
+                                                            style={{ width: `${c.avgAdherence * 100}%` }}
+                                                        />
+                                                    </div>
+                                                    <span className="text-[10px] font-mono opacity-60">
+                                                        S={(c.avgAdherence).toFixed(2)} | N={c.count}
+                                                    </span>
                                                 </div>
-                                                <span className="text-[10px] font-mono opacity-60">S=0.82</span>
                                             </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-xs opacity-30 italic text-center py-4">
+                                            {t('observatory.clustering_map.awaiting_signal')}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
                             </ResearchCard>
                         </div>

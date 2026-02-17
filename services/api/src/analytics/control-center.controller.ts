@@ -65,10 +65,14 @@ export class ControlCenterController {
         this.validateSecret(secret);
         // This is a heavy operation, we should ideally job-ify it, 
         // but for research override we trigger it directly.
-        const users = await this.ccService.getPopulationMap();
-        for (const user of users) {
-            await this.trajectoryService.reconstructState(user.id);
-        }
-        return { status: 'rebuild_triggered', n: users.length };
+        const count = await this.ccService.rebuildAllSnapshots();
+        return { status: 'rebuild_triggered', n: count };
+    }
+
+    @Public()
+    @Get('organism-clusters')
+    async getOrganismClusters(@Headers('x-research-secret') secret: string) {
+        this.validateSecret(secret);
+        return this.ccService.getOrganismClusters();
     }
 }

@@ -47,16 +47,25 @@ export class StateTrajectoryService {
 
         const assessment = await this.prisma.assessments.findUnique({ where: { userId } });
 
-        // 2. Compute Signals
-        const signals = this.computeBioSignals(events, logs, assessment);
-
-        // 3. Determine Dominant State
-        const dominantState = this.determineDominantState(signals);
-
-        // 4. Persist Snapshot
         const dayStart = new Date(date);
         dayStart.setHours(0, 0, 0, 0);
 
+        // 1.5 Fetch Pre-existing Snapshots for Baseline/Trend Analysis
+        const previousSnapshots = await (this.prisma as any).dailyStateSnapshot.findMany({
+            where: {
+                userId,
+                date: { lt: dayStart, gte: new Date(dayStart.getTime() - 7 * 24 * 60 * 60 * 1000) }
+            },
+            orderBy: { date: 'asc' }
+        });
+
+        // 2. Compute Signals
+        const signals = this.computeBioSignals(events, logs, assessment, previousSnapshots);
+
+        // 3. Determine Dominant State
+        const analysis = this.determineDominantState(signals, previousSnapshots);
+
+        // 4. Persist Snapshot
         return (this.prisma as any).dailyStateSnapshot.upsert({
             where: {
                 userId_date: {
@@ -68,16 +77,18 @@ export class StateTrajectoryService {
                 userId,
                 date: dayStart,
                 ...signals,
-                dominantState,
+                dominantState: analysis.state,
+                metadata: analysis.metadata
             },
             update: {
                 ...signals,
-                dominantState,
+                dominantState: analysis.state,
+                metadata: analysis.metadata
             },
         });
     }
 
-    private computeBioSignals(events: any[], logs: any[], assessment: any): BioSignals {
+    private computeBioSignals(events: any[], logs: any[], assessment: any, history: any[] = []): BioSignals {
         // A. CIRCADIAN ALIGNMENT
         // Calculate variance in start timestamps
         const startTimes = events
@@ -120,9 +131,12 @@ export class StateTrajectoryService {
         // Inferred from erratic interaction timing
         const energyVariability = 1 - circadianAlignment;
 
-        // H. RELAPSE PRESSURE
-        // High if stability is dropping while activation is rising
-        const relapsePressure = (nervousSystemActivation * 0.7) + ((1 - stability) * 0.3);
+        // D. RELAPSE PRESSURE (Inverted Stability + Trend)
+        // If stability is dropping fast, pressure spikes
+        const stabilitySlope = this.calculateSlope(history.map(h => h.stability));
+        const relapsePressure = Math.min(1, Math.max(0,
+            (1 - stability) + (stabilitySlope < -0.1 ? 0.3 : 0) // Penalty for rapid destabilization
+        ));
 
         return {
             stability,
@@ -178,11 +192,44 @@ export class StateTrajectoryService {
         return maxFailStreak === 0 ? 1.0 : Math.max(0, 1 - maxFailStreak / 4);
     }
 
-    private determineDominantState(s: BioSignals): string {
-        if (s.relapsePressure > 0.7) return 'crisis';
-        if (s.stability > 0.8) return 'stabilized';
-        if (s.nervousSystemActivation > 0.6) return 'perturbation';
-        return 'adaptation';
+    private determineDominantState(signals: BioSignals, history: any[] = []): { state: string, metadata: any } {
+        const { stability, nervousSystemActivation, relapsePressure } = signals;
+        const activationSlope = this.calculateSlope(history.map(h => h.nervousSystemActivation));
+
+        let state = 'adaptation';
+
+        if (stability > 0.8 && relapsePressure < 0.2) state = 'stabilized';
+        else if (nervousSystemActivation > 0.7 || activationSlope > 0.1) state = 'perturbation'; // High activation or rapid spike
+        else if (relapsePressure > 0.8) state = 'crisis';
+        else if (stability < 0.4) state = 'fragile';
+
+        return {
+            state,
+            metadata: {
+                activationSlope,
+                stabilitySlope: this.calculateSlope(history.map(h => h.stability)),
+                historyLength: history.length,
+                computationTimestamp: new Date().toISOString()
+            }
+        };
+    }
+
+    private calculateSlope(values: number[]): number {
+        if (values.length < 2) return 0;
+        const n = values.length;
+        // Simple linear regression slope for normalized time steps
+        const xMean = (n - 1) / 2;
+        const yMean = values.reduce((a, b) => a + b, 0) / n;
+
+        let numerator = 0;
+        let denominator = 0;
+
+        for (let i = 0; i < n; i++) {
+            numerator += (i - xMean) * (values[i] - yMean);
+            denominator += (i - xMean) ** 2;
+        }
+
+        return denominator === 0 ? 0 : numerator / denominator;
     }
 
     /**

@@ -14,46 +14,66 @@ export class ControlCenterService {
     /**
      * Population Map cluster analysis
      */
+    /**
+     * Population Map cluster analysis (K-Anonymous)
+     * Groups users into hexbins to prevent individual re-identification.
+     */
     async getPopulationMap() {
         const users = await this.prisma.user.findMany({
             include: {
                 assessment: true,
                 state: true,
-                behaviorState: true,
                 completions: true,
                 logs: {
-                    take: 7,
+                    take: 1, // Only need latest for potential energy calc, but really we should use state
                     orderBy: { createdAt: 'desc' },
                 }
             },
         });
 
-        return users.map(user => {
+        // 1. Vectorize all users
+        const vectors = users.map(user => {
             const sym = (user.assessment?.symptoms as any) || {};
-            // Simplified vectorization for visualization
-            const symptomsVector = [
-                sym.fatigue ? 1 : 0,
-                sym.brainFog ? 1 : 0,
-                sym.insomnia ? 1 : 0,
-                sym.anxiety ? 1 : 0,
-                sym.bloating ? 1 : 0,
-            ];
+            // Vector: [Fatigue, BrainFog, Insomnia, Anxiety, Bloating]
+            // We map this 5D vector to 2D for visualization using a simple projection (e.g. PCA-like or predefined axes)
+            // For MVP: Axis X = Metabolic/Energy (Fatigue + BrainFog), Axis Y = Nervous/Sleep (Insomnia + Anxiety)
+
+            const axisX = (sym.fatigue ? 1 : 0) + (sym.brainFog ? 1 : 0) + (sym.bloating ? 0.5 : 0);
+            const axisY = (sym.insomnia ? 1 : 0) + (sym.anxiety ? 1 : 0);
 
             const adherence = user.completions.length > 0
                 ? user.completions.reduce((acc, c) => acc + (c.adherenceRate || 0), 0) / user.completions.length
                 : 0;
 
-            return {
-                id: user.id,
-                organismProfile: {
-                    profileType: user.state?.profileType,
-                    symptomsVector,
-                    energyScore: user.logs[0]?.selfReportEffect ? (user.logs[0].selfReportEffect as any).energy : null,
-                },
-                effectiveness: adherence,
-                currentProtocol: user.state?.programId,
-            };
+            return { x: axisX, y: axisY, adherence };
         });
+
+        // 2. Aggregate into Bins (Privacy Layer)
+        const bins: Record<string, { x: number, y: number, count: number, adherenceSum: number }> = {};
+
+        vectors.forEach(v => {
+            // Snap to grid
+            const key = `${Math.round(v.x * 2)}_${Math.round(v.y * 2)}`;
+            if (!bins[key]) {
+                bins[key] = { x: v.x, y: v.y, count: 0, adherenceSum: 0 };
+            }
+            bins[key].count++;
+            bins[key].adherenceSum += v.adherence;
+        });
+
+        // 3. Apply K-Anonymity (K=5)
+        // Groups with < 5 users are suppressed or merged (here: suppressed)
+        const K_ANONYMITY_THRESHOLD = 5;
+
+        return Object.values(bins)
+            .filter(b => b.count >= K_ANONYMITY_THRESHOLD)
+            .map(b => ({
+                coordinates: { x: b.x, y: b.y },
+                populationSize: b.count,
+                avgEffectiveness: b.adherenceSum / b.count,
+                // Add explicit noise for differential privacy if needed, 
+                // but aggregation is a good first step.
+            }));
     }
 
     /**
@@ -191,5 +211,73 @@ export class ControlCenterService {
             avgActivation: data.activation / data.n,
             populationSize: data.n
         }));
+    }
+
+    /**
+     * Bio-Clustering Analysis
+     * Groups users by dominant biological signal failure point.
+     */
+    async getOrganismClusters() {
+        // ... (existing code, ensure it ends here)
+        const snapshots = await (this.prisma as any).dailyStateSnapshot.findMany({
+            orderBy: { date: 'desc' },
+            include: { user: { include: { completions: true } } }
+        });
+
+        const latestMap = new Map();
+        snapshots.forEach((s: any) => {
+            if (!latestMap.has(s.userId)) latestMap.set(s.userId, s);
+        });
+
+        const clusters: Record<string, any> = {
+            'metabolic_high': { count: 0, adherenceSum: 0 },
+            'circadian_drift': { count: 0, adherenceSum: 0 },
+            'inflammatory_peak': { count: 0, adherenceSum: 0 },
+            'balanced': { count: 0, adherenceSum: 0 }
+        };
+
+        latestMap.forEach((s: any) => {
+            let type = 'balanced';
+            if (s.metabolicRigidity > 0.6) type = 'metabolic_high';
+            else if (s.circadianAlignment < 0.5) type = 'circadian_drift';
+            else if (s.nervousSystemActivation > 0.6 && s.recoveryLatency > 0.5) type = 'inflammatory_peak';
+
+            const adherence = s.user.completions.length > 0
+                ? s.user.completions.reduce((acc: number, c: any) => acc + (c.adherenceRate || 0), 0) / s.user.completions.length
+                : 0;
+
+            if (clusters[type]) {
+                clusters[type].count++;
+                clusters[type].adherenceSum += adherence;
+            }
+        });
+
+        const K_ANONYMITY_THRESHOLD = 5;
+
+        return Object.entries(clusters)
+            .filter(([slug, data]) => data.count >= K_ANONYMITY_THRESHOLD) // Apply K-Anonymity
+            .map(([slug, data]) => ({
+                slug,
+                count: data.count,
+                avgAdherence: data.count > 0 ? data.adherenceSum / data.count : 0,
+                dominance: data.count / latestMap.size
+            }));
+    }
+
+    async rebuildAllSnapshots(): Promise<number> {
+        const users = await this.prisma.user.findMany({
+            select: { id: true }
+        });
+
+        for (const user of users) {
+            // Access private method or inject if possible - trajectoryService is injected!
+            // Wait, reconstructState might be private or not exist on the type depending on my earlier check.
+            // I see 'this.trajectoryService' in constructor. 
+            // Let's assume it has reconstructState as public.
+            // Wait, I saw it called in controller: `this.trajectoryService.reconstructState(user.id)`.
+            // So it's public.
+            await this.trajectoryService.reconstructState(user.id);
+        }
+        return users.length;
     }
 }
