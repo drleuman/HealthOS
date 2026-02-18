@@ -1,16 +1,16 @@
 {
     "App": {
         "Onboarding": {
-            "initial_configuration": "CONFIGURACIÓN_INICIAL",
-            "dataset_classification": "CLASIFICACIÓN_DEL_DATASET",
-            "select_primary": "SELECCIONAR_CATEGORÍA_DE_OBSERVACIÓN",
+            "initial_configuration": "CONFIGURACIÓN INICIAL",
+            "dataset_classification": "CLASIFICACIÓN DEL DATASET",
+            "select_primary": "SELECCIONAR CATEGORÍA DE OBSERVACIÓN",
             "finalize": "Finalizar registro",
             "initializing": "Inicializando...",
             "categories": {
-                "SLEEP_CYCLE": "CICLO_DE_SUEÑO",
-                "ENERGY_METABOLISM": "METABOLISMO_ENERGÉTICO",
-                "PHYSICAL_ACTIVITY": "ACTIVIDAD_FÍSICA",
-                "NUTRITIONAL_INTAKE": "INGESTA_NUTRICIONAL"
+                "SLEEP_CYCLE": "CICLO DE SUEÑO",
+                "ENERGY_METABOLISM": "METABOLISMO ENERGÉTICO",
+                "PHYSICAL_ACTIVITY": "ACTIVIDAD FÍSICA",
+                "NUTRITIONAL_INTAKE": "INGESTA NUTRICIONAL"
             }
         },
         "ControlCenter": {
@@ -23,7 +23,7 @@
                 "predictor": "Predictor"
             },
             "status": {
-                "uplink_stable": "ESTADO: ENLACE_ESTABLE",
+                "uplink_stable": "ESTADO: ENLACE ESTABLE",
                 "signal_deanonymized": "SEÑAL: DESANONIMIZADA",
                 "rebuild_snapshots": "RECONSTRUIR INSTANTÁNEAS",
                 "reconstructing": "RECONSTRUYENDO..."
