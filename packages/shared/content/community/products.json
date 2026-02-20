@@ -1,93 +1,70 @@
 [
     {
-        "id": "blue_blockers",
-        "slug": "blue-blockers",
+        "id": "10084",
+        "slug": "lentes-amarillas",
+        "type": "product",
+        "featured": true,
+        "priceCents": 3900,
+        "currency": "EUR",
+        "title": {
+            "es": "Lentes Amarillas (Día)",
+            "en": "Yellow Lenses (Day)"
+        },
+        "excerpt": {
+            "es": "Protección 100% contra luces artificiales, filtrando hasta 450nm para proteger la salud del ojo y del sistema hormonal.",
+            "en": "100% protection against artificial lights, filtering up to 450nm to protect eye health and the hormonal system."
+        },
+        "image": {
+            "src": "https://mithohacks.com/wp-content/uploads/2023/10/lentes-amarillas.jpg",
+            "alt": {
+                "es": "Lentes amarillas",
+                "en": "Yellow lenses"
+            }
+        }
+    },
+    {
+        "id": "10085",
+        "slug": "lentes-rojas",
         "type": "product",
         "featured": true,
         "priceCents": 4500,
         "currency": "EUR",
         "title": {
-            "es": "Gafas Blue Blockers (noche)",
-            "en": "Blue Blockers (night)"
+            "es": "Lentes Rojas (Noche)",
+            "en": "Red Lenses (Night)"
         },
         "excerpt": {
-            "es": "Bloquea luz azul-cian (400-500nm) para proteger melatonina.",
-            "en": "Blocks blue-cyan light (400-500nm) to protect melatonin."
+            "es": "Bloqueo total de luz azul y verde para maximizar la producción de melatonina antes de dormir.",
+            "en": "Total blue and green light block to maximize melatonin production before sleep."
         },
         "image": {
-            "src": "/img/products/blue-blockers.jpg",
+            "src": "https://mithohacks.com/wp-content/uploads/2023/10/lentes-rojas.jpg",
             "alt": {
-                "es": "Gafas bloqueadoras",
-                "en": "Blocking glasses"
+                "es": "Lentes rojas",
+                "en": "Red lenses"
             }
         }
     },
     {
-        "id": "mouth_tape",
-        "slug": "mouth-tape",
+        "id": "10086",
+        "slug": "suplemento-magnesio",
         "type": "product",
         "featured": true,
-        "priceCents": 1200,
+        "priceCents": 2900,
         "currency": "EUR",
         "title": {
-            "es": "Cinta bucal (micropore)",
-            "en": "Mouth Tape"
+            "es": "Magnesio Triple Complejo",
+            "en": "Triple Magnesium Complex"
         },
         "excerpt": {
-            "es": "Fomenta respiración nasal nocturna suavemente.",
-            "en": "Encourages gentle nasal breathing at night."
+            "es": "Combinación de alta biodisponibilidad para optimizar el descanso y la función muscular.",
+            "en": "High bioavailability combination to optimize rest and muscle function."
         },
         "image": {
-            "src": "/img/products/mouth-tape.jpg",
+            "src": "https://mithohacks.com/wp-content/uploads/2023/10/magnesium.jpg",
             "alt": {
-                "es": "Cinta bucal",
-                "en": "Mouth tape"
-            }
-        }
-    },
-    {
-        "id": "magnesium_complex",
-        "slug": "magnesium",
-        "type": "product",
-        "featured": false,
-        "priceCents": 2800,
-        "currency": "EUR",
-        "title": {
-            "es": "Magnesio Bisglicinato",
-            "en": "Magnesium Bisglycinate"
-        },
-        "excerpt": {
-            "es": "Alta biodisponibilidad para relajación muscular.",
-            "en": "High bioavailability for muscle relaxation."
-        },
-        "image": {
-            "src": "/img/products/magnesium.jpg",
-            "alt": {
-                "es": "Bote de magnesio",
-                "en": "Magnesium jar"
-            }
-        }
-    },
-    {
-        "id": "red_light_bulb",
-        "slug": "red-light",
-        "type": "product",
-        "featured": false,
-        "priceCents": 1500,
-        "currency": "EUR",
-        "title": {
-            "es": "Bombilla Roja (670nm)",
-            "en": "Red Light Bulb (670nm)"
-        },
-        "excerpt": {
-            "es": "Iluminación ambiental sin señal de alerta.",
-            "en": "Ambient lighting without alertness signal."
-        },
-        "image": {
-            "src": "/img/products/red-bulb.jpg",
-            "alt": {
-                "es": "Bombilla roja",
-                "en": "Red bulb"
+                "es": "Suplemento magnesio",
+                "en": "Magnesium supplement"
             }
         }
     }

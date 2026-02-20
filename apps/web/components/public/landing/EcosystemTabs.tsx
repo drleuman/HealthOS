@@ -26,6 +26,15 @@ const CatalogGrid = ({ items, type, locale }: { items: any[], type: string, loca
                     }
                     className="flex flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50 shadow-sm transition hover:bg-slate-800 hover:shadow-md hover:border-slate-700"
                 >
+                    {item.image?.src && (
+                        <div className="aspect-[16/9] w-full overflow-hidden border-b border-slate-800">
+                            <img
+                                src={item.image.src}
+                                alt={item.image.alt?.[locale] || item.image.alt?.['es'] || ''}
+                                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                        </div>
+                    )}
                     <div className="flex flex-1 flex-col justify-between p-6">
                         <div className="flex-1">
                             <div className="text-sm font-medium text-indigo-400 uppercase tracking-wider mb-2">

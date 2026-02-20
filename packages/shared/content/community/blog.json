@@ -1,62 +1,47 @@
 [
     {
-        "id": "hrv_science",
-        "slug": "understanding-hrv",
+        "id": "3449",
+        "slug": "vitamina-de-luz",
+        "type": "blog",
+        "featured": true,
+        "readingMinutes": 6,
+        "title": {
+            "es": "Vitamina de Luz: Por qué la luz de mañana importa",
+            "en": "Light Vitamin: Why Morning Light Matters"
+        },
+        "excerpt": {
+            "es": "La exposición a luz solar en los primeros 30 minutos al despertar es la señal más potente para sincronizar tu ritmo circadiano.",
+            "en": "Sunlight exposure in the first 30 minutes after waking up is the strongest signal to sync your circadian rhythm."
+        }
+    },
+    {
+        "id": "3450",
+        "slug": "carga-alostatica",
+        "type": "blog",
+        "featured": true,
+        "readingMinutes": 8,
+        "title": {
+            "es": "Carga Alostática y Salud Metabólica",
+            "en": "Allostatic Load and Metabolic Health"
+        },
+        "excerpt": {
+            "es": "Cómo el estrés acumulado desregula tus hormonas y qué puedes hacer para frenar el proceso.",
+            "en": "How accumulated stress deregulates your hormones and what you can do to stop the process."
+        }
+    },
+    {
+        "id": "3451",
+        "slug": "ritmo-circadiano-digestivo",
         "type": "blog",
         "featured": true,
         "readingMinutes": 5,
         "title": {
-            "es": "Entendiendo tu Variabilidad Cardiaca",
-            "en": "Understanding Your Heart Rate Variability"
+            "es": "El Ritmo Circadiano de tu Digestión",
+            "en": "The Circadian Rhythm of Your Digestion"
         },
         "excerpt": {
-            "es": "Cómo usar el HRV para medir la carga alostática real, no solo el estrés percibido.",
-            "en": "Using HRV to measure true allostatic load, not just perceived stress."
-        }
-    },
-    {
-        "id": "light_cortisol",
-        "slug": "light-science",
-        "type": "blog",
-        "featured": true,
-        "readingMinutes": 7,
-        "title": {
-            "es": "La ciencia de la luz y el cortisol",
-            "en": "The Science of Light and Cortisol"
-        },
-        "excerpt": {
-            "es": "10 minutos antes de las 9am cambian la arquitectura del sueño.",
-            "en": "10 minutes before 9am change your sleep architecture."
-        }
-    },
-    {
-        "id": "migrating_motor_complex",
-        "slug": "meal-spacing",
-        "type": "blog",
-        "featured": true,
-        "readingMinutes": 4,
-        "title": {
-            "es": "El Complejo Motor Migratorio",
-            "en": "The Migrating Motor Complex"
-        },
-        "excerpt": {
-            "es": "Limpieza digestiva que solo se activa en ayuno.",
-            "en": "Digestive cleaning that only activates during fasting."
-        }
-    },
-    {
-        "id": "breath_mechanics",
-        "slug": "breath-work-co2",
-        "type": "blog",
-        "featured": false,
-        "readingMinutes": 6,
-        "title": {
-            "es": "Tolerancia al CO2 y Ansiedad",
-            "en": "CO2 Tolerance and Anxiety"
-        },
-        "excerpt": {
-            "es": "Por qué respirar menos aire oxigena más.",
-            "en": "Why breathing less air oxygenates more."
+            "es": "Tu sistema digestivo no funciona igual a las 8am que a las 8pm. Aprende a alinear tus comidas.",
+            "en": "Your digestive system doesn't work the same at 8am vs 8pm. Learn to align your meals."
         }
     }
 ]

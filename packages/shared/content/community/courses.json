@@ -1,50 +1,47 @@
 [
     {
-        "id": "nervous_system_deep_dive",
-        "slug": "nervous-system-deep-dive",
+        "id": "course_sleep_mastery",
+        "slug": "maestria-en-sueno",
         "type": "course",
         "featured": true,
         "modulesCount": 12,
-        "durationMinutes": 240,
         "title": {
-            "es": "Nervous System Deep Dive",
-            "en": "Nervous System Deep Dive"
+            "es": "Maestría en Sueño y Descanso",
+            "en": "Sleep and Rest Mastery"
         },
         "excerpt": {
-            "es": "Teoría avanzada para personalización de protocolos.",
-            "en": "Advanced theory for protocol customization."
+            "es": "Profundiza en la ciencia del sueño y aprende protocolos avanzados para optimizar tu recuperación nocturna.",
+            "en": "Dive deep into sleep science and learn advanced protocols to optimize your night recovery."
         }
     },
     {
-        "id": "digestive_repair_course",
-        "slug": "digestive-repair-course",
+        "id": "course_metabolic_reset",
+        "slug": "reset-metabolico",
         "type": "course",
         "featured": true,
         "modulesCount": 8,
-        "durationMinutes": 180,
         "title": {
-            "es": "Reparando la Integridad Digestiva",
-            "en": "Repairing Gut Integrity"
+            "es": "Reset Metabólico de 21 Días",
+            "en": "21-Day Metabolic Reset"
         },
         "excerpt": {
-            "es": "Más allá del protocolo básico de reseteo.",
-            "en": "Beyond the basic reset protocol."
+            "es": "Una guía paso a paso para estabilizar tu glucosa y mejorar tu flexibilidad metabólica mediante hábitos simples.",
+            "en": "A step-by-step guide to stabilize your glucose and improve your metabolic flexibility through simple habits."
         }
     },
     {
-        "id": "circadian_biology",
-        "slug": "circadian-biology-101",
+        "id": "course_circadian_foundations",
+        "slug": "bases-circadianas",
         "type": "course",
-        "featured": false,
-        "modulesCount": 5,
-        "durationMinutes": 120,
+        "featured": true,
+        "modulesCount": 6,
         "title": {
-            "es": "Biología Circadiana 101",
-            "en": "Circadian Biology 101"
+            "es": "Bases de Cronobiología",
+            "en": "Foundations of Chronobiology"
         },
         "excerpt": {
-            "es": "Entendiendo los relojes periféricos.",
-            "en": "Understanding peripheral clocks."
+            "es": "El curso fundamental para entender cómo los ritmos de luz y oscuridad gobiernan toda tu salud biológica.",
+            "en": "The foundational course to understand how light and dark rhythms govern all your biological health."
         }
     }
 ]

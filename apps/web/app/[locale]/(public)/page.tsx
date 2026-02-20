@@ -4,11 +4,11 @@ import HowItWorks from '@/components/public/landing/HowItWorks';
 import EcosystemTabs from '@/components/public/landing/EcosystemTabs';
 import TrustStrip from '@/components/public/landing/TrustStrip';
 import FinalCTA from '@/components/public/landing/FinalCTA';
-import { loadCommunityCatalog } from '@healthos/shared';
+import { getEnhancedCatalog } from '@/lib/catalog';
 
 // Page is an Async Server Component
 export default async function LandingPage({ params: { locale } }: { params: { locale: string } }) {
-  const catalog = loadCommunityCatalog();
+  const catalog = await getEnhancedCatalog(locale);
 
   return (
     <main className="flex flex-col bg-slate-950 min-h-screen selection:bg-indigo-500/30 selection:text-indigo-200">

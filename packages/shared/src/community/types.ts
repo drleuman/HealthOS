@@ -23,6 +23,7 @@ export type CourseItem = CommunityItemBase & {
     durationMinutes?: number;
     title: Record<Locale, string>;
     excerpt: Record<Locale, string>;
+    image?: { src: string; alt: Record<Locale, string> };
 };
 
 export type BlogItem = CommunityItemBase & {
@@ -30,6 +31,7 @@ export type BlogItem = CommunityItemBase & {
     readingMinutes?: number;
     title: Record<Locale, string>;
     excerpt: Record<Locale, string>;
+    image?: { src: string; alt: Record<Locale, string> };
 };
 
 export type CommunityCatalog = {
