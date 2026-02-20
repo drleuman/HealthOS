@@ -9,30 +9,36 @@ export class JwtAuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
 
-        // 1. Check for Legacy X-User-Email header
-        const legacyEmail = request.headers['x-user-email'];
-        if (legacyEmail) {
-            (request as any)['user'] = { email: String(legacyEmail), plan: 'member' };
-            return true;
-        }
+        const isProd = process.env.NODE_ENV === 'production';
 
-        // 2. Check for JWT in Cookie (Zero-Preflight) OR Header
-        let token = request.cookies?.['hos_session'] || request.cookies?.['access_token'];
+        // EXCLUSIVE BEARER TOKEN STRATEGY (Option B)
+        let token = this.extractTokenFromHeader(request);
 
-        if (!token) {
-            token = this.extractTokenFromHeader(request);
+        // Fallback to cookie only in dev for same-origin or legacy support
+        if (!token && !isProd) {
+            token = request.cookies?.['hos_session'] || request.cookies?.['access_token'];
         }
 
         if (!token) {
-            throw new UnauthorizedException('No token or user info provided');
+            throw new UnauthorizedException('Authentication token missing');
+        }
+
+        const secret = process.env.API_JWT_SECRET;
+        if (isProd && (!secret || secret.length < 32)) {
+            // This should be caught in bootstrap, but guard check adds depth
+            throw new Error('Internal security configuration error');
         }
 
         try {
             const payload = await this.jwt.verifyAsync(token, {
-                secret: process.env.API_JWT_SECRET || 'dev_secret',
+                secret: secret || 'dev_secret',
             });
-            // sub is user.id
-            (request as any)['user'] = { id: payload.sub, email: payload.email, plan: payload.plan };
+            // Ensure stable claims
+            (request as any)['user'] = {
+                id: payload.sub,
+                email: payload.email,
+                plan: payload.plan || 'free'
+            };
         } catch {
             throw new UnauthorizedException('Invalid or expired token');
         }

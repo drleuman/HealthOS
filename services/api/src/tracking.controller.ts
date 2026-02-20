@@ -1,17 +1,18 @@
-import { Controller, Post, Body, Get, Query, Headers, UnauthorizedException, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Headers, UnauthorizedException, HttpException, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { TrackingService, TrackingEvent } from './tracking.service';
-import { Public } from './public.decorator';
+import { Public, RequiredPlan } from './public.decorator';
 import { logger } from './logger';
-import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { SubscriptionGuard } from './subscription.guard';
 import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
 import { EventSignatureGuard } from './tracking/guards/event-signature.guard';
 
 @Controller('events')
+@UseGuards(JwtAuthGuard, SubscriptionGuard)
 export class TrackingController {
     constructor(
-        private trackingService: TrackingService,
-        private jwtService: JwtService
+        private trackingService: TrackingService
     ) { }
 
     /**
@@ -26,7 +27,7 @@ export class TrackingController {
     @Post()
     async trackEvent(
         @Body() event: TrackingEvent,
-        @Headers('authorization') authHeader?: string
+        @Req() req: any
     ) {
         // Zod Validation
         try {
@@ -45,25 +46,9 @@ export class TrackingController {
             return { ok: false, error: 'Invalid payload' };
         }
 
-        // 1. Attempt to identify user from token (Soft Auth)
-        let userId: string | undefined;
-
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            const token = authHeader.split(' ')[1];
-            try {
-                const payload = await this.jwtService.verifyAsync(token, {
-                    secret: process.env.API_JWT_SECRET
-                });
-                userId = payload.sub;
-            } catch (e) {
-                // Invalid token? Treat as anonymous, don't block tracking
-                // But maybe log warn if debugging
-            }
-        }
-
-        // 2. Attach validated userId
-        if (userId) {
-            event.userId = userId;
+        // 1. Identify user from token if available (from Guard)
+        if (req.user?.id) {
+            event.userId = req.user.id;
         }
 
         // 3. Fire and forget
@@ -82,12 +67,8 @@ export class TrackingController {
     @Throttle({ default: { limit: 5, ttl: 60000 } }) // Very strict for batch
     @Post('batch')
     async trackBatch(
-        @Body() body: { events: TrackingEvent[] },
-        @Headers('authorization') authHeader?: string
+        @Body() body: { events: TrackingEvent[] }
     ) {
-        // Similar soft auth logic could be applied here if needed
-        // For now, let's keep it simple or strictly strictly anonymous
-
         this.trackingService.trackBatch(body.events).catch((error) => {
             logger.error({ error, count: body.events.length }, 'Batch tracking failed');
         });
@@ -96,62 +77,39 @@ export class TrackingController {
     }
 
     /**
-     * Helper to protect analytics endpoints
+     * Helper to protect analytics endpoints (Legacy support for secret header)
      */
     private async validateAnalyticsAccess(authHeader?: string, secretHeader?: string) {
-        // 1. Check Secret Header (Service-to-Service or Admin Script)
-        // Hardcoded secret for now (env var in production)
         const ADMIN_SECRET = process.env.ANALYTICS_SECRET || 'admin-secret-dev';
         if (secretHeader === ADMIN_SECRET) {
             return true;
         }
-
-        // 2. Check Admin JWT
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            const token = authHeader.split(' ')[1];
-            try {
-                const payload = await this.jwtService.verifyAsync(token, {
-                    secret: process.env.API_JWT_SECRET
-                });
-                // Check for admin role/claim if it exists. 
-                // For now, we only assume specific users or ALL authenticated users?
-                // Request says: "admin plan OR X-Analytics-Secret"
-                // Our JWT payload has 'plan'.
-                if (payload.plan === 'admin' || payload.roles?.includes('admin')) {
-                    return true;
-                }
-            } catch (e) {
-                // Invalid token
-            }
-        }
-
-        throw new HttpException('Forbidden: Admin access required', HttpStatus.FORBIDDEN);
+        // Admin plan is now handled by SubscriptionGuard + @RequiredPlan('admin')
+        return false;
     }
 
     /**
      * GET /events/analytics/activation
      */
-    @Public()
+    @RequiredPlan('admin')
     @Get('analytics/activation')
     async getActivation(
-        @Headers('authorization') auth?: string,
         @Headers('x-analytics-secret') secret?: string
     ) {
-        await this.validateAnalyticsAccess(auth, secret);
+        if (secret) await this.validateAnalyticsAccess(undefined, secret);
         return this.trackingService.getActivationRate();
     }
 
     /**
      * GET /events/analytics/dropoff
      */
-    @Public()
+    @RequiredPlan('admin')
     @Get('analytics/dropoff')
     async getDropOff(
         @Query('day') day: string,
-        @Headers('authorization') auth?: string,
         @Headers('x-analytics-secret') secret?: string
     ) {
-        await this.validateAnalyticsAccess(auth, secret);
+        if (secret) await this.validateAnalyticsAccess(undefined, secret);
         const dayNum = parseInt(day, 10) || 3;
         return this.trackingService.getDropOffAtDay(dayNum);
     }
@@ -159,13 +117,12 @@ export class TrackingController {
     /**
      * GET /events/analytics/conversion
      */
-    @Public()
+    @RequiredPlan('admin')
     @Get('analytics/conversion')
     async getConversion(
-        @Headers('authorization') auth?: string,
         @Headers('x-analytics-secret') secret?: string
     ) {
-        await this.validateAnalyticsAccess(auth, secret);
+        if (secret) await this.validateAnalyticsAccess(undefined, secret);
         return this.trackingService.getToolConversionRate();
     }
 }

@@ -22,11 +22,16 @@ export interface WordPressPost {
     featured_media_url?: string;
 }
 
+import { PlanService } from './plan.service';
+import { TrackingService } from './tracking.service';
+
 @Injectable()
 export class CommunityService {
     constructor(
         private prisma: PrismaService,
-        private clinicalModeration: ClinicalInterpretationService
+        private clinicalModeration: ClinicalInterpretationService,
+        private planService: PlanService,
+        private tracking: TrackingService
     ) { }
 
     async getThreads(filter: ThreadFilter) {
@@ -48,20 +53,67 @@ export class CommunityService {
         });
     }
 
-    async getThread(id: string) {
-        return this.prisma.communityThread.findUnique({
+    async getThread(id: string, userPlan: string, userId: string) {
+        const policy = this.planService.getPolicy(userPlan);
+
+        if (userPlan === 'free') {
+            const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+            const readCount = await this.prisma.event.count({
+                where: {
+                    userId,
+                    event: 'thread_read',
+                    timestamp: { gte: last24h }
+                }
+            });
+
+            if (readCount >= policy.threadReads24h) {
+                this.tracking.trackPlanGated(userId, userPlan, 'thread_reads_24h', true).catch(() => { });
+                const thread = await this.prisma.communityThread.findUnique({
+                    where: { id },
+                    include: {
+                        replies: { take: 1, orderBy: { createdAt: 'asc' } }
+                    }
+                });
+
+                return this.planService.buildEnvelope({
+                    ...thread,
+                    replies: thread?.replies.map(r => ({ ...r, content: r.content.substring(0, 100) + '...' }))
+                }, userPlan, 'thread_reads_24h', true);
+            }
+
+            // Record read if not already recorded
+            const alreadyRead = await this.prisma.event.findFirst({
+                where: {
+                    userId,
+                    event: 'thread_read',
+                    timestamp: { gte: last24h },
+                    context: { path: ['threadId'], equals: id } as any // Prisma JSON query bypass
+                }
+            });
+
+            if (!alreadyRead) {
+                await this.prisma.event.create({
+                    data: { userId, event: 'thread_read', context: { threadId: id } }
+                });
+                this.tracking.trackQuotaConsumed(userId, 'thread_reads_24h', policy.threadReads24h - (readCount + 1)).catch(() => { });
+            }
+        }
+
+        const data = await this.prisma.communityThread.findUnique({
             where: { id },
             include: {
                 replies: {
                     orderBy: { createdAt: 'asc' },
                     include: {
                         user: {
-                            select: { id: true, email: true } // Minimal user info
+                            select: { id: true, email: true }
                         }
                     }
                 }
             }
         });
+
+        return this.planService.buildEnvelope(data, userPlan, 'thread_reads_24h', false);
     }
 
     async createReply(threadId: string, userId: string, content: string) {
@@ -151,7 +203,7 @@ export class CommunityService {
         }
     }
 
-    async getMembershipPostBySlug(slug: string) {
+    async getMembershipPostBySlug(slug: string, userPlan: string) {
         const url = `${this.WP_URL}/posts?categories=${this.MEMBERSHIP_CAT}&slug=${slug}&_embed=1`;
 
         try {
@@ -161,7 +213,18 @@ export class CommunityService {
             const posts = (await response.json()) as any[];
             if (!posts.length) return null;
 
-            return this.mapWPPost(posts[0]);
+            const post = this.mapWPPost(posts[0]);
+            const policy = this.planService.getPolicy(userPlan);
+
+            if (!policy.fullArticleAccess) {
+                this.tracking.trackPlanGated(post.id.toString(), userPlan, 'full_article_access', false).catch(() => { }); // Post ID as identifier
+                return this.planService.buildEnvelope({
+                    ...post,
+                    content: { rendered: post.excerpt.rendered + "<p><i>[Contenido exclusivo para miembros]</i></p>" }
+                }, userPlan, 'full_article_access', true);
+            }
+
+            return this.planService.buildEnvelope(post, userPlan, 'full_article_access', false);
         } catch (error) {
             console.error('Failed to fetch WP post by slug', error);
             return null;

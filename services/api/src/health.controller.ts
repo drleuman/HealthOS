@@ -17,24 +17,24 @@ export class HealthController {
   }
 
   @UseGuards(SubscriptionGuard)
-  @RequiredPlan('member')
+  @RequiredPlan('free')
   @Get('user/today')
   async today(@User() user: UserPayload) {
-    return this.svc.getToday(user.email);
+    return this.svc.getToday(user.email); // getToday doesn't restrict by plan yet, will decide later
   }
 
   @UseGuards(SubscriptionGuard)
-  @RequiredPlan('member')
+  @RequiredPlan('free')
   @Get('user/route')
   async route(@User() user: UserPayload) {
-    return this.svc.getRoute(user.email);
+    return this.svc.getRoute(user.email, user.plan);
   }
 
   @UseGuards(SubscriptionGuard)
-  @RequiredPlan('member')
+  @RequiredPlan('free')
   @Post('user/day-log')
   async log(@Body() body: DayLogInput, @User() user: UserPayload) {
-    return this.svc.logDay(user.email, body);
+    return this.svc.logDay(user.email, user.plan, body);
   }
 
   @UseGuards(SubscriptionGuard)

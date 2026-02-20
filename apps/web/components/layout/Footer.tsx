@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 export function Footer() {
-    const t = useTranslations('Footer'); // Ensure this key exists or fallback
+    const t = useTranslations('App.Footer');
 
     return (
         <footer className="border-t border-slate-800 bg-slate-950 py-12">

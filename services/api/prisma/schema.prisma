@@ -27,6 +27,7 @@ model User {
   replies        CommunityReply[]
   completions    ProtocolCompletion[]
   stateSnapshots DailyStateSnapshot[]
+  refreshTokens  RefreshToken[]
 }
 
 model NotificationEvent {
@@ -325,4 +326,23 @@ model DailyStateSnapshot {
 
   @@unique([userId, date])
   @@index([userId, date])
+}
+
+model RefreshToken {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId    String    @default(uuid())
+  tokenHash    String    @unique
+  expiresAt    DateTime
+  rotatedAt    DateTime?
+  revokedAt    DateTime?
+  replacedById String?
+  ip           String?
+  userAgent    String?
+  createdAt    DateTime  @default(now())
+
+  @@index([userId])
+  @@index([sessionId])
+  @@index([expiresAt])
 }

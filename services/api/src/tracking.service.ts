@@ -59,6 +59,14 @@ export interface TrackingEvent {
  * - week_completed
  * - program_completed
  * - second_program_started
+ * 
+ * F — Conversión & Negocio
+ * - paywall_impression (viewed gated content)
+ * - paywall_cta_clicked (intent to upgrade)
+ * - access_blocked_limit (hard limit hit)
+ * - quota_consumed (rolling quota tick)
+ * - conversion_started
+ * - conversion_completed
  */
 @Injectable()
 export class TrackingService {
@@ -220,5 +228,34 @@ export class TrackingService {
         const rate = opened > 0 ? (purchased / opened) * 100 : 0;
 
         return { opened, purchased, rate };
+    }
+
+    /**
+     * Track when a user hits a plan limit or sees gated content
+     */
+    async trackPlanGated(userId: string, plan: string, feature: string, isHardBlock: boolean, context?: any) {
+        return this.track({
+            event: isHardBlock ? 'access_blocked_limit' : 'paywall_impression',
+            userId,
+            context: {
+                plan,
+                feature,
+                ...context
+            }
+        });
+    }
+
+    /**
+     * Track rolling quota consumption
+     */
+    async trackQuotaConsumed(userId: string, feature: string, remaining: number) {
+        return this.track({
+            event: 'quota_consumed',
+            userId,
+            context: {
+                feature,
+                remaining
+            }
+        });
     }
 }

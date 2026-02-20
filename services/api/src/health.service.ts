@@ -9,6 +9,8 @@ import { ProtocolEngine } from './behavioral/protocol.engine';
 import { Prisma } from '@prisma/client';
 
 import { CommunityService } from './community.service';
+import { PlanService } from './plan.service';
+import { TrackingService } from './tracking.service';
 
 @Injectable()
 export class HealthService {
@@ -18,7 +20,9 @@ export class HealthService {
     private behaviorService: BehaviorService,
     private microInterventionService: MicroInterventionService,
     private protocolEngine: ProtocolEngine,
-    private communityService: CommunityService
+    private communityService: CommunityService,
+    private planService: PlanService,
+    private tracking: TrackingService
   ) { }
 
   // ... (lines 18-265)
@@ -366,9 +370,11 @@ export class HealthService {
     }
   }
 
-  async getRoute(email: string): Promise<RoutePayload> {
+  async getRoute(email: string, userPlan: string): Promise<any> {
     try {
       const user = await this.ensureUser(email);
+      const policy = this.planService.getPolicy(userPlan);
+
       const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
       const programId = state?.programId || 'circadian_reset_14';
       const currentDay = state?.currentDay || 1;
@@ -380,9 +386,16 @@ export class HealthService {
       });
       const completedDays = new Set(logs.map((l: any) => l.day));
 
+      let isGated = false;
       const days = Array.from({ length: program.duration_days }, (_, i) => {
         const d = i + 1;
         const def = program.days.find(x => x.day === d);
+
+        // Calculate phase (mocking phase logic for now: every 7 days is a phase)
+        const phase = Math.ceil(d / 7);
+        const lockedByPlan = phase > policy.routePhaseMax;
+
+        if (lockedByPlan) isGated = true;
 
         let status: 'done' | 'current' | 'locked' = 'locked';
         if (completedDays.has(d) || d < currentDay) {
@@ -393,33 +406,46 @@ export class HealthService {
 
         return {
           day: d,
-          title: def?.title || `Día ${d}`,
-          status,
+          title: lockedByPlan ? '🔒 Upgrade Required' : (def?.title || `Día ${d}`),
+          status: lockedByPlan ? 'locked' : status,
+          lockedByPlan
         };
       });
 
-      return {
+      if (isGated) {
+        this.tracking.trackPlanGated(user.id, userPlan, 'route_phase_max', false).catch(() => { });
+      }
+
+      const data = {
         program_id: programId,
         current_day: currentDay,
         duration_days: program.duration_days,
         days,
       };
+
+      return this.planService.buildEnvelope(data, userPlan, 'route_phase_max', isGated);
     } catch (e) {
-      return {
-        program_id: 'circadian_reset_14 (MOCK)',
-        current_day: 1,
-        duration_days: 14,
-        days: [
-          { day: 1, title: 'Luz de mañana', status: 'done' },
-          { day: 2, title: 'Cena temprana', status: 'current' },
-          { day: 3, title: 'Pantallas', status: 'locked' },
-        ]
-      };
+      console.error('getRoute Error:', e);
+      return { data: { error: 'Failed to fetch route' } };
     }
   }
 
-  async logDay(email: string, input: DayLogInput) {
+  async logDay(email: string, userPlan: string, input: DayLogInput) {
     const user = await this.ensureUser(email);
+    const policy = this.planService.getPolicy(userPlan);
+
+    const logCount = await this.prisma.dailyLog.count({ where: { userId: user.id } });
+    if (logCount >= policy.dailyLogMaxTotal) {
+      this.tracking.trackPlanGated(user.id, userPlan, 'daily_log_max_total', true).catch(() => { });
+      return {
+        ok: false,
+        gated: true,
+        reason: 'UPGRADE_REQUIRED',
+        feature: 'daily_log_max_total',
+        message_key: 'App.Paywall.LogLimit'
+      };
+    }
+
     const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
     if (!state) return { ok: false };
 

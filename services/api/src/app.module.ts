@@ -22,6 +22,8 @@ import { SecretsValidator } from './secrets-validator.service';
 import { CustomThrottlerGuard } from './custom-throttler.guard';
 import { TrackingService } from './tracking.service';
 import { TrackingController } from './tracking.controller';
+import { RefreshTokenService } from './refresh-token.service';
+import { PlanService } from './plan.service';
 import { MicroInterventionService } from './micro-intervention.service';
 import { OpsController } from './analytics/ops.controller';
 import { NotificationHubService } from './notifications/notification-hub.service';
@@ -84,6 +86,8 @@ import { CatalogModule } from './catalog/catalog.module';
     ControlCenterService,
     SecretsValidator,
     TrackingService,
+    RefreshTokenService,
+    PlanService,
     FileProgramRegistry,
     // Behavioral & Content Services
     PerceptionInterpreter,

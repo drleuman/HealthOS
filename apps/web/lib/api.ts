@@ -14,6 +14,64 @@ interface ApiError {
 class ApiClient {
     constructor() { }
 
+    private getToken(): string | null {
+        if (typeof window === 'undefined') return null;
+        return localStorage.getItem('hos_token');
+    }
+
+    private getRefreshToken(): string | null {
+        if (typeof window === 'undefined') return null;
+        return localStorage.getItem('hos_refresh_token');
+    }
+
+    private setTokens(access: string, refresh: string): void {
+        if (typeof window === 'undefined') return;
+        localStorage.setItem('hos_token', access);
+        localStorage.setItem('hos_refresh_token', refresh);
+    }
+
+    private clearTokens(): void {
+        if (typeof window === 'undefined') return;
+        localStorage.removeItem('hos_token');
+        localStorage.removeItem('hos_refresh_token');
+    }
+
+    private isRefreshing = false;
+    private refreshPromise: Promise<boolean> | null = null;
+
+    private async refresh(): Promise<boolean> {
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken) return false;
+
+        if (this.isRefreshing) return this.refreshPromise!;
+
+        this.isRefreshing = true;
+        this.refreshPromise = (async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refresh_token: refreshToken }),
+                    credentials: 'omit',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    this.setTokens(data.access_token, data.refresh_token);
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                return false;
+            } finally {
+                this.isRefreshing = false;
+                this.refreshPromise = null;
+            }
+        })();
+
+        return this.refreshPromise;
+    }
+
     /**
      * Make authenticated request
      */
@@ -28,10 +86,15 @@ class ApiClient {
             ...(options.headers as Record<string, string>),
         };
 
-        // ZERO-PREFLIGHT CRITICAL:
-        // Do NOT send Content-Type on GET requests, or it effectively becomes a "non-simple" request 
-        // and triggers a preflight (OPTIONS), defeating the purpose.
-        if (options.method !== 'GET' && options.method !== 'HEAD' && !headers['Content-Type']) {
+        const token = this.getToken();
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        // --- SAFE MUTATION CONFIG ---
+        // 1. Ensure Content-Type for all mutations
+        const isMutation = !['GET', 'HEAD', 'OPTIONS'].includes(options.method || 'GET');
+        if (isMutation && !headers['Content-Type'] && options.body) {
             headers['Content-Type'] = 'application/json';
         }
 
@@ -39,14 +102,31 @@ class ApiClient {
             const response = await fetch(url, {
                 ...options,
                 headers,
-                credentials: 'include',
+                // Option B: Bearer token is immune to 3rd party cookie blocks
+                credentials: 'omit',
             });
 
             // Handle 401 Unauthorized
             if (response.status === 401) {
-                // this.clearToken(); // No local token to clear
-                if (typeof window !== 'undefined') {
-                    window.location.href = '/auth';
+                // Skip refresh if already attempting logic on auth endpoints
+                if (retry && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/refresh')) {
+                    const refreshSucceeded = await this.refresh();
+                    if (refreshSucceeded) {
+                        return this.request<T>(endpoint, options, false);
+                    }
+                }
+
+                this.clearTokens();
+                if (typeof window !== 'undefined' && !endpoint.includes('/auth/login')) {
+                    // LOOP PROTECTION: Don't redirect if already on auth page
+                    if (window.location.pathname.includes('/auth')) {
+                        throw new Error('Unauthorized');
+                    }
+
+                    // LOCALE-AWARE REDIRECT
+                    const pathParts = window.location.pathname.split('/').filter(Boolean);
+                    const currentLocale = ['es', 'en'].includes(pathParts[0]) ? pathParts[0] : 'es';
+                    window.location.href = `/${currentLocale}/auth?returnTo=${encodeURIComponent(window.location.pathname)}`;
                 }
                 throw new Error('Unauthorized');
             }
@@ -90,12 +170,14 @@ class ApiClient {
     /**
      * Auth: Login
      */
-    async login(email: string): Promise<{ user: any }> {
-        const response = await this.post<{ user: any }>(
+    async login(email: string): Promise<{ user: any; access_token: string; refresh_token: string }> {
+        const response = await this.post<{ user: any; access_token: string; refresh_token: string }>(
             '/auth/login',
             { email },
         );
-        // Token is now HttpOnly cookie set by server
+        if (response.access_token && response.refresh_token) {
+            this.setTokens(response.access_token, response.refresh_token);
+        }
         return response;
     }
 
@@ -103,9 +185,7 @@ class ApiClient {
      * Auth: Check if authenticated
      */
     isAuthenticated(): boolean {
-        // Optimistic: Assume authenticated (Cookie-based). 
-        // 401 response will trigger redirect to /auth
-        return true;
+        return !!this.getToken();
     }
 
     /**
@@ -113,9 +193,12 @@ class ApiClient {
      */
     async logout(): Promise<void> {
         try {
-            await this.post('/auth/logout');
+            const refreshToken = this.getRefreshToken();
+            await this.post('/auth/logout', { refresh_token: refreshToken });
         } catch (e) {
-            console.error('Logout failed', e);
+            // Ignore error
+        } finally {
+            this.clearTokens();
         }
     }
 
@@ -124,6 +207,25 @@ class ApiClient {
      */
     async submitAssessment(data: any): Promise<any> {
         return this.post('/assessment', data);
+    }
+
+    /**
+     * Tracking: Log business events
+     */
+    async trackBusinessEvent(event: string, context?: any): Promise<void> {
+        try {
+            await this.post('/events', { event, context });
+        } catch (e) {
+            console.error('Failed to track business event', e);
+        }
+    }
+
+    async trackPaywallClick(feature: string, location: string): Promise<void> {
+        return this.trackBusinessEvent('paywall_cta_clicked', { feature, location });
+    }
+
+    async trackConversionStart(): Promise<void> {
+        return this.trackBusinessEvent('conversion_started', {});
     }
 
     /**

@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { RefreshTokenService } from './refresh-token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwt: JwtService
+    private jwt: JwtService,
+    private refreshService: RefreshTokenService
   ) { }
 
   private getPlanForEmail(email: string): string {
@@ -42,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async login(email: string) {
+  async login(email: string, ip?: string, ua?: string) {
     const plan = this.getPlanForEmail(email);
     const user = await this.prisma.user.upsert({
       where: { email },
@@ -50,11 +52,15 @@ export class AuthService {
       update: { plan },
     }).catch(() => ({ id: 'mock-uuid', email, plan }));
 
-    const payload = { sub: user.id, email: user.email, plan: user.plan };
-    const secret = process.env.API_JWT_SECRET || 'dev_secret';
+    const tokens = await this.refreshService.generateTokenPair(
+      { id: user.id, email: user.email, plan: user.plan },
+      undefined,
+      ip,
+      ua
+    );
 
     return {
-      access_token: this.jwt.sign(payload, { secret, expiresIn: '7d' }),
+      ...tokens,
       user
     };
   }

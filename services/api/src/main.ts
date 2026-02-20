@@ -14,7 +14,19 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log'],
   });
 
+  // Safe to trust proxy for Vercel/Plesk deployments
+  (app.getHttpAdapter().getInstance() as any).set('trust proxy', 1);
+
   const config = app.get(ConfigService);
+  const isProd = (process.env.NODE_ENV || 'development') === 'production';
+  const isDev = !isProd;
+
+  // --- Startup Validation ---
+  const jwtSecret = config.get('API_JWT_SECRET');
+  if (isProd && (!jwtSecret || jwtSecret === 'dev_secret' || jwtSecret.length < 32)) {
+    logger.error('FATAL: API_JWT_SECRET is missing, weak, or insecure in production.');
+    process.exit(1);
+  }
 
   // Apply global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
@@ -26,7 +38,6 @@ async function bootstrap() {
     .map((o: string) => o.trim().toLowerCase().replace(/\/$/, ''))
     .filter(Boolean);
 
-  const isDev = (process.env.NODE_ENV || 'development') !== 'production';
   const devAllow = [
     'http://localhost:3000',
     'http://localhost:3001',
@@ -37,20 +48,31 @@ async function bootstrap() {
   const allowlist = new Set([
     ...(isDev ? devAllow : []),
     ...prodAllow,
-    'https://healthos-ten.vercel.app', // Hardcoded to ensure access
-    'https://healthos.vercel.app'
   ]);
 
   logger.info(`CORS allowlist: ${Array.from(allowlist).join(', ')}`);
 
   app.enableCors({
-    origin: [
-      'https://healthos-ten.vercel.app',
-      'https://healthos.vercel.app',
-      'http://localhost:3000',
-      'http://localhost:3001',
-    ],
-    credentials: true, // Frontend uses credentials: 'include'
+    origin: (origin, callback) => {
+      // If no origin (e.g. mobile apps or curl), allow it
+      if (!origin) return callback(null, true);
+
+      const normalizedOrigin = origin.toLowerCase().replace(/\/$/, '');
+
+      // Exact match
+      if (allowlist.has(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      // Vercel Preview support (Strictly only in non-production)
+      if (isDev && normalizedOrigin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+
+      logger.warn(`CORS blocked for origin: ${origin}`);
+      callback(null, false); // Safe block without throwing
+    },
+    credentials: isDev, // Bearer strategy doesn't need credentials in prod
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: [
       'Content-Type',
@@ -58,10 +80,9 @@ async function bootstrap() {
       'Authorization',
       'X-Analytics-Secret',
       'x-request-id',
-      'x-user-email',
-      'x-mh-signature',
+      'x-mh-signature', // Signature for SSO/Internal
       'Origin',
-    ].join(', '),
+    ],
   });
 
   // Keep cookieParser if needed for other parts (e.g., auth.controller still sets cookies for non-cors usage)

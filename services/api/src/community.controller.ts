@@ -1,16 +1,21 @@
-import { Controller, Get, Post, Body, Param, Query, Headers, UnauthorizedException, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Headers, UnauthorizedException, UseGuards, HttpException, HttpStatus, Req } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { CommunityService } from './community.service';
 import { JwtService } from '@nestjs/jwt';
-import { Public } from './public.decorator';
+import { Public, RequiredPlan } from './public.decorator';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { SubscriptionGuard } from './subscription.guard';
 
 @Controller('community')
+@UseGuards(JwtAuthGuard, SubscriptionGuard)
 export class CommunityController {
     constructor(
         private service: CommunityService,
         private jwtService: JwtService
     ) { }
 
-    @Public()
+    @RequiredPlan('free')
+    @Throttle({ default: { limit: 120, ttl: 60000 } })
     @Get('threads')
     async getThreads(
         @Query('scope') scope?: string,
@@ -28,52 +33,24 @@ export class CommunityController {
         });
     }
 
-    @Public()
+    @Throttle({ default: { limit: 60, ttl: 60000 } })
     @Get('thread/:id')
-    async getThread(
-        @Param('id') id: string,
-        @Headers('authorization') authHeader?: string
-    ) {
-        // Soft gating: Check if user is authenticated
-        let userId: string | null = null;
-        try {
-            if (authHeader && authHeader.startsWith('Bearer ')) {
-                const token = authHeader.split(' ')[1];
-                const payload = await this.jwtService.verifyAsync(token, {
-                    secret: process.env.API_JWT_SECRET
-                });
-                userId = payload.sub;
-            }
-        } catch (e) {
-            // Token invalid or expired - treat as unauthenticated
-            userId = null;
-        }
-
-        // If not authenticated, return gated response
-        if (!userId) {
-            return {
-                gated: true,
-                threadId: id,
-                message: 'Authentication required to view this thread'
-            };
-        }
-
-        // Authenticated: return full thread
-        return this.service.getThread(id);
+    async getThread(@Param('id') id: string, @Req() req: any) {
+        return this.service.getThread(id, req.user.plan, req.user.id);
     }
 
+    @Throttle({ default: { limit: 10, ttl: 60000 } })
     @Post('thread/:id/reply')
     async createReply(
         @Param('id') id: string,
         @Body('content') content: string,
-        @Headers('authorization') authHeader: string
+        @Req() req: any
     ) {
-        const userId = await this.getUserId(authHeader);
-        return this.service.createReply(id, userId, content);
+        // userId from JwtAuthGuard
+        return this.service.createReply(id, req.user.id, content);
     }
 
-
-    @Public()
+    @RequiredPlan('free')
     @Get('membership')
     async getMembershipPosts(
         @Query('page') page?: string,
@@ -85,28 +62,13 @@ export class CommunityController {
         );
     }
 
-    @Public()
+    @RequiredPlan('free')
     @Get('membership/:slug')
-    async getMembershipPost(@Param('slug') slug: string) {
-        const post = await this.service.getMembershipPostBySlug(slug);
+    async getMembershipPost(@Param('slug') slug: string, @Req() req: any) {
+        const post = await this.service.getMembershipPostBySlug(slug, req.user.plan);
         if (!post) {
             throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
         }
         return post;
-    }
-
-    private async getUserId(authHeader: string): Promise<string> {
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            throw new UnauthorizedException('Missing token');
-        }
-        const token = authHeader.split(' ')[1];
-        try {
-            const payload = await this.jwtService.verifyAsync(token, {
-                secret: process.env.API_JWT_SECRET
-            });
-            return payload.sub;
-        } catch (e) {
-            throw new UnauthorizedException('Invalid token');
-        }
     }
 }

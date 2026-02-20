@@ -352,16 +352,16 @@
             "events": "Eventos",
             "history": "Historial",
             "logout": "Salir"
-        }
-    },
-    "Footer": {
-        "Support": {
-            "common_questions": "Dudas comunes"
         },
-        "all_rights_reserved": "Todos los derechos reservados.",
-        "privacy": "Privacidad",
-        "rights": "HealthOS © 2024. Todos los derechos reservados.",
-        "terms": "Términos"
+        "Footer": {
+            "Support": {
+                "common_questions": "Dudas comunes"
+            },
+            "all_rights_reserved": "Todos los derechos reservados.",
+            "privacy": "Privacidad",
+            "rights": "HealthOS © 2024. Todos los derechos reservados.",
+            "terms": "Términos"
+        }
     },
     "Protocol": {
         "Actions": {

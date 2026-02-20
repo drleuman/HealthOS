@@ -352,16 +352,16 @@
             "events": "Events",
             "history": "History",
             "logout": "Exit"
-        }
-    },
-    "Footer": {
-        "Support": {
-            "common_questions": "Common questions"
         },
-        "all_rights_reserved": "All rights reserved. HealthOS is an experimental project.",
-        "privacy": "Privacy",
-        "rights": "HealthOS © 2024. All rights reserved.",
-        "terms": "Terms"
+        "Footer": {
+            "Support": {
+                "common_questions": "Common questions"
+            },
+            "all_rights_reserved": "All rights reserved. HealthOS is an experimental project.",
+            "privacy": "Privacy",
+            "rights": "HealthOS © 2024. All rights reserved.",
+            "terms": "Terms"
+        }
     },
     "Protocol": {
         "Actions": {
