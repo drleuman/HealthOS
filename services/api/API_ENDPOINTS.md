@@ -210,6 +210,83 @@
 
 ---
 
+
+---
+
+## Community Endpoints
+
+### GET /community/membership
+**Purpose**: Fetch membership posts from WordPress (Category 65)  
+**Auth**: None (public)  
+**Query**: `?page=1&perPage=10`  
+**Response**:
+```json
+{
+  "posts": [
+    {
+      "id": 123,
+      "date": "2026-02-15T...",
+      "slug": "mi-slug",
+      "link": "...",
+      "title": { "rendered": "..." },
+      "excerpt": { "rendered": "..." },
+      "content": { "rendered": "..." },
+      "featured_media_url": "..."
+    }
+  ],
+  "pagination": { "total": 100, "totalPages": 10, "currentPage": 1, "perPage": 10 }
+}
+```
+
+### GET /community/membership/:slug
+**Purpose**: Fetch a single membership post by slug  
+**Auth**: None (public)  
+**Response**: Single post object (same as above)
+
+---
+
+
+---
+
+## Catalog Endpoints (WooCommerce Integration)
+
+### GET /catalog/categories
+**Purpose**: List product categories from WooCommerce  
+**Auth**: None (public)  
+**Response**:
+```json
+[
+  { "id": 1, "name": "Biohacks", "slug": "biohacks", "count": 10, "image": "...", "parent": 0 }
+]
+```
+
+### GET /catalog/products
+**Purpose**: Paginated list of products  
+**Auth**: None (public)  
+**Query**: `?page=1&perPage=10&categoryId=1&search=...`  
+**Response**:
+```json
+{
+  "products": [
+    {
+      "id": 123,
+      "slug": "product-slug",
+      "name": "...",
+      "price": "29.90",
+      "buyUrl": "https://mithohacks.com/pago/?add-to-cart=123",
+      "images": ["..."]
+    }
+  ],
+  "pagination": { "total": 50, "totalPages": 5, "page": 1, "perPage": 10 }
+}
+```
+
+### GET /catalog/products/:slug
+**Purpose**: Full product detail  
+**Auth**: None (public)
+
+---
+
 ## Health/Monitoring Endpoints (Public)
 
 ### GET /health

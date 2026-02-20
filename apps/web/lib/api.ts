@@ -148,6 +148,47 @@ class ApiClient {
     }
 
     /**
+     * Community: Get membership posts (Category 65)
+     */
+    async getMembershipPosts(page = 1, perPage = 10): Promise<{ posts: any[], pagination: any }> {
+        return this.get(`/community/membership?page=${page}&perPage=${perPage}`);
+    }
+
+    /**
+     * Community: Get single membership post by slug
+     */
+    async getMembershipPost(slug: string): Promise<any> {
+        return this.get(`/community/membership/${slug}`);
+    }
+
+    /**
+     * Catalog: Get categories from WooCommerce
+     */
+    async getCatalogCategories(): Promise<any[]> {
+        return this.get('/catalog/categories');
+    }
+
+    /**
+     * Catalog: Get products with optional filters
+     */
+    async getCatalogProducts(params: { page?: number; perPage?: number; categoryId?: number; search?: string } = {}): Promise<{ products: any[], pagination: any }> {
+        const query = new URLSearchParams();
+        if (params.page) query.append('page', params.page.toString());
+        if (params.perPage) query.append('perPage', params.perPage.toString());
+        if (params.categoryId) query.append('categoryId', params.categoryId.toString());
+        if (params.search) query.append('search', params.search);
+
+        return this.get(`/catalog/products?${query.toString()}`);
+    }
+
+    /**
+     * Catalog: Get single product by slug
+     */
+    async getCatalogProduct(slug: string): Promise<any> {
+        return this.get(`/catalog/products/${slug}`);
+    }
+
+    /**
      * Auth: Generate SSO token for Mithohacks
      */
     async getSsoLink(redirectUrl?: string): Promise<string> {

@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { ClinicalInterpretationService } from './behavioral/clinical-interpretation.service';
+import fetch from 'node-fetch';
 
 export interface ThreadFilter {
     scope?: string;
@@ -8,6 +9,17 @@ export interface ThreadFilter {
     day?: number;
     areaId?: string;
     limit?: number;
+}
+
+export interface WordPressPost {
+    id: number;
+    date: string;
+    slug: string;
+    link: string;
+    title: { rendered: string };
+    excerpt: { rendered: string };
+    content: { rendered: string };
+    featured_media_url?: string;
 }
 
 @Injectable()
@@ -105,5 +117,67 @@ export class CommunityService {
                 excerpt: `Espacio de apoyo para el día ${day} del protocolo ${protocolId}.`
             }
         });
+    }
+
+    /**
+     * WordPress Membership Content
+     */
+    private WP_URL = 'https://comunidaddescentra.com/wp-json/wp/v2';
+    private MEMBERSHIP_CAT = 65;
+
+    async getMembershipPosts(page = 1, perPage = 10) {
+        const url = `${this.WP_URL}/posts?categories=${this.MEMBERSHIP_CAT}&per_page=${perPage}&page=${page}&_embed=1&orderby=date&order=desc`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`WP API error: ${response.status}`);
+
+            const total = response.headers.get('X-WP-Total');
+            const totalPages = response.headers.get('X-WP-TotalPages');
+            const posts = (await response.json()) as any[];
+
+            return {
+                posts: posts.map((p: any) => this.mapWPPost(p)),
+                pagination: {
+                    total: total ? parseInt(total, 10) : 0,
+                    totalPages: totalPages ? parseInt(totalPages, 10) : 0,
+                    currentPage: page,
+                    perPage
+                }
+            };
+        } catch (error) {
+            console.error('Failed to fetch WP posts', error);
+            return { posts: [], pagination: { total: 0, totalPages: 0, currentPage: page, perPage } };
+        }
+    }
+
+    async getMembershipPostBySlug(slug: string) {
+        const url = `${this.WP_URL}/posts?categories=${this.MEMBERSHIP_CAT}&slug=${slug}&_embed=1`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) return null;
+
+            const posts = (await response.json()) as any[];
+            if (!posts.length) return null;
+
+            return this.mapWPPost(posts[0]);
+        } catch (error) {
+            console.error('Failed to fetch WP post by slug', error);
+            return null;
+        }
+    }
+
+    private mapWPPost(p: any): WordPressPost {
+        return {
+            id: p.id,
+            date: p.date,
+            slug: p.slug,
+            link: p.link,
+            title: p.title,
+            excerpt: p.excerpt,
+            content: p.content,
+            featured_media_url: p._embedded?.['wp:featuredmedia']?.[0]?.source_url
+        };
     }
 }

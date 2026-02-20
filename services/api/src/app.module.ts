@@ -42,6 +42,7 @@ import { CommunityController } from './community.controller';
 import { CommunityService } from './community.service';
 import { ClinicalInterpretationService } from './behavioral/clinical-interpretation.service';
 import { StateTrajectoryService } from './behavioral/state-trajectory.service';
+import { CatalogModule } from './catalog/catalog.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { StateTrajectoryService } from './behavioral/state-trajectory.service';
       ttl: 60000,
       limit: 100,
     }]),
+    CatalogModule,
   ],
   controllers: [
     AppController,

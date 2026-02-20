@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Query, Headers, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Headers, UnauthorizedException, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { CommunityService } from './community.service';
 import { JwtService } from '@nestjs/jwt';
 import { Public } from './public.decorator';
@@ -70,6 +70,29 @@ export class CommunityController {
     ) {
         const userId = await this.getUserId(authHeader);
         return this.service.createReply(id, userId, content);
+    }
+
+
+    @Public()
+    @Get('membership')
+    async getMembershipPosts(
+        @Query('page') page?: string,
+        @Query('perPage') perPage?: string
+    ) {
+        return this.service.getMembershipPosts(
+            page ? parseInt(page, 10) : 1,
+            perPage ? parseInt(perPage, 10) : 10
+        );
+    }
+
+    @Public()
+    @Get('membership/:slug')
+    async getMembershipPost(@Param('slug') slug: string) {
+        const post = await this.service.getMembershipPostBySlug(slug);
+        if (!post) {
+            throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+        }
+        return post;
     }
 
     private async getUserId(authHeader: string): Promise<string> {
