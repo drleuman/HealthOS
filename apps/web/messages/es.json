@@ -99,6 +99,12 @@
                 "rebuild_failed": "Fallo en Reconstrucción"
             }
         },
+        "Paywall": {
+            "route_phase_max": "Has alcanzado el límite de tu plan actual. Actualiza a Miembro para desbloquear la fase completa del protocolo.",
+            "daily_log_max_total": "Has alcanzado el límite de registros de tu plan. Actualiza para llevar un historial ilimitado.",
+            "thread_reads_24h": "Has leído el límite diario de hilos para tu plan. Actualiza para acceso ilimitado a la comunidad.",
+            "full_article_access": "Este contenido es exclusivo para miembros. Actualiza tu plan para leer el artículo completo."
+        },
         "Community": {
             "Groups": {
                 "DigestiveRepair": {
