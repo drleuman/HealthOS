@@ -27,7 +27,8 @@ export class MetricsService {
         return {
             errorsLastHour: totalAlerts,
             criticalLastHour: criticalAlerts,
-            status: criticalAlerts > 5 ? 'at_risk' : (criticalAlerts > 0 ? 'degraded' : 'healthy')
+            status: criticalAlerts > 5 ? 'at_risk' : (criticalAlerts > 0 ? 'degraded' : 'healthy'),
+            uptime: Math.floor(process.uptime())
         };
     }
 }

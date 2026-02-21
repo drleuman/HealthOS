@@ -10,6 +10,7 @@ export class SystemAlertsService {
     private errorSpikeCount = 0;
     private rateLimitSpikeCount = 0;
     private lastResetTime = Date.now();
+    private lastAlertNotifications = new Map<string, number>();
 
     constructor(
         private prisma: PrismaService,
@@ -41,9 +42,18 @@ export class SystemAlertsService {
             }
         });
 
-        // Notify if critical
+        // Notify if critical (with 2-minute deduplication per type)
         if (severity === 'critical') {
-            await this.telegram.notifyCriticalAlert(type, message, meta);
+            const now = Date.now();
+            const lastSent = this.lastAlertNotifications.get(type) || 0;
+            const twoMinutes = 2 * 60 * 1000;
+
+            if (now - lastSent > twoMinutes) {
+                this.lastAlertNotifications.set(type, now);
+                await this.telegram.notifyCriticalAlert(type, message, meta);
+            } else {
+                this.logger.log(`Skipping Telegram notification for ${type} (deduplicated)`);
+            }
         }
 
         return alert;
