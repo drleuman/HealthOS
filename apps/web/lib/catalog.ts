@@ -4,12 +4,12 @@ import { loadCommunityCatalog, CommunityCatalog, ProductItem, BlogItem, CourseIt
 /**
  * Fetches the community catalog, trying the API first and falling back to local static JSON.
  */
-export async function getEnhancedCatalog(locale: string): Promise<CommunityCatalog> {
+export async function getEnhancedCatalog(locale: string, limit: number = 20): Promise<CommunityCatalog> {
     const staticCatalog = loadCommunityCatalog();
 
     try {
         // Try to fetch real products from WooCommerce via our API
-        const productsResponse = await api.getCatalogProducts({ perPage: 6 });
+        const productsResponse = await api.getCatalogProducts({ perPage: limit });
         const realProducts: ProductItem[] = productsResponse.products.map((p: any) => ({
             id: p.id.toString(),
             slug: p.slug,
