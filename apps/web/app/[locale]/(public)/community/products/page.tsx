@@ -1,11 +1,11 @@
 import { getEnhancedCatalog } from '@/lib/catalog';
 import { ProductCard } from '@/components/catalog/ProductCard';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 export default async function ProductsPage({ params }: { params: { locale: string } }) {
     const { locale } = params;
     const catalog = await getEnhancedCatalog(locale);
-    const t = useTranslations('Public.Products');
+    const t = await getTranslations('Public.Products');
 
     return (
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

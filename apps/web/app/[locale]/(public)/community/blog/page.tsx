@@ -1,11 +1,11 @@
 import { getEnhancedCatalog } from '@/lib/catalog';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
 
 export default async function BlogPage({ params }: { params: { locale: string } }) {
     const { locale } = params;
     const catalog = await getEnhancedCatalog(locale);
-    const t = useTranslations('Public.Blog');
+    const t = await getTranslations('Public.Blog');
 
     return (
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
