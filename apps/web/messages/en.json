@@ -357,9 +357,10 @@
             "Support": {
                 "common_questions": "Common questions"
             },
-            "all_rights_reserved": "All rights reserved. HealthOS is an experimental project.",
+            "all_rights_reserved": "All rights reserved.",
             "privacy": "Privacy",
-            "rights": "HealthOS © 2024. All rights reserved.",
+            "rights": "HealthOS. All rights reserved.",
+            "tagline": "Habit protocol based on chronobiology",
             "terms": "Terms"
         }
     },
@@ -1071,35 +1072,25 @@
     },
     "Public": {
         "Blog": {
-            "read_more": "Leer artículo",
-            "subtitle": "Artículos sobre salud metabólica y sistemas",
+            "read_more": "Read article",
+            "subtitle": "Articles on metabolic health and systems",
             "title": "Blog"
         },
         "Community": {
-            "channels_title": "Canales activos",
-            "join_cta": "Unirme a la discusión",
-            "subtitle": "Conversaciones reales con personas reales",
-            "title": "Comunidad"
+            "channels_title": "Active channels",
+            "join_cta": "Join the discussion",
+            "subtitle": "Real conversations with real people",
+            "title": "Community"
         },
         "Courses": {
-            "cta_start": "Empezar curso",
-            "subtitle": "Profundiza en la metodología HealthOS",
-            "title": "Cursos"
+            "cta_start": "Start course",
+            "subtitle": "Go deeper into the HealthOS methodology",
+            "title": "Courses"
         },
         "Landing": {
-            "anti_1": "Not productivity porn",
-            "anti_2": "Not another tracker",
-            "anti_3": "Not hack-focused",
-            "anti_4": "Not performance-first",
-            "anti_description": "We are not another biohacking or productivity app. HealthOS removes the noise so you can focus on your body's real signal.",
-            "anti_title": "What we are NOT",
-            "beta_access": "Beta access available.",
-            "blog": "Blog",
-            "community_activity": "Community activity",
-            "courses": "Courses",
             "ecosystem": {
-                "coming_soon": "Coming Soon...",
-                "intro": "Aligned protocols, community, and tools.",
+                "coming_soon": "Coming soon",
+                "intro": "Protocols, community and tools aligned with your biology.",
                 "tabs": {
                     "blog": "Reads",
                     "community": "Community",
@@ -1107,18 +1098,19 @@
                     "products": "Tools",
                     "protocols": "Protocols"
                 },
-                "title": "Everything You Need to Heal",
-                "view_all": "View Full Catalog"
+                "title": "Everything you need to move forward",
+                "view_all": "View full catalog"
             },
             "final": {
-                "cta_primary": "Start Now",
-                "cta_secondary": "I have an account",
-                "subtitle": "No credit cards. Just physiology.",
-                "title": "Start Your Recalibration Today"
+                "cta_primary": "Start now",
+                "cta_secondary": "I already have an account",
+                "subtitle": "No credit card. No mandatory supplements. Just physiology.",
+                "title": "Start your recalibration today"
             },
             "goals": {
                 "digestion": "Digestion",
                 "energy": "Energy",
+                "goal_aria_prefix": "Start protocol for: {goal}",
                 "performance": "Performance",
                 "sleep": "Sleep",
                 "stress": "Stress",
@@ -1126,74 +1118,60 @@
                 "weight": "Weight"
             },
             "hero": {
-                "cta_primary": "Create Free Account",
-                "cta_secondary": "See How It Works",
-                "subtitle": "An evidence-based guided route to recalibrate your biological rhythms.",
-                "title": "Recover Sleep, Energy and Digestion"
+                "badge": "Chronobiology-based protocol",
+                "cta_primary": "Assess your state in 2 minutes",
+                "cta_secondary": "See how it works",
+                "subtitle": "HealthOS is a habit protocol that recalibrates your sleep, energy and digestion by aligning your biological rhythms — no mandatory supplements.",
+                "title": "Your body runs on rhythms. Start respecting yours.",
+                "trust_line": "No credit card. Free plan available."
             },
             "hiw": {
                 "step1": {
-                    "desc": "A 2-minute test identifies your circadian mismatches.",
-                    "title": "Assess Your State"
+                    "desc": "A 2-minute assessment identifies your circadian misalignments and sets your baseline.",
+                    "title": "Assess your state"
                 },
                 "step2": {
-                    "desc": "A personalized protocol of habits, not supplements.",
-                    "title": "Get Your Route"
+                    "desc": "A personalised habit protocol — no mandatory supplements, no impossible routines.",
+                    "title": "Receive your route"
                 },
                 "step3": {
-                    "desc": "Log today and notice the difference tomorrow.",
-                    "title": "Observe the Change"
+                    "desc": "The system records your daily signals. Improvement patterns are visible within 7–14 days.",
+                    "title": "Observe the change"
                 },
-                "title": "How HealthOS Works"
+                "title": "How HealthOS works"
             },
-            "instrument_v1": "Instrument v1.0",
-            "join": "Join",
-            "open_thread": "Open thread",
             "trust": {
-                "intro": "Based on chronobiology and evolutionary physiology.",
-                "label_community": "Community-Driven",
-                "label_evidence": "Evidence-Based",
-                "label_longterm": "Long-Term",
-                "p1": {
-                    "desc": "Validated protocols.",
-                    "title": "Evidence"
-                },
-                "p2": {
-                    "desc": "Real support.",
-                    "title": "Community"
-                },
-                "p3": {
-                    "desc": "Sustainable habits.",
-                    "title": "Long Term"
-                },
-                "title": "Science, Not Trends"
-            },
-            "view_course": "View course"
+                "intro": "Based on chronobiology, evolutionary physiology and circadian rhythms. No medical claims — habit protocols with published evidence.",
+                "label_community": "Active community",
+                "label_evidence": "Evidence-based",
+                "label_longterm": "Sustainable outcomes",
+                "title": "Science, not trends"
+            }
         },
         "Learn": {
-            "featured_title": "Destacado para ti",
-            "latest_title": "Lo último",
-            "search_placeholder": "¿Qué quieres aprender hoy?",
-            "start_here": "Empieza por aquí",
-            "subtitle": "Guías, protocolos y recursos para tu salud",
-            "tab_articles": "Artículos",
-            "tab_courses": "Cursos",
-            "tab_guides": "Guías",
-            "title": "Centro de Aprendizaje"
+            "featured_title": "Featured for you",
+            "latest_title": "Latest",
+            "search_placeholder": "What do you want to learn today?",
+            "start_here": "Start here",
+            "subtitle": "Guides, protocols and resources for your health",
+            "tab_articles": "Articles",
+            "tab_courses": "Courses",
+            "tab_guides": "Guides",
+            "title": "Learning Hub"
         },
         "Nav": {
-            "blog": "Reads",
+            "blog": "Blog",
             "community": "Community",
             "courses": "Courses",
             "learn": "Learn",
-            "login": "Login",
-            "products": "Tools",
-            "start": "Start"
+            "login": "Sign in",
+            "products": "Products",
+            "start": "Get started"
         },
         "Products": {
-            "cta_view": "Ver detalles",
-            "subtitle": "Herramientas para tu práctica diaria",
-            "title": "Productos"
+            "cta_view": "View details",
+            "subtitle": "Tools for your daily practice",
+            "title": "Products"
         }
     },
     "Resources": {

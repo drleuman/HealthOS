@@ -6,6 +6,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+            },
             colors: {
                 // Ensuring we have access to the extended palette if needed
             },
@@ -13,3 +16,4 @@ module.exports = {
     },
     plugins: [],
 };
+

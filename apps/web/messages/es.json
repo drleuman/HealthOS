@@ -366,6 +366,7 @@
             "all_rights_reserved": "Todos los derechos reservados.",
             "privacy": "Privacidad",
             "rights": "HealthOS © 2024. Todos los derechos reservados.",
+            "tagline": "Protocolo de hábitos basado en cronobiología",
             "terms": "Términos"
         }
     },
@@ -1093,19 +1094,9 @@
             "title": "Cursos"
         },
         "Landing": {
-            "anti_1": "No es 'productivity porn'",
-            "anti_2": "No es otro tracker más",
-            "anti_3": "No centrado en 'hacks'",
-            "anti_4": "No rendimiento-primero",
-            "anti_description": "No somos otra app de biohacking o productividad. HealthOS elimina el ruido para que puedas concentrarte en la señal real de tu cuerpo.",
-            "anti_title": "Lo que NO somos",
-            "beta_access": "Beta access available.",
-            "blog": "Blog",
-            "community_activity": "Community activity",
-            "courses": "Courses",
             "ecosystem": {
-                "coming_soon": "Coming Soon...",
-                "intro": "Protocolos, comunidad y herramientas alineadas.",
+                "coming_soon": "Próximamente",
+                "intro": "Protocolos, comunidad y herramientas alineadas con tu biología.",
                 "tabs": {
                     "blog": "Lecturas",
                     "community": "Comunidad",
@@ -1113,18 +1104,19 @@
                     "products": "Herramientas",
                     "protocols": "Protocolos"
                 },
-                "title": "Todo lo que necesitas para sanar",
+                "title": "Todo lo que necesitas para avanzar",
                 "view_all": "Ver todo el catálogo"
             },
             "final": {
                 "cta_primary": "Empezar ahora",
                 "cta_secondary": "Ya tengo cuenta",
-                "subtitle": "Sin tarjetas de crédito. Solo fisiología.",
+                "subtitle": "Sin tarjeta de crédito. Sin suplementos obligatorios. Solo fisiología.",
                 "title": "Empieza tu recalibración hoy"
             },
             "goals": {
                 "digestion": "Digestión",
                 "energy": "Energía",
+                "goal_aria_prefix": "Empezar protocolo para: {goal}",
                 "performance": "Rendimiento",
                 "sleep": "Sueño",
                 "stress": "Estrés",
@@ -1132,49 +1124,35 @@
                 "weight": "Peso"
             },
             "hero": {
-                "cta_primary": "Crear cuenta gratis",
+                "badge": "Protocolo basado en cronobiología",
+                "cta_primary": "Evalúa tu estado en 2 minutos",
                 "cta_secondary": "Ver cómo funciona",
-                "subtitle": "Una ruta guiada basada en evidencia para recalibrar tus ritmos biológicos.",
-                "title": "Recupera sueño, energía y digestión"
+                "subtitle": "HealthOS es un protocolo de hábitos que recalibra tu sueño, energía y digestión ajustando tus ritmos biológicos — sin suplementos obligatorios.",
+                "title": "Tu cuerpo funciona con ritmos. Empieza a respetar los tuyos.",
+                "trust_line": "Sin tarjeta de crédito. Plan gratuito disponible."
             },
             "hiw": {
                 "step1": {
-                    "desc": "Un test de 2 minutos identifica tus desajustes circadianos.",
+                    "desc": "Un test de 2 minutos identifica tus desajustes circadianos y establece tu línea base.",
                     "title": "Evalúa tu estado"
                 },
                 "step2": {
-                    "desc": "Un protocolo personalizado de hábitos, no de suplementos.",
+                    "desc": "Un protocolo personalizado de hábitos — sin suplementos obligatorios, sin rutinas imposibles.",
                     "title": "Recibe tu ruta"
                 },
                 "step3": {
-                    "desc": "Registra hoy y nota la diferencia mañana.",
+                    "desc": "El sistema registra tus señales diarias. Los patrones de mejora son visibles en 7–14 días.",
                     "title": "Observa el cambio"
                 },
                 "title": "Cómo funciona HealthOS"
             },
-            "instrument_v1": "Instrument v1.0",
-            "join": "Join",
-            "open_thread": "Open thread",
             "trust": {
-                "intro": "Basado en cronobiología y fisiología evolutiva.",
-                "label_community": "Community-Driven",
-                "label_evidence": "Evidence-Based",
-                "label_longterm": "Long-Term",
-                "p1": {
-                    "desc": "Protocolos validados.",
-                    "title": "Evidencia"
-                },
-                "p2": {
-                    "desc": "Soporte real.",
-                    "title": "Comunidad"
-                },
-                "p3": {
-                    "desc": "Hábitos sostenibles.",
-                    "title": "Largo plazo"
-                },
+                "intro": "Basado en cronobiología, fisiología evolutiva y ritmos circadianos. Sin afirmaciones médicas — protocolos de hábitos con evidencia publicada.",
+                "label_community": "Comunidad activa",
+                "label_evidence": "Basado en evidencia",
+                "label_longterm": "Resultados sostenibles",
                 "title": "Ciencia, no tendencias"
-            },
-            "view_course": "View course"
+            }
         },
         "Learn": {
             "featured_title": "Destacado para ti",
