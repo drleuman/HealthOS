@@ -31,7 +31,9 @@ export default function RoutePage() {
         const loadRoute = async () => {
             try {
                 const result = await api.getRoute();
-                if (mounted) setData(result);
+                // Handle new API envelope if present
+                const routeData = result?.data || result;
+                if (mounted) setData(routeData);
             } catch (err) {
                 console.error('Error loading route:', err);
             } finally {

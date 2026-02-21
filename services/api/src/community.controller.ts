@@ -7,13 +7,13 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { SubscriptionGuard } from './subscription.guard';
 
 @Controller('community')
-@UseGuards(JwtAuthGuard, SubscriptionGuard)
 export class CommunityController {
     constructor(
         private service: CommunityService,
         private jwtService: JwtService
     ) { }
 
+    @UseGuards(JwtAuthGuard, SubscriptionGuard)
     @RequiredPlan('free')
     @Throttle({ default: { limit: 120, ttl: 60000 } })
     @Get('threads')
@@ -33,12 +33,14 @@ export class CommunityController {
         });
     }
 
+    @UseGuards(JwtAuthGuard, SubscriptionGuard)
     @Throttle({ default: { limit: 60, ttl: 60000 } })
     @Get('thread/:id')
     async getThread(@Param('id') id: string, @Req() req: any) {
         return this.service.getThread(id, req.user.plan, req.user.id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Throttle({ default: { limit: 10, ttl: 60000 } })
     @Post('thread/:id/reply')
     async createReply(
@@ -50,7 +52,9 @@ export class CommunityController {
         return this.service.createReply(id, req.user.id, content);
     }
 
-    @RequiredPlan('free')
+    // Public endpoints — called from SSR server components without user token
+    @Public()
+    @Throttle({ default: { limit: 60, ttl: 60000 } })
     @Get('membership')
     async getMembershipPosts(
         @Query('page') page?: string,
@@ -62,10 +66,11 @@ export class CommunityController {
         );
     }
 
-    @RequiredPlan('free')
+    @Public()
+    @Throttle({ default: { limit: 60, ttl: 60000 } })
     @Get('membership/:slug')
-    async getMembershipPost(@Param('slug') slug: string, @Req() req: any) {
-        const post = await this.service.getMembershipPostBySlug(slug, req.user.plan);
+    async getMembershipPost(@Param('slug') slug: string) {
+        const post = await this.service.getMembershipPostBySlug(slug, 'admin');
         if (!post) {
             throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
         }
