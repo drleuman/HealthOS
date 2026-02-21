@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenService } from './refresh-token.service';
+import { MetricsService } from './metrics/metrics.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
-    private refreshService: RefreshTokenService
+    private refreshService: RefreshTokenService,
+    private metrics: MetricsService
   ) { }
 
   private getPlanForEmail(email: string): string {
@@ -50,7 +52,12 @@ export class AuthService {
       where: { email },
       create: { email, plan },
       update: { plan },
-    }).catch(() => ({ id: 'mock-uuid', email, plan }));
+    }).catch((e) => {
+      this.metrics.recordLogin(false);
+      throw e;
+    });
+
+    this.metrics.recordLogin(true);
 
     const tokens = await this.refreshService.generateTokenPair(
       { id: user.id, email: user.email, plan: user.plan },

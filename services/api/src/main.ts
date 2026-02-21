@@ -13,6 +13,7 @@ import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { SystemAlertsService } from './system-alerts/system-alerts.service';
+import { MetricsService } from './metrics/metrics.service';
 
 const env = process.env.NODE_ENV || 'development';
 const sentrySampleRate = env === 'production' ? 0.1 : (env === 'staging' ? 0.5 : 1.0);
@@ -51,6 +52,7 @@ async function bootstrap() {
   // Inside bootstrap:
   const { httpAdapter } = app.get(HttpAdapterHost);
   const systemAlerts = app.get(SystemAlertsService);
+  const metrics = app.get(MetricsService);
 
   // Apply global exception filters (Sentry wrapper around the BaseExceptionFilter)
   app.useGlobalFilters(
@@ -58,7 +60,7 @@ async function bootstrap() {
     new GlobalExceptionFilter()
   );
 
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new LoggingInterceptor(metrics));
 
   // --- CORS Configuration ---
   const appOriginRaw = config.get('APP_ORIGIN') || 'https://healthos-ten.vercel.app';

@@ -1,10 +1,10 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { BehaviorService } from './behavior.service';
 import { SystemMessageService } from './behavioral/system-message.service';
+import { MetricsService } from './metrics/metrics.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { SubscriptionGuard } from './subscription.guard';
 import { Public } from './public.decorator';
-import { MetricsService } from './metrics/metrics.service';
 import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
 
@@ -14,9 +14,21 @@ export class AppController {
     constructor(
         private behaviorService: BehaviorService,
         private systemMessageService: SystemMessageService,
-        private metricsService: MetricsService,
+        private metrics: MetricsService,
         private config: ConfigService
     ) { }
+
+    @Public()
+    @Get('/internal/metrics')
+    async getInternalMetrics(@Req() req: any) {
+        const secret = req.headers['x-internal-health-secret'] || req.headers['x-internal-secret'];
+        const configuredSecret = this.config.get('INTERNAL_HEALTH_SECRET') || 'dev_secret';
+
+        if (secret !== configuredSecret) {
+            throw new UnauthorizedException('Invalid internal secret');
+        }
+        return this.metrics.getSystemHealthMetrics();
+    }
 
     @Public()
     @Get('/health')
@@ -37,19 +49,7 @@ export class AppController {
     @Public()
     @Get('/internal/health-check')
     async getInternalHealth(@Req() req: any) {
-        const secret = req.headers['x-internal-secret'];
-        const configuredSecret = this.config.get('INTERNAL_HEALTH_SECRET') || 'internal_dev_secret';
-
-        if (secret !== configuredSecret) {
-            throw new UnauthorizedException('Invalid internal secret');
-        }
-
-        const metrics = await this.metricsService.getSystemHealthMetrics();
-        return {
-            ok: true,
-            ts: new Date().toISOString(),
-            metrics
-        };
+        return this.getInternalMetrics(req);
     }
 
     @UseGuards(JwtAuthGuard)

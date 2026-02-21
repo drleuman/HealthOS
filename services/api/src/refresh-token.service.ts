@@ -3,13 +3,15 @@ import { PrismaService } from './prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 import { SystemAlertsService } from './system-alerts/system-alerts.service';
+import { MetricsService } from './metrics/metrics.service';
 
 @Injectable()
 export class RefreshTokenService {
     constructor(
         private prisma: PrismaService,
         private jwt: JwtService,
-        private systemAlerts: SystemAlertsService
+        private systemAlerts: SystemAlertsService,
+        private metrics: MetricsService
     ) { }
 
     private hashToken(token: string): string {
@@ -74,6 +76,8 @@ export class RefreshTokenService {
                 where: { sessionId: tokenRecord.sessionId },
                 data: { revokedAt: new Date() },
             });
+
+            this.metrics.recordTokenReuse();
 
             await this.systemAlerts.triggerAlert(
                 'auth_reuse_detected',

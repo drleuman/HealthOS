@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException, Logger } from '@nes
 import { PrismaService } from '../prisma.service';
 import { TrackingService } from '../tracking.service';
 import { Prisma } from '@prisma/client';
+import { MetricsService } from '../metrics/metrics.service';
 
 @Injectable()
 export class AdminService {
@@ -9,7 +10,11 @@ export class AdminService {
     private overviewCache: Record<string, { data: any; timestamp: number }> = {};
     private readonly CACHE_TTL = 30000; // 30 seconds
 
-    constructor(private prisma: PrismaService, private tracking: TrackingService) { }
+    constructor(
+        private prisma: PrismaService,
+        private tracking: TrackingService,
+        private metrics: MetricsService
+    ) { }
 
     async getOverview(periodDays: number = 7) {
         const cacheKey = `overview_${periodDays}`;
@@ -23,7 +28,7 @@ export class AdminService {
 
         const [totalUsers, activeUsers, newUsers, paywallImpressions, paywallClicks, conversions, eventsLast60Min, recentErrors] = await Promise.all([
             this.prisma.user.count(),
-            this.prisma.user.count({ where: { lastSeen: { gte: dateLimit } } }),
+            (this.prisma.user as any).count({ where: { lastSeen: { gte: dateLimit } } }),
             this.prisma.user.count({ where: { createdAt: { gte: dateLimit } } }),
             this.prisma.event.count({ where: { event: 'paywall_impression', timestamp: { gte: dateLimit } } }),
             this.prisma.event.count({ where: { event: 'paywall_cta_clicked', timestamp: { gte: dateLimit } } }),
@@ -71,7 +76,7 @@ export class AdminService {
         if (status) whereClause.status = status;
 
         const [users, total] = await Promise.all([
-            this.prisma.user.findMany({
+            (this.prisma.user as any).findMany({
                 where: whereClause,
                 skip: (page - 1) * limit,
                 take: limit,
@@ -85,7 +90,7 @@ export class AdminService {
                     lastSeen: true,
                     createdAt: true
                 }
-            }),
+            } as any),
             this.prisma.user.count({ where: whereClause })
         ]);
 
@@ -249,12 +254,12 @@ export class AdminService {
     }
 
     async getSystemHealth() {
+        const metrics = await this.metrics.getSystemHealthMetrics();
         return {
-            status: 'ok',
+            ...metrics,
             timestamp: new Date(),
             version: process.env.npm_package_version || '1.0.0',
-            nodeEnv: process.env.NODE_ENV || 'development',
-            appOrigin: process.env.APP_ORIGIN || process.env.NEXT_PUBLIC_API_URL || 'unknown'
+            nodeEnv: process.env.NODE_ENV || 'development'
         };
     }
 }

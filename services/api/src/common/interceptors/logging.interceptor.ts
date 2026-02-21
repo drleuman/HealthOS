@@ -1,10 +1,13 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
+import { MetricsService } from '../../metrics/metrics.service';
 import { Observable, tap } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
     private readonly logger = new Logger('HTTP');
+
+    constructor(private metrics: MetricsService) { }
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const ctx = context.switchToHttp();
@@ -48,6 +51,9 @@ export class LoggingInterceptor implements NestInterceptor {
                 } else {
                     this.logger.log(JSON.stringify(logPayload));
                 }
+
+                // Record metrics
+                this.metrics.recordRequest(statusCode, duration_ms);
             }),
         );
     }

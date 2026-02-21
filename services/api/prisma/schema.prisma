@@ -372,3 +372,14 @@ model SystemAlert {
   @@index([type])
   @@index([severity])
 }
+
+model MetricSnapshot {
+  id        String   @id @default(cuid())
+  name      String
+  value     Float
+  window    String   // e.g., '1m'
+  createdAt DateTime @default(now())
+
+  @@index([name, createdAt])
+}
+

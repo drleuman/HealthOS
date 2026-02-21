@@ -21,15 +21,8 @@ export class TelegramService {
             return;
         }
 
-        const now = Date.now();
-        if (now - this.lastAlertTime < this.ALERT_COOLDOWN_MS) {
-            this.logger.warn('Telegram alert skipped due to cooldown.');
-            return;
-        }
-
-        this.lastAlertTime = now;
-
-        const text = `🚨 *HEALTHOS OPs ALERT* 🚨\n\n*Type:* ${title}\n*Message:* ${message}\n\n*Details:*\n\`\`\`json\n${JSON.stringify(meta, null, 2).substring(0, 500)}\n\`\`\`\n\n[Open Dashboard](https://admin.healthos.com/admin/alerts)`;
+        const env = process.env.NODE_ENV || 'development';
+        const text = `🚨 *HEALTHOS OPs ALERT* 🚨\n\n*Type:* \`${title}\`\n*Message:* ${message}\n\n*Context:*\n- Environment: \`${env}\`\n- Timestamp: \`${new Date().toISOString()}\`\n\n*Details:*\n\`\`\`json\n${JSON.stringify(meta, null, 2).substring(0, 500)}\n\`\`\`\n\n[Open Dashboard](https://admin.healthos.com/admin/alerts)`;
 
         try {
             const fetch = (await import('node-fetch')).default;

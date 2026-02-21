@@ -1,9 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModuleOptions, ThrottlerStorage } from '@nestjs/throttler';
 import { ExecutionContext } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { MetricsService } from './metrics/metrics.service';
 
 @Injectable()
 export class CustomThrottlerGuard extends ThrottlerGuard {
+    constructor(
+        options: ThrottlerModuleOptions,
+        storageService: ThrottlerStorage,
+        reflector: Reflector,
+        private metrics: MetricsService
+    ) {
+        super(options, storageService, reflector);
+    }
     protected async getTracker(req: Record<string, any>): Promise<string> {
         // Rate limit by IP + userId (if authenticated)
         const ip = req.ip || req.connection?.remoteAddress || 'unknown';
@@ -14,6 +24,7 @@ export class CustomThrottlerGuard extends ThrottlerGuard {
     }
 
     protected async getErrorMessage(context: ExecutionContext, throttlerLimitDetail: any): Promise<string> {
+        this.metrics.recordRateLimit();
         return 'Too many requests. Please try again later.';
     }
 }
