@@ -9,8 +9,10 @@
             "categories": {
                 "SLEEP_CYCLE": "CICLO DE SUEÑO",
                 "ENERGY_METABOLISM": "METABOLISMO ENERGÉTICO",
-                "PHYSICAL_ACTIVITY": "ACTIVIDAD FÍSICA",
-                "NUTRITIONAL_INTAKE": "INGESTA NUTRICIONAL"
+                "DIGESTIVE_SYSTEM": "SISTEMA DIGESTIVO",
+                "NERVOUS_SYSTEM": "SISTEMA NERVIOSO",
+                "BODY_COMPOSITION": "COMPOSICIÓN CORPORAL",
+                "PHYSICAL_ACTIVITY": "RENDIMIENTO FÍSICO"
             }
         },
         "ControlCenter": {

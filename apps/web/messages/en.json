@@ -7,10 +7,12 @@
             "finalize": "Finalize registration",
             "initializing": "Initializing...",
             "categories": {
-                "SLEEP_CYCLE": "SLEEP_CYCLE",
-                "ENERGY_METABOLISM": "ENERGY_METABOLISM",
-                "PHYSICAL_ACTIVITY": "PHYSICAL_ACTIVITY",
-                "NUTRITIONAL_INTAKE": "NUTRITIONAL_INTAKE"
+                "SLEEP_CYCLE": "SLEEP CYCLE",
+                "ENERGY_METABOLISM": "ENERGY METABOLISM",
+                "DIGESTIVE_SYSTEM": "DIGESTIVE SYSTEM",
+                "NERVOUS_SYSTEM": "NERVOUS SYSTEM",
+                "BODY_COMPOSITION": "BODY COMPOSITION",
+                "PHYSICAL_ACTIVITY": "PHYSICAL PERFORMANCE"
             }
         },
         "ControlCenter": {
