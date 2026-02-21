@@ -46,6 +46,7 @@ import { ClinicalInterpretationService } from './behavioral/clinical-interpretat
 import { StateTrajectoryService } from './behavioral/state-trajectory.service';
 import { CatalogModule } from './catalog/catalog.module';
 import { AdminModule } from './admin/admin.module';
+import { SystemAlertsModule } from './system-alerts/system-alerts.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { AdminModule } from './admin/admin.module';
     }]),
     CatalogModule,
     AdminModule,
+    SystemAlertsModule,
   ],
   controllers: [
     AppController,

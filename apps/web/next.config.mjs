@@ -33,5 +33,18 @@ const nextConfig = {
 
 };
 
-export default withNextIntl(nextConfig);
+import { withSentryConfig } from '@sentry/nextjs';
 
+export default withSentryConfig(
+  withNextIntl(nextConfig),
+  {
+    silent: true,
+    org: "healthos",
+    project: "healthos-web",
+    widenClientFileUpload: true,
+    transpileClientSDK: true,
+    hideSourceMaps: true,
+    disableLogger: true,
+    automaticVercelMonitors: true,
+  }
+);

@@ -2,12 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
+import { SystemAlertsService } from './system-alerts/system-alerts.service';
 
 @Injectable()
 export class RefreshTokenService {
     constructor(
         private prisma: PrismaService,
         private jwt: JwtService,
+        private systemAlerts: SystemAlertsService
     ) { }
 
     private hashToken(token: string): string {
@@ -72,6 +74,14 @@ export class RefreshTokenService {
                 where: { sessionId: tokenRecord.sessionId },
                 data: { revokedAt: new Date() },
             });
+
+            await this.systemAlerts.triggerAlert(
+                'auth_reuse_detected',
+                'critical',
+                `Refresh Token Reuse detected for user ${tokenRecord.user.email} on IP: ${ip || 'unknown'}`,
+                { userId: tokenRecord.user.id, sessionId: tokenRecord.sessionId, ip, userAgent }
+            );
+
             throw new UnauthorizedException('Security Breach: Token reuse detected. All sessions for this device revoked.');
         }
 

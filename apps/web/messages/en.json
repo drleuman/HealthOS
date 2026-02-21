@@ -339,6 +339,22 @@
         "feature": "Feature",
         "timestamp": "Timestamp"
       },
+      "alerts": {
+        "title": "System Alerts",
+        "description": "Monitoring of anomalies, critical errors, and API abuse.",
+        "type": "Type",
+        "severity": "Severity",
+        "message": "Message",
+        "meta": "Technical Context",
+        "critical": "Critical",
+        "warn": "Warning",
+        "info": "Information",
+        "no_alerts": "No active system alerts",
+        "overview_card": {
+          "title": "System Alerts",
+          "subtitle": "Critical (24h)"
+        }
+      },
       "system_health": {
         "status": "Status",
         "version": "Version",

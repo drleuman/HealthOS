@@ -345,6 +345,22 @@
         "feature": "Función",
         "timestamp": "Fecha"
       },
+      "alerts": {
+        "title": "Alertas del Sistema",
+        "description": "Monitorización de anomalías, errores críticos y abusos de API.",
+        "type": "Tipo",
+        "severity": "Severidad",
+        "message": "Mensaje",
+        "meta": "Contexto Técnico",
+        "critical": "Crítico",
+        "warn": "Advertencia",
+        "info": "Información",
+        "no_alerts": "No hay alertas activas en el sistema",
+        "overview_card": {
+          "title": "Alertas del Sistema",
+          "subtitle": "Críticas (24h)"
+        }
+      },
       "system_health": {
         "status": "Estado",
         "version": "Versión",

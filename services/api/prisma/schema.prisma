@@ -358,3 +358,17 @@ model RefreshToken {
   @@index([sessionId])
   @@index([expiresAt])
 }
+
+model SystemAlert {
+  id         String    @id @default(uuid())
+  type       String    // 'auth_reuse_detected', 'api_5xx_spike', 'rate_limit_spike', 'admin_action', 'refresh_fail_spike'
+  severity   String    // 'info', 'warn', 'critical'
+  message    String    @db.Text
+  meta       Json?     // Ex: { endpoint: '/api/users', ip: '...' }
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+
+  @@index([createdAt])
+  @@index([type])
+  @@index([severity])
+}

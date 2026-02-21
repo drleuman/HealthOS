@@ -2,12 +2,14 @@
 
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { api } from '@/lib/api';
 
 export default function AdminOverview() {
     const t = useTranslations('App.Admin');
     const [period, setPeriod] = useState('7d');
     const [data, setData] = useState<any>(null);
+    const [alertsData, setAlertsData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -15,9 +17,16 @@ export default function AdminOverview() {
         let mounted = true;
         setLoading(true);
         setError(null);
-        api.adminOverview(period)
-            .then(res => {
-                if (mounted) setData(res);
+
+        Promise.all([
+            api.adminOverview(period),
+            api.adminAlertsOverview()
+        ])
+            .then(([resOverview, resAlerts]) => {
+                if (mounted) {
+                    setData(resOverview);
+                    setAlertsData(resAlerts);
+                }
             })
             .catch(err => {
                 if (mounted) setError(err.message);
@@ -25,6 +34,7 @@ export default function AdminOverview() {
             .finally(() => {
                 if (mounted) setLoading(false);
             });
+
         return () => { mounted = false; };
     }, [period]);
 
@@ -62,13 +72,20 @@ export default function AdminOverview() {
             )}
 
             {!loading && data && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                     {/* Stat Cards */}
                     <StatCard title={t('total_users')} value={data.totalUsers} />
                     <StatCard title={t('active_users')} value={data.activeUsers} />
                     <StatCard title={t('new_users_7d')} value={data.newUsers} />
                     <StatCard title={t('events_last_60m')} value={data.eventsLast60Min} />
-                    <StatCard title={t('recent_errors')} value={data.recentErrors} isError={data.recentErrors > 0} />
+
+                    <Link href="/admin/alerts" className="block outline-none focus:ring-2 focus:ring-sky-500 rounded-xl">
+                        <StatCard
+                            title={t('alerts.overview_card.subtitle')}
+                            value={alertsData || 0}
+                            isError={(alertsData || 0) > 0}
+                        />
+                    </Link>
                 </div>
             )}
 

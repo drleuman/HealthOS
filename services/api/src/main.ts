@@ -3,10 +3,27 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { GlobalExceptionFilter } from './global-exception.filter';
+import { SentryExceptionFilter } from './common/filters/sentry.filter';
+import { HttpAdapterHost } from '@nestjs/core';
 import { logger } from './logger';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { PrismaService } from './prisma.service';
+import * as Sentry from '@sentry/node';
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { SystemAlertsService } from './system-alerts/system-alerts.service';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  integrations: [
+    nodeProfilingIntegration(),
+  ],
+  tracesSampleRate: 0.1,
+  profilesSampleRate: 0.1,
+  release: process.env.npm_package_version || '1.0.0',
+  environment: process.env.NODE_ENV || 'development',
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -28,8 +45,17 @@ async function bootstrap() {
     process.exit(1);
   }
 
-  // Apply global exception filter
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  // Inside bootstrap:
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  const systemAlerts = app.get(SystemAlertsService);
+
+  // Apply global exception filters (Sentry wrapper around the BaseExceptionFilter)
+  app.useGlobalFilters(
+    new SentryExceptionFilter(httpAdapter, systemAlerts),
+    new GlobalExceptionFilter()
+  );
+
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   // --- CORS Configuration ---
   const appOriginRaw = config.get('APP_ORIGIN') || 'https://healthos-ten.vercel.app';

@@ -3,6 +3,7 @@ import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../jwt-auth.guard';
 import { SubscriptionGuard, REQUIRED_PLAN_KEY } from '../subscription.guard';
 import { Throttle } from '@nestjs/throttler';
+import { SystemAlertsService } from '../system-alerts/system-alerts.service';
 
 // Custom decorator for assigning required plan natively
 export const RequiredPlan = (plan: string) => SetMetadata(REQUIRED_PLAN_KEY, plan);
@@ -12,7 +13,10 @@ export const RequiredPlan = (plan: string) => SetMetadata(REQUIRED_PLAN_KEY, pla
 @RequiredPlan('admin')
 @Throttle({ default: { limit: 300, ttl: 60000 } }) // Admin specific rate limit
 export class AdminController {
-    constructor(private readonly adminService: AdminService) { }
+    constructor(
+        private readonly adminService: AdminService,
+        private readonly systemAlerts: SystemAlertsService
+    ) { }
 
     @Get('overview')
     getOverview(@Query('period') period: string) {
@@ -76,5 +80,22 @@ export class AdminController {
     @Get('system/health')
     getSystemHealth() {
         return this.adminService.getSystemHealth();
+    }
+
+    @Get('alerts/overview')
+    getAlertsOverview() {
+        return this.systemAlerts.getOverview();
+    }
+
+    @Get('alerts')
+    getAlerts(
+        @Query('period') period: string,
+        @Query('severity') severity: string,
+        @Query('type') type: string,
+        @Query('limit') limit: string
+    ) {
+        const periodDays = period === '30d' ? 30 : (period === '24h' ? 1 : 7);
+        const safeLimit = Math.min(parseInt(limit) || 50, 200);
+        return this.systemAlerts.getAlerts(periodDays, severity, type, safeLimit);
     }
 }

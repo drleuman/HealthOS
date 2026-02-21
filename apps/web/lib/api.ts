@@ -357,6 +357,25 @@ class ApiClient {
     }
 
     /**
+     * Admin: Get alerts overview
+     */
+    async adminAlertsOverview(): Promise<any> {
+        return this.get(`/admin/alerts/overview`);
+    }
+
+    /**
+     * Admin: Get system alerts
+     */
+    async adminAlerts(params: { period?: string; severity?: string; type?: string; limit?: number } = {}): Promise<any[]> {
+        const query = new URLSearchParams();
+        if (params.period) query.append('period', params.period);
+        if (params.severity) query.append('severity', params.severity);
+        if (params.type) query.append('type', params.type);
+        if (params.limit) query.append('limit', params.limit.toString());
+        return this.get(`/admin/alerts?${query.toString()}`);
+    }
+
+    /**
      * Admin: Get users list
      */
     async adminUsers(params: { query?: string; plan?: string; status?: string; page?: number; limit?: number } = {}): Promise<any> {
