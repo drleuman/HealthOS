@@ -349,6 +349,76 @@ class ApiClient {
         }
     }
 
+    /**
+     * Admin: Get dashboard overview
+     */
+    async adminOverview(period: string = '7d'): Promise<any> {
+        return this.get(`/admin/overview?period=${period}`);
+    }
+
+    /**
+     * Admin: Get users list
+     */
+    async adminUsers(params: { query?: string; plan?: string; status?: string; page?: number; limit?: number } = {}): Promise<any> {
+        const query = new URLSearchParams();
+        if (params.query) query.append('query', params.query);
+        if (params.plan) query.append('plan', params.plan);
+        if (params.status) query.append('status', params.status);
+        if (params.page) query.append('page', params.page.toString());
+        if (params.limit) query.append('limit', params.limit.toString());
+        return this.get(`/admin/users?${query.toString()}`);
+    }
+
+    /**
+     * Admin: Get user details
+     */
+    async adminUserDetail(id: string): Promise<any> {
+        return this.get(`/admin/users/${id}`);
+    }
+
+    /**
+     * Admin: Get user timeline
+     */
+    async adminUserTimeline(id: string): Promise<any> {
+        return this.get(`/admin/users/${id}/timeline`);
+    }
+
+    /**
+     * Admin: Update user
+     */
+    async adminUpdateUser(id: string, data: { plan?: string; role?: string; status?: string; metadata?: any }): Promise<any> {
+        return this.request(`/admin/users/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        });
+    }
+
+    /**
+     * Admin: Revoke sessions
+     */
+    async adminRevokeSessions(id: string, sessionId?: string): Promise<any> {
+        return this.post(`/admin/users/${id}/revoke-sessions`, { sessionId });
+    }
+
+    /**
+     * Admin: Get events
+     */
+    async adminEvents(params: { event?: string; feature?: string; userId?: string; period?: string } = {}): Promise<any> {
+        const query = new URLSearchParams();
+        if (params.event) query.append('event', params.event);
+        if (params.feature) query.append('feature', params.feature);
+        if (params.userId) query.append('userId', params.userId);
+        if (params.period) query.append('period', params.period);
+        return this.get(`/admin/events?${query.toString()}`);
+    }
+
+    /**
+     * Admin: Get system health
+     */
+    async adminSystem(): Promise<any> {
+        return this.get(`/admin/system/health`);
+    }
+
     private updateLastEventTimestamp(): void {
         if (typeof window !== 'undefined') {
             localStorage.setItem('healthos_last_event_at', Date.now().toString());

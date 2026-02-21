@@ -43,19 +43,25 @@ export class SubscriptionGuard implements CanActivate {
 
         let dbUser;
         try {
-            // Fetch user from database to get current plan
+            // Fetch user from database to get current plan and role
             dbUser = await this.prisma.user.findUnique({
                 where: { email: user.email },
-                select: { plan: true },
+                select: { plan: true, role: true },
             });
         } catch (e) {
             console.error('SubscriptionGuard DB Error:', e);
             // Fallback to minimal plan to allow app to load in Limited Mode
-            dbUser = { plan: 'member' };
+            dbUser = { plan: 'member', role: 'user' };
         }
 
         if (!dbUser) {
             throw new ForbiddenException('User not found');
+        }
+
+        // Explicit Role Check: If an endpoint demands 'admin', 
+        // they must have the 'admin' role, regardless of their billing plan.
+        if (requiredPlan === 'admin' && dbUser.role !== 'admin') {
+            throw new ForbiddenException('Admin access required');
         }
 
         // Simple plan hierarchy: free < member < premium
@@ -63,7 +69,7 @@ export class SubscriptionGuard implements CanActivate {
             free: 0,
             member: 1,
             premium: 2,
-            admin: 100, // SuperAdmin has access to everything
+            admin: 100, // Kept for backwards compatibility but role is the true check
         };
 
         const userPlanLevel = planHierarchy[dbUser.plan] ?? 0;

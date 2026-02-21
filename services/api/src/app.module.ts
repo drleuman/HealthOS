@@ -45,6 +45,7 @@ import { CommunityService } from './community.service';
 import { ClinicalInterpretationService } from './behavioral/clinical-interpretation.service';
 import { StateTrajectoryService } from './behavioral/state-trajectory.service';
 import { CatalogModule } from './catalog/catalog.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { CatalogModule } from './catalog/catalog.module';
       limit: 100,
     }]),
     CatalogModule,
+    AdminModule,
   ],
   controllers: [
     AppController,

@@ -8,11 +8,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   wpUserId  Int?
-  email     String   @unique
-  plan      String   @default("free")
-  createdAt DateTime @default(now())
+  email     String    @unique
+  plan      String    @default("free")
+  role      String    @default("user") // 'user', 'admin'
+  status    String    @default("active") // 'active' or 'blocked'
+  metadata  Json?
+  lastSeen  DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([plan])
+  @@index([status])
+  @@index([createdAt])
+  @@index([lastSeen])
 
   assessment     Assessments?
   state          UserState?
@@ -150,9 +159,12 @@ model Event {
   meta      Json? // Platform, version, etc.
   createdAt DateTime @default(now())
 
+  @@index([event])
   @@index([event, timestamp])
+  @@index([userId])
   @@index([userId, event])
   @@index([sessionId])
+  @@index([createdAt])
 }
 
 model UserBehaviorSnapshot {

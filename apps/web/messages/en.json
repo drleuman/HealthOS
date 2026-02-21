@@ -1,1950 +1,1992 @@
 {
-    "App": {
-        "Onboarding": {
-            "initial_configuration": "INITIAL_CONFIGURATION",
-            "dataset_classification": "DATASET_CLASSIFICATION",
-            "select_primary": "SELECT_PRIMARY_OBSERVATION_CATEGORY",
-            "finalize": "Finalize registration",
-            "initializing": "Initializing...",
-            "categories": {
-                "SLEEP_CYCLE": "SLEEP CYCLE",
-                "ENERGY_METABOLISM": "ENERGY METABOLISM",
-                "DIGESTIVE_SYSTEM": "DIGESTIVE SYSTEM",
-                "NERVOUS_SYSTEM": "NERVOUS SYSTEM",
-                "BODY_COMPOSITION": "BODY COMPOSITION",
-                "PHYSICAL_ACTIVITY": "PHYSICAL PERFORMANCE"
-            }
+  "App": {
+    "Onboarding": {
+      "initial_configuration": "INITIAL_CONFIGURATION",
+      "dataset_classification": "DATASET_CLASSIFICATION",
+      "select_primary": "SELECT_PRIMARY_OBSERVATION_CATEGORY",
+      "finalize": "Finalize registration",
+      "initializing": "Initializing...",
+      "categories": {
+        "SLEEP_CYCLE": "SLEEP CYCLE",
+        "ENERGY_METABOLISM": "ENERGY METABOLISM",
+        "DIGESTIVE_SYSTEM": "DIGESTIVE SYSTEM",
+        "NERVOUS_SYSTEM": "NERVOUS SYSTEM",
+        "BODY_COMPOSITION": "BODY COMPOSITION",
+        "PHYSICAL_ACTIVITY": "PHYSICAL PERFORMANCE"
+      }
+    },
+    "ControlCenter": {
+      "title": "Control Center",
+      "subtitle": "Clinical Instrumentation Layer",
+      "nav": {
+        "observatory": "Observatory",
+        "laboratory": "Laboratory",
+        "pathways": "Pathways",
+        "predictor": "Predictor"
+      },
+      "status": {
+        "uplink_stable": "STATUS: UPLINK_STABLE",
+        "signal_deanonymized": "SIGNAL: DE-ANONYMIZED",
+        "rebuild_snapshots": "REBUILD SNAPSHOTS",
+        "reconstructing": "RECONSTRUCTING..."
+      },
+      "auth": {
+        "protocol": "Research Access Protocol",
+        "placeholder": "ENTER RESEARCH KEY",
+        "button": "De-Anonymize Signal"
+      },
+      "observatory": {
+        "title": "Population Observatory",
+        "subtitle": "Mapping organism-level physiological similarity to protocol effectiveness.",
+        "clustering_map": {
+          "title": "Physiological Clustering Map",
+          "conclusion": "Higher symptom entropy (Cluster B) correlates with 40% lower initial protocol adherence regardless of motivation scores.",
+          "awaiting_signal": "AWAITING COHORT SIGNAL..."
         },
-        "ControlCenter": {
-            "title": "Control Center",
-            "subtitle": "Clinical Instrumentation Layer",
-            "nav": {
-                "observatory": "Observatory",
-                "laboratory": "Laboratory",
-                "pathways": "Pathways",
-                "predictor": "Predictor"
-            },
-            "status": {
-                "uplink_stable": "STATUS: UPLINK_STABLE",
-                "signal_deanonymized": "SIGNAL: DE-ANONYMIZED",
-                "rebuild_snapshots": "REBUILD SNAPSHOTS",
-                "reconstructing": "RECONSTRUCTING..."
-            },
-            "auth": {
-                "protocol": "Research Access Protocol",
-                "placeholder": "ENTER RESEARCH KEY",
-                "button": "De-Anonymize Signal"
-            },
-            "observatory": {
-                "title": "Population Observatory",
-                "subtitle": "Mapping organism-level physiological similarity to protocol effectiveness.",
-                "clustering_map": {
-                    "title": "Physiological Clustering Map",
-                    "conclusion": "Higher symptom entropy (Cluster B) correlates with 40% lower initial protocol adherence regardless of motivation scores.",
-                    "awaiting_signal": "AWAITING COHORT SIGNAL..."
-                },
-                "organism_effectiveness": {
-                    "title": "Organism Type Effectiveness",
-                    "conclusion": "Ectomorphic metabolism profiles show preferential stabilization on 'Sleep Protocol A' over 'Circadian Phase 1'.",
-                    "sample_n": "Sample N",
-                    "clusters": "Clusters",
-                    "types": {
-                        "metabolic_high": "Metabolic High",
-                        "circadian_drift": "Circadian Drift",
-                        "inflammatory_peak": "Inflammatory Peak"
-                    }
-                }
-            },
-            "laboratory": {
-                "title": "Protocol Laboratory",
-                "subtitle": "Detailed distribution analysis of behavioral outcomes and state stabilization.",
-                "outcome_distribution": {
-                    "title": "Outcome Signal Distribution",
-                    "conclusion": "Protocol 'Circadian_V3' shows a bimodal distribution; users either stabilize completely by Day 5 or experience volatility spikes by Day 9."
-                },
-                "stabilization_vector": {
-                    "title": "Stabilization Vector",
-                    "conclusion": "Population-wide stabilization follows a non-linear trajectory; nervous system activation spikes are predictive of adaptive failure 48h before behavior manifests.",
-                    "awaiting_stream": "Awaiting Stabilization Stream...",
-                    "t_minus_30": "T-30 Days",
-                    "today": "Today",
-                    "stability": "Stability",
-                    "activation": "Activation"
-                }
-            },
-            "pathways": {
-                "title": "Transition Matrix",
-                "subtitle": "Evaluating the effect size of sequential protocol assignments.",
-                "effect_matrix": {
-                    "title": "Inter-Protocol Effect Matrix",
-                    "conclusion": "Sequencing 'Detox' before 'Stabilize' produces a 2.1x higher effect size than the reverse sequence (Destabilization Risk)."
-                }
-            },
-            "predictor": {
-                "title": "Predictive Intelligence",
-                "subtitle": "Heuristic-based probability of early protocol abandonment or system failure.",
-                "early_failure": {
-                    "title": "Early Failure Probability",
-                    "conclusion": "Missing more than 1 'Action Check' in the first 72 hours is 85% predictive of complete system disengagement within 14 days.",
-                    "risk": "RISK"
-                },
-                "recalibration": {
-                    "title": "Recalibration Performance",
-                    "conclusion": "The Recalibration Engine currently resolves 88% of 'System Drifts' within 3 days.",
-                    "resolution_rate": "Resolution Rate",
-                    "total_events": "Total Events"
-                }
-            },
-            "actions": {
-                "confirm_rebuild": "This will recompute all biological snapshots for the current population. Continue?",
-                "rebuild_complete": "Rebuild Complete",
-                "rebuild_failed": "Rebuild Failed"
-            }
-        },
-        "Community": {
-            "Groups": {
-                "DigestiveRepair": {
-                    "day_1": "Day 1 Group",
-                    "day_10": "Day 10 Group",
-                    "day_11": "Day 11 Group",
-                    "day_12": "Day 12 Group",
-                    "day_13": "Day 13 Group",
-                    "day_14": "Day 14 Group",
-                    "day_2": "Day 2 Group",
-                    "day_3": "Day 3 Group",
-                    "day_4": "Day 4 Group",
-                    "day_5": "Day 5 Group",
-                    "day_6": "Day 6 Group",
-                    "day_7": "Day 7 Group",
-                    "day_8": "Day 8 Group",
-                    "day_9": "Day 9 Group"
-                }
-            },
-            "Nav": {
-                "blog": "Reads",
-                "courses": "Courses",
-                "products": "Tools",
-                "threads": "Threads"
-            },
-            "activity_relative": "{when}",
-            "back": "Back to community",
-            "back_to_community": "Back",
-            "empty": "No active threads in this scope.",
-            "enter_button": "Sign In",
-            "gated_body": "This thread is part of the private community space.",
-            "gated_title": "Members Only",
-            "instrument": "Context instrument",
-            "loading": "Loading context...",
-            "moderation_block_hint": "This content cannot be registered. Please record neutral observations without seeking interpretation or providing prescriptions.",
-            "not_found": "Thread not found.",
-            "overlays": {
-                "diagnosis_request_overlay": "System note: this space records observations, not causes. Note what happened today and compare it across days.",
-                "expert_dependency_overlay": "System note: the instrument does not provide individual instructions. Continue with today’s step and record the observed result.",
-                "peer_prescription_overlay": "System note: this space does not record recommendations for other people. Describe your own observation and what changed after a specific action."
-            },
-            "replies": "replies",
-            "reply_placeholder": "Add your observation or question...",
-            "scope_active": "Active",
-            "scope_general": "General",
-            "scope_program_day": "Today's Group",
-            "send_failed": "Failed to post. Please try again.",
-            "send_reply": "Reply",
-            "sending": "Sending...",
-            "system_note": "System note",
-            "title": "Community",
-            "view_group": "View Group"
-        },
-        "History": {
-            "actions": {
-                "caffeine": "Caffeine",
-                "carbs_evening_only": "Evening carbs",
-                "consistent_lunch_time": "Fixed lunch",
-                "delay_caffeine": "Delay caffeine",
-                "earlier_dinner": "Earlier dinner",
-                "early_dinner_window": "Early dinner",
-                "eat_before_hunger": "Eat before hunger",
-                "eat_within_60min": "Meal <60min",
-                "fixed_breakfast_time": "Fixed breakfast",
-                "fixed_meal_structure": "Fixed structure",
-                "light": "Light",
-                "morning_light": "Morning light",
-                "no_caloric_drinks_morning": "No calories AM",
-                "no_snacking_between_meals": "No snacking",
-                "no_sugar_isolated": "No isolated sugar",
-                "protein_breakfast": "Protein at breakfast",
-                "protein_first_meal": "Protein first",
-                "repeat_best_day_pattern": "Repeat pattern",
-                "repeatable_breakfast": "Stable breakfast",
-                "steady_meal_timing": "Steady timing",
-                "walk_after_meal_10min": "Post-meal walk",
-                "water_before_caffeine": "Water before coffee"
-            },
-            "back_to_today": "Back to today",
-            "checks": {
-                "afternoon_energy": "Afternoon Energy",
-                "daily_energy_variation": "Daily Variation",
-                "digestion_check": "Digestion",
-                "energy_midmorning": "Midmorning Energy",
-                "energy_stability": "Daily Stability",
-                "focus_clarity": "Mental Clarity",
-                "hunger_between_meals": "Between-meal Hunger",
-                "midday_crash": "Midday Dip",
-                "morning_clarity": "Morning Clarity",
-                "morning_energy": "Morning Energy",
-                "morning_hunger": "Morning Hunger",
-                "night_hunger": "Night Hunger",
-                "overall_energy": "Overall Energy",
-                "perceived_activation": "Activation",
-                "post_activity_energy": "Post-activity Energy",
-                "postmeal_alertness": "Post-meal Alertness",
-                "postmeal_state": "Post-meal State"
-            },
-            "confirm_recorded": "Observation recorded.",
-            "confirm_time": "Time: {when}",
-            "day": "Day {day}",
-            "empty_body": "When you record an observation, it will appear here in chronological order.",
-            "empty_title": "No records yet.",
-            "filter_30d": "30 days",
-            "filter_7d": "7 days",
-            "filter_all": "All",
-            "footer": "Records are independent. The absence of records is also part of the dataset.",
-            "instrument": "Instrument",
-            "item_observed": "RECORDED",
-            "last_record": "Last observation: {when}",
-            "load_failed": "Failed to load.",
-            "loading": "Loading...",
-            "no_records": "No observations recorded.",
-            "observed": "OBSERVED",
-            "retry": "Retry",
-            "subtitle": "Chronological record of observations",
-            "title": "History",
-            "unknown": "Entry"
-        },
-        "Nav": {
-            "history": "History",
-            "logout": "Exit",
-            "protocols": "Protocols",
-            "resources": "Resources",
-            "today": "Today"
-        },
-        "Observation": {
-            "record": "[ record observation ]",
-            "title": "OBSERVATION · active monitor"
-        },
-        "Protocols": {
-            "back": "Back to dashboard",
-            "title": "Active Protocols"
-        },
-        "Recalibration": {
-            "day_label": "Day {day} of 3",
-            "submit": "Update status",
-            "title": "Minimal recalibration"
-        },
-        "Reentry": {
-            "body": "A drift has been detected in the recorded signals. An optional minimal intervention phase (3 days) allows restoring pattern stability.",
-            "keep_observing": "Continue observing",
-            "start_recalibration": "Open recalibration (3 days)",
-            "title": "Minimal recalibration available"
-        },
-        "Today": {
-            "card_title": "Today",
-            "check": "Check",
-            "check_default_question": "Record your perception.",
-            "check_placeholder": "Write a short note...",
-            "collapse": "collapse",
-            "community": "Community",
-            "community_active": "Active community",
-            "context_empty": "No additional observations for this period.",
-            "context_title": "System Context",
-            "cta_register": "Record observation",
-            "day_label": "Day {day}",
-            "expand": "expand",
-            "footer": "The system records states when provided. Periods without records are also part of the dataset.",
-            "instrument": "Instrument",
-            "learn_label": "Learning (Context)",
-            "learn_title": "Daily content",
-            "load_failed": "Sync failed",
-            "load_label": "Load: {value}",
-            "load_normal": "normal",
-            "load_reduced": "reduced",
-            "loading": "Loading...",
-            "maintenance_mode": "The system does not detect necessary intervention",
-            "minimal_active": "Minimal active (L{level})",
-            "minimal_active_label": "Minimal Active",
-            "minimal_inactive": "Full load",
-            "minimal_mode_l2_hint": "Today: minimal version (1 step).",
-            "minutes": "{m} min",
-            "no_action_note": "The system does not detect necessary intervention. Record any spontaneous observation.",
-            "no_actions": "No actions available.",
-            "no_message": "No system observations.",
-            "no_resources": "No resources linked for today.",
-            "open": "Open",
-            "optional_tool_label": "Optional tool",
-            "recalibration_active": "Recalibration Active",
-            "recalibration_cta": "View Progress",
-            "recalibration_desc": "3-day adjustment phase in progress.",
-            "record": "[ record ]",
-            "replies_label": "{count, plural, =0 {replies} one {reply} other {replies}}",
-            "resources_subtitle": "Support material (optional)",
-            "resources_title": "Resources",
-            "retry": "Retry",
-            "status_active": "ACTIVE",
-            "status_completed": "OBSERVATION",
-            "status_empty": "LATENT SYSTEM",
-            "submit_check": "Record",
-            "system_message": "System",
-            "technical_details": "[?] Technical details",
-            "technical_title": "Technical details",
-            "title": "Today",
-            "transmitting": "[ syncing ]",
-            "view_all_community": "View group",
-            "view_group": "View Group",
-            "view_resource": "View",
-            "windows": {
-                "before_11": "before 11:00",
-                "first_hour_awake": "first hour after waking",
-                "morning": "morning"
-            }
+        "organism_effectiveness": {
+          "title": "Organism Type Effectiveness",
+          "conclusion": "Ectomorphic metabolism profiles show preferential stabilization on 'Sleep Protocol A' over 'Circadian Phase 1'.",
+          "sample_n": "Sample N",
+          "clusters": "Clusters",
+          "types": {
+            "metabolic_high": "Metabolic High",
+            "circadian_drift": "Circadian Drift",
+            "inflammatory_peak": "Inflammatory Peak"
+          }
         }
+      },
+      "laboratory": {
+        "title": "Protocol Laboratory",
+        "subtitle": "Detailed distribution analysis of behavioral outcomes and state stabilization.",
+        "outcome_distribution": {
+          "title": "Outcome Signal Distribution",
+          "conclusion": "Protocol 'Circadian_V3' shows a bimodal distribution; users either stabilize completely by Day 5 or experience volatility spikes by Day 9."
+        },
+        "stabilization_vector": {
+          "title": "Stabilization Vector",
+          "conclusion": "Population-wide stabilization follows a non-linear trajectory; nervous system activation spikes are predictive of adaptive failure 48h before behavior manifests.",
+          "awaiting_stream": "Awaiting Stabilization Stream...",
+          "t_minus_30": "T-30 Days",
+          "today": "Today",
+          "stability": "Stability",
+          "activation": "Activation"
+        }
+      },
+      "pathways": {
+        "title": "Transition Matrix",
+        "subtitle": "Evaluating the effect size of sequential protocol assignments.",
+        "effect_matrix": {
+          "title": "Inter-Protocol Effect Matrix",
+          "conclusion": "Sequencing 'Detox' before 'Stabilize' produces a 2.1x higher effect size than the reverse sequence (Destabilization Risk)."
+        }
+      },
+      "predictor": {
+        "title": "Predictive Intelligence",
+        "subtitle": "Heuristic-based probability of early protocol abandonment or system failure.",
+        "early_failure": {
+          "title": "Early Failure Probability",
+          "conclusion": "Missing more than 1 'Action Check' in the first 72 hours is 85% predictive of complete system disengagement within 14 days.",
+          "risk": "RISK"
+        },
+        "recalibration": {
+          "title": "Recalibration Performance",
+          "conclusion": "The Recalibration Engine currently resolves 88% of 'System Drifts' within 3 days.",
+          "resolution_rate": "Resolution Rate",
+          "total_events": "Total Events"
+        }
+      },
+      "actions": {
+        "confirm_rebuild": "This will recompute all biological snapshots for the current population. Continue?",
+        "rebuild_complete": "Rebuild Complete",
+        "rebuild_failed": "Rebuild Failed"
+      }
     },
-    "Auth": {
-        "back_to_community": "Back to community",
-        "email_placeholder": "Enter authorized email",
-        "error_generic": "Connection error",
-        "feedback_label": "[FEEDBACK]",
-        "feedback_value": "ASYNCHRONOUS",
-        "initializing": "Initializing...",
-        "magic_link_sent": "Access link sent",
-        "metadata_feedback": "Asynchronous feedback",
-        "metadata_mode": "Active system",
-        "mode_label": "[MODE]",
-        "mode_value": "LATENT",
-        "open_environment": "Open environment",
-        "secure_connection": "SECURE CONNECTION ESTABLISHED",
-        "submit": "Continue",
-        "subtitle": "Access your personal space",
-        "system_id_label": "SYSTEM ID: HOS-BETA 9.1",
-        "title": "HEALTHOS",
-        "user_identifier_label": "USER IDENTIFIER"
+    "Community": {
+      "Groups": {
+        "DigestiveRepair": {
+          "day_1": "Day 1 Group",
+          "day_10": "Day 10 Group",
+          "day_11": "Day 11 Group",
+          "day_12": "Day 12 Group",
+          "day_13": "Day 13 Group",
+          "day_14": "Day 14 Group",
+          "day_2": "Day 2 Group",
+          "day_3": "Day 3 Group",
+          "day_4": "Day 4 Group",
+          "day_5": "Day 5 Group",
+          "day_6": "Day 6 Group",
+          "day_7": "Day 7 Group",
+          "day_8": "Day 8 Group",
+          "day_9": "Day 9 Group"
+        }
+      },
+      "Nav": {
+        "blog": "Reads",
+        "courses": "Courses",
+        "products": "Tools",
+        "threads": "Threads"
+      },
+      "activity_relative": "{when}",
+      "back": "Back to community",
+      "back_to_community": "Back",
+      "empty": "No active threads in this scope.",
+      "enter_button": "Sign In",
+      "gated_body": "This thread is part of the private community space.",
+      "gated_title": "Members Only",
+      "instrument": "Context instrument",
+      "loading": "Loading context...",
+      "moderation_block_hint": "This content cannot be registered. Please record neutral observations without seeking interpretation or providing prescriptions.",
+      "not_found": "Thread not found.",
+      "overlays": {
+        "diagnosis_request_overlay": "System note: this space records observations, not causes. Note what happened today and compare it across days.",
+        "expert_dependency_overlay": "System note: the instrument does not provide individual instructions. Continue with today’s step and record the observed result.",
+        "peer_prescription_overlay": "System note: this space does not record recommendations for other people. Describe your own observation and what changed after a specific action."
+      },
+      "replies": "replies",
+      "reply_placeholder": "Add your observation or question...",
+      "scope_active": "Active",
+      "scope_general": "General",
+      "scope_program_day": "Today's Group",
+      "send_failed": "Failed to post. Please try again.",
+      "send_reply": "Reply",
+      "sending": "Sending...",
+      "system_note": "System note",
+      "title": "Community",
+      "view_group": "View Group"
     },
-    "Common": {
-        "CheckOptions": {
+    "History": {
+      "actions": {
+        "caffeine": "Caffeine",
+        "carbs_evening_only": "Evening carbs",
+        "consistent_lunch_time": "Fixed lunch",
+        "delay_caffeine": "Delay caffeine",
+        "earlier_dinner": "Earlier dinner",
+        "early_dinner_window": "Early dinner",
+        "eat_before_hunger": "Eat before hunger",
+        "eat_within_60min": "Meal <60min",
+        "fixed_breakfast_time": "Fixed breakfast",
+        "fixed_meal_structure": "Fixed structure",
+        "light": "Light",
+        "morning_light": "Morning light",
+        "no_caloric_drinks_morning": "No calories AM",
+        "no_snacking_between_meals": "No snacking",
+        "no_sugar_isolated": "No isolated sugar",
+        "protein_breakfast": "Protein at breakfast",
+        "protein_first_meal": "Protein first",
+        "repeat_best_day_pattern": "Repeat pattern",
+        "repeatable_breakfast": "Stable breakfast",
+        "steady_meal_timing": "Steady timing",
+        "walk_after_meal_10min": "Post-meal walk",
+        "water_before_caffeine": "Water before coffee"
+      },
+      "back_to_today": "Back to today",
+      "checks": {
+        "afternoon_energy": "Afternoon Energy",
+        "daily_energy_variation": "Daily Variation",
+        "digestion_check": "Digestion",
+        "energy_midmorning": "Midmorning Energy",
+        "energy_stability": "Daily Stability",
+        "focus_clarity": "Mental Clarity",
+        "hunger_between_meals": "Between-meal Hunger",
+        "midday_crash": "Midday Dip",
+        "morning_clarity": "Morning Clarity",
+        "morning_energy": "Morning Energy",
+        "morning_hunger": "Morning Hunger",
+        "night_hunger": "Night Hunger",
+        "overall_energy": "Overall Energy",
+        "perceived_activation": "Activation",
+        "post_activity_energy": "Post-activity Energy",
+        "postmeal_alertness": "Post-meal Alertness",
+        "postmeal_state": "Post-meal State"
+      },
+      "confirm_recorded": "Observation recorded.",
+      "confirm_time": "Time: {when}",
+      "day": "Day {day}",
+      "empty_body": "When you record an observation, it will appear here in chronological order.",
+      "empty_title": "No records yet.",
+      "filter_30d": "30 days",
+      "filter_7d": "7 days",
+      "filter_all": "All",
+      "footer": "Records are independent. The absence of records is also part of the dataset.",
+      "instrument": "Instrument",
+      "item_observed": "RECORDED",
+      "last_record": "Last observation: {when}",
+      "load_failed": "Failed to load.",
+      "loading": "Loading...",
+      "no_records": "No observations recorded.",
+      "observed": "OBSERVED",
+      "retry": "Retry",
+      "subtitle": "Chronological record of observations",
+      "title": "History",
+      "unknown": "Entry"
+    },
+    "Nav": {
+      "history": "History",
+      "logout": "Exit",
+      "protocols": "Protocols",
+      "resources": "Resources",
+      "today": "Today"
+    },
+    "Observation": {
+      "record": "[ record observation ]",
+      "title": "OBSERVATION · active monitor"
+    },
+    "Protocols": {
+      "back": "Back to dashboard",
+      "title": "Active Protocols"
+    },
+    "Recalibration": {
+      "day_label": "Day {day} of 3",
+      "submit": "Update status",
+      "title": "Minimal recalibration"
+    },
+    "Reentry": {
+      "body": "A drift has been detected in the recorded signals. An optional minimal intervention phase (3 days) allows restoring pattern stability.",
+      "keep_observing": "Continue observing",
+      "start_recalibration": "Open recalibration (3 days)",
+      "title": "Minimal recalibration available"
+    },
+    "Today": {
+      "card_title": "Today",
+      "check": "Check",
+      "check_default_question": "Record your perception.",
+      "check_placeholder": "Write a short note...",
+      "collapse": "collapse",
+      "community": "Community",
+      "community_active": "Active community",
+      "context_empty": "No additional observations for this period.",
+      "context_title": "System Context",
+      "cta_register": "Record observation",
+      "day_label": "Day {day}",
+      "expand": "expand",
+      "footer": "The system records states when provided. Periods without records are also part of the dataset.",
+      "instrument": "Instrument",
+      "learn_label": "Learning (Context)",
+      "learn_title": "Daily content",
+      "load_failed": "Sync failed",
+      "load_label": "Load: {value}",
+      "load_normal": "normal",
+      "load_reduced": "reduced",
+      "loading": "Loading...",
+      "maintenance_mode": "The system does not detect necessary intervention",
+      "minimal_active": "Minimal active (L{level})",
+      "minimal_active_label": "Minimal Active",
+      "minimal_inactive": "Full load",
+      "minimal_mode_l2_hint": "Today: minimal version (1 step).",
+      "minutes": "{m} min",
+      "no_action_note": "The system does not detect necessary intervention. Record any spontaneous observation.",
+      "no_actions": "No actions available.",
+      "no_message": "No system observations.",
+      "no_resources": "No resources linked for today.",
+      "open": "Open",
+      "optional_tool_label": "Optional tool",
+      "recalibration_active": "Recalibration Active",
+      "recalibration_cta": "View Progress",
+      "recalibration_desc": "3-day adjustment phase in progress.",
+      "record": "[ record ]",
+      "replies_label": "{count, plural, =0 {replies} one {reply} other {replies}}",
+      "resources_subtitle": "Support material (optional)",
+      "resources_title": "Resources",
+      "retry": "Retry",
+      "status_active": "ACTIVE",
+      "status_completed": "OBSERVATION",
+      "status_empty": "LATENT SYSTEM",
+      "submit_check": "Record",
+      "system_message": "System",
+      "technical_details": "[?] Technical details",
+      "technical_title": "Technical details",
+      "title": "Today",
+      "transmitting": "[ syncing ]",
+      "view_all_community": "View group",
+      "view_group": "View Group",
+      "view_resource": "View",
+      "windows": {
+        "before_11": "before 11:00",
+        "first_hour_awake": "first hour after waking",
+        "morning": "morning"
+      }
+    },
+    "Admin": {
+      "title": "Admin Dashboard",
+      "overview": "Overview",
+      "users": "Users",
+      "events": "Events",
+      "system": "System",
+      "search": "Search...",
+      "logout": "Logout",
+      "no_data": "No data available",
+      "total_users": "Total Users",
+      "active_users": "Active Users",
+      "new_users_7d": "New Users (7d)",
+      "events_last_60m": "Events (60m)",
+      "recent_errors": "Recent Errors (24h)",
+      "email": "Email",
+      "plan": "Plan",
+      "status": "Status",
+      "created_at": "Created At",
+      "last_seen": "Last Seen",
+      "actions": "Actions",
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel",
+      "block": "Block",
+      "unblock": "Unblock",
+      "change_plan": "Change Plan",
+      "revoke_sessions": "Revoke Sessions",
+      "events_table": {
+        "event": "Event",
+        "user_id": "User ID",
+        "feature": "Feature",
+        "timestamp": "Timestamp"
+      },
+      "system_health": {
+        "status": "Status",
+        "version": "Version",
+        "env": "Environment",
+        "origin": "Origin"
+      },
+      "confirm_block": "Are you sure you want to block this user?",
+      "confirm_revoke": "Are you sure you want to revoke all sessions for this user?"
+    }
+  },
+  "Auth": {
+    "back_to_community": "Back to community",
+    "email_placeholder": "Enter authorized email",
+    "error_generic": "Connection error",
+    "feedback_label": "[FEEDBACK]",
+    "feedback_value": "ASYNCHRONOUS",
+    "initializing": "Initializing...",
+    "magic_link_sent": "Access link sent",
+    "metadata_feedback": "Asynchronous feedback",
+    "metadata_mode": "Active system",
+    "mode_label": "[MODE]",
+    "mode_value": "LATENT",
+    "open_environment": "Open environment",
+    "secure_connection": "SECURE CONNECTION ESTABLISHED",
+    "submit": "Continue",
+    "subtitle": "Access your personal space",
+    "system_id_label": "SYSTEM ID: HOS-BETA 9.1",
+    "title": "HEALTHOS",
+    "user_identifier_label": "USER IDENTIFIER"
+  },
+  "Common": {
+    "CheckOptions": {
+      "better": "Better",
+      "same": "Same",
+      "worse": "Worse"
+    },
+    "back_to_today": "Back to today",
+    "beta_label": "BETA",
+    "transmitting": "[ syncing ]"
+  },
+  "Components": {
+    "Alert": {
+      "context_info": "Contextual Information"
+    },
+    "Ambient": {
+      "msg_1": "System available. State may be captured at any moment.",
+      "msg_2": "System available. Observation may be recorded when present.",
+      "msg_3": "System available. Recording possible at any time.",
+      "status_ready": "SYSTEM AVAILABLE"
+    },
+    "Select": {
+      "placeholder": "Select option..."
+    },
+    "Topbar": {
+      "events": "Events",
+      "history": "History",
+      "logout": "Exit"
+    },
+    "Footer": {
+      "Support": {
+        "common_questions": "Common questions"
+      },
+      "all_rights_reserved": "All rights reserved.",
+      "privacy": "Privacy",
+      "rights": "HealthOS. All rights reserved.",
+      "tagline": "Habit protocol based on chronobiology",
+      "terms": "Terms"
+    }
+  },
+  "Protocol": {
+    "Actions": {
+      "add_fiber": {
+        "details": "Una sola fuente. Empieza pequeño.",
+        "label": "Añadir una fibra"
+      },
+      "breath_before_meal": {
+        "details": "Antes de una comida (una basta).",
+        "label": "Respirar 1 minuto antes"
+      },
+      "breathing_3min": {
+        "details": "Inhala lento, exhala más lento. Calma el sistema.",
+        "label": "Respiración consciente (3 min)"
+      },
+      "chew": {
+        "details": "En una comida. Sin contar. Solo más lento.",
+        "label": "Masticar un poco más"
+      },
+      "downshift_10min": {
+        "details": "Actividad de baja estimulación antes de dormir.",
+        "label": "Descarga nocturna (10 min)"
+      },
+      "kitchen_cutoff": {
+        "details": "Termina de comer 3h antes de dormir (ajusta si turnos).",
+        "label": "Corte de cocina (3h)"
+      },
+      "meal_order": {
+        "details": "Primero proteína/verdura. Carbohidrato al final (si aplica).",
+        "label": "Orden de comida"
+      },
+      "meal_pause": {
+        "details": "Respira y baja ritmo antes del primer bocado.",
+        "label": "Pausa 30 segundos antes de comer"
+      },
+      "no_snacking": {
+        "details": "Espacia las ingestas para dar descanso digestivo.",
+        "label": "Ritmo de comidas sin picoteo"
+      },
+      "one_change": {
+        "details": "Cambia una sola variable y deja el resto igual.",
+        "label": "Un cambio"
+      },
+      "plan_next_5min": {
+        "details": "Elige una práctica. Decide cuándo la harás 2-3 días esta semana.",
+        "label": "Plan mínimo 5 minutos"
+      },
+      "protein_anchor": {
+        "details": "Una comida con proteína simple y estable.",
+        "label": "Ancla de proteína"
+      },
+      "reflux_positioning": {
+        "details": "Opcional: lado izquierdo / elevar cabecera.",
+        "label": "Ajuste postural (reflujo)"
+      },
+      "simple_meal_today": {
+        "details": "Reduce la complejidad en una comida principal.",
+        "label": "Plato simple (2 ingredientes)"
+      },
+      "simple_plate": {
+        "details": "Una comida con menos mezcla, alimentos familiares.",
+        "label": "Plato simple"
+      },
+      "trigger_scan": {
+        "details": "Anota una variable posible (sin eliminar hoy).",
+        "label": "Escaneo de desencadenantes"
+      },
+      "walk_10min": {
+        "details": "Tras la comida principal. Ritmo suave.",
+        "label": "Caminar 10 minutos"
+      },
+      "water_timing": {
+        "details": "Evita grandes vasos con la comida. Sorbos ok.",
+        "label": "Ajuste de agua"
+      }
+    },
+    "Checks": {
+      "bloating": {
+        "options": {
+          "mild": "Leve",
+          "moderate": "Moderada",
+          "none": "Ninguna",
+          "severe": "Severa"
+        },
+        "prompt": "Hinchazón/Distensión"
+      },
+      "burping": {
+        "options": {
+          "higher": "Más",
+          "lower": "Menos",
+          "same": "Igual"
+        },
+        "prompt": "Eructos"
+      },
+      "calmness": {
+        "options": {
+          "high": "Alto (Relajado)",
+          "low": "Bajo (Tenso)",
+          "medium": "Medio"
+        },
+        "prompt": "Nivel de calma"
+      },
+      "cravings": {
+        "options": {
+          "higher": "Más",
+          "lower": "Menos",
+          "same": "Igual"
+        },
+        "prompt": "Antojos"
+      },
+      "fullness": {
+        "options": {
+          "heavier": "Más pesada",
+          "lighter": "Más ligera",
+          "same": "Igual"
+        },
+        "prompt": "Pesadez"
+      },
+      "gas": {
+        "options": {
+          "higher": "Más",
+          "lower": "Menos",
+          "same": "Igual"
+        },
+        "prompt": "Gases"
+      },
+      "hunger": {
+        "options": {
+          "high": "Alta",
+          "managable": "Manejable",
+          "none": "Saciado/a"
+        },
+        "prompt": "Hambre entre comidas"
+      },
+      "overall": {
+        "options": {
+          "improved": "Mejoró",
+          "mixed": "Mixto",
+          "no_change": "Sin cambio"
+        },
+        "prompt": "Balance global"
+      },
+      "reflux": {
+        "options": {
+          "higher": "Más alto",
+          "lower": "Más bajo",
+          "same": "Igual"
+        },
+        "prompt": "Reflujo"
+      },
+      "sleep_after_dinner": {
+        "options": {
+          "easier": "Más fácil",
+          "harder": "Más difícil",
+          "same": "Igual"
+        },
+        "prompt": "Dormir tras cenar"
+      },
+      "sleep_quality": {
+        "options": {
+          "excellent": "Excelente",
+          "fair": "Regular",
+          "good": "Buena",
+          "poor": "Mala"
+        },
+        "prompt": "Calidad de sueño"
+      },
+      "stool": {
+        "options": {
+          "improved": "Mejoró",
+          "same": "Igual",
+          "worse": "Empeoró"
+        },
+        "prompt": "Tránsito"
+      }
+    },
+    "CircadianReset": {
+      "Actions": {
+        "bright_light_am": {
+          "label": "Increase light upon waking"
+        },
+        "caffeine_cutoff": {
+          "label": "Caffeine cutoff time"
+        },
+        "closure_plan": {
+          "label": "Maintenance plan"
+        },
+        "delay_caffeine": {
+          "label": "Delay first caffeine"
+        },
+        "downshift_3min": {
+          "label": "Short 3-minute downshift"
+        },
+        "earlier_dinner": {
+          "label": "Earlier dinner"
+        },
+        "food_order": {
+          "label": "Food order in a meal"
+        },
+        "gentle_movement_am": {
+          "label": "Gentle morning movement"
+        },
+        "morning_light": {
+          "label": "Morning natural light"
+        },
+        "personal_tune": {
+          "label": "Choose a main lever"
+        },
+        "post_meal_walk": {
+          "label": "Short post-meal walk"
+        },
+        "reduce_blue_light": {
+          "label": "Reduce blue light at night"
+        },
+        "week1_review": {
+          "label": "Brief week review"
+        },
+        "wind_down": {
+          "label": "Evening stimulus reduction"
+        }
+      },
+      "Checks": {
+        "afternoon_focus": {
+          "prompt": "In the afternoon, how was your focus?"
+        },
+        "alertness_am": {
+          "higher": "Higher",
+          "lower": "Lower",
+          "prompt": "How was your clarity upon waking?"
+        },
+        "best_lever": {
+          "caffeine": "Caffeine",
+          "dinner": "Dinner",
+          "light": "Light",
+          "prompt": "Which lever was most sustainable for you?"
+        },
+        "energy_2h_after": {
+          "prompt": "Two or three hours later, how was your energy?"
+        },
+        "evening_anxiety": {
+          "higher": "Higher",
+          "lower": "Lower",
+          "prompt": "In the evening, how was mental tension?"
+        },
+        "headache": {
+          "mild": "Mild",
+          "none": "No",
+          "prompt": "Was there a headache when delaying caffeine?",
+          "strong": "Strong"
+        },
+        "midday_crash": {
+          "less": "Less",
+          "more": "More",
+          "prompt": "How was the midday crash?"
+        },
+        "next_step": {
+          "maintain": "Keep minimal version",
+          "prompt": "Recommended next step",
+          "repeat": "Repeat 14 days",
+          "switch": "Switch to another protocol"
+        },
+        "night_quality": {
+          "deeper": "Deeper",
+          "lighter": "Lighter",
+          "prompt": "How did you feel the sleep quality?"
+        },
+        "night_waking": {
+          "one_two": "One or two",
+          "prompt": "How many times did you wake up at night?",
+          "three_plus": "Three or more",
+          "zero": "Zero"
+        },
+        "overall_week": {
+          "improving": "Improving",
+          "neutral": "Neutral",
+          "prompt": "Overall, the week feels..."
+        },
+        "post_meal_energy": {
+          "dip": "Dipping",
+          "prompt": "After the meal, your energy was...",
+          "stable": "Stable",
+          "variable": "Variable"
+        },
+        "sleep_latency": {
+          "faster": "Faster",
+          "prompt": "How was the time to fall asleep?",
+          "slower": "Slower"
+        },
+        "sleep_onset": {
+          "easier": "Easier",
+          "harder": "Harder",
+          "prompt": "When going to bed, how was falling asleep?"
+        }
+      },
+      "Title": "Circadian Reset (14 days)"
+    },
+    "Support": {
+      "common_questions": "Dudas comunes"
+    },
+    "circadian_reset_14": {
+      "Day1": {
+        "learn": {
+          "body": "La exposición a luz brillante temprano en el día es la señal más potente para sincronizar tu ritmo circadiano.",
+          "title": "Contexto"
+        },
+        "title": "Luz de mañana"
+      },
+      "Day2": {
+        "learn": {
+          "body": "Adelantar la última ingesta facilita la digestión y mejora la calidad del sueño profundo.",
+          "title": "Contexto"
+        },
+        "title": "Cena más temprano"
+      },
+      "Day3": {
+        "learn": {
+          "body": "La luz azul de las pantallas suprime la melatonina. Reducirla por la noche ayuda a preparar el cuerpo para dormir.",
+          "title": "Contexto"
+        },
+        "title": "Pantallas y oscuridad"
+      },
+      "Day4": {
+        "learn": {
+          "body": "La cafeína tiene una vida media larga. Retrasar su consumo al despertar evita el 'crash' de la tarde.",
+          "title": "Contexto"
+        },
+        "title": "Cafeína"
+      },
+      "Day5": {
+        "learn": {
+          "body": "Caminar a paso ligero por la mañana eleva la temperatura corporal y refuerza la señal de vigilia.",
+          "title": "Contexto"
+        },
+        "title": "Movimiento suave"
+      },
+      "Day6": {
+        "learn": {
+          "body": "Mantener el ambiente oscuro antes de dormir señala al cerebro que es hora de descansar.",
+          "title": "Contexto"
+        },
+        "title": "Oscuridad nocturna"
+      },
+      "Day9": {
+        "learn": {
+          "body": "Una rutina de desaceleración ayuda a transicionar del estado de alerta al de reposo.",
+          "title": "Contexto"
+        },
+        "title": "Descarga nocturna"
+      }
+    },
+    "digestive_reset_14": {
+      "Actions": {
+        "add_fiber": {
+          "details": "One source only. Start small.",
+          "label": "Add one fiber"
+        },
+        "breath_before_meal": {
+          "details": "Before one meal (one is enough).",
+          "label": "Breathe 1 minute before"
+        },
+        "chew": {
+          "details": "One meal. No counting. Just slower.",
+          "label": "Chew a bit more"
+        },
+        "kitchen_cutoff": {
+          "details": "Finish food 3h before sleep (adjust for shift work).",
+          "label": "Kitchen cutoff (3h)"
+        },
+        "meal_order": {
+          "details": "Protein/veg first. Carbs last (if applicable).",
+          "label": "Meal order"
+        },
+        "meal_pause": {
+          "details": "Breathe and slow down before the first bite.",
+          "label": "Pause 30 seconds before eating"
+        },
+        "no_snacking": {
+          "label": "No snacking between meals"
+        },
+        "one_change": {
+          "details": "Change one variable only. Keep the rest the same.",
+          "label": "One change"
+        },
+        "plan_next": {
+          "details": "Choose one practice and schedule it 2–3 days.",
+          "label": "Minimal plan (5 min)"
+        },
+        "protein_anchor": {
+          "details": "One meal with simple, stable protein.",
+          "label": "Protein anchor"
+        },
+        "reflux_positioning": {
+          "details": "Optional: left side / elevate head.",
+          "label": "Posture adjustment (reflux)"
+        },
+        "review_trigger": {
+          "details": "Pick one minimal adjustment for tomorrow.",
+          "label": "Review trigger"
+        },
+        "simple_meal_today": {
+          "label": "Simple plate (2 ingredients)"
+        },
+        "simple_plate": {
+          "details": "One meal with less mixing, familiar foods.",
+          "label": "Simple plate"
+        },
+        "trigger_scan": {
+          "details": "Note one possible variable (no elimination today).",
+          "label": "Trigger scan"
+        },
+        "walk_10min": {
+          "details": "After the main meal. Gentle pace.",
+          "label": "Walk 10 minutes"
+        },
+        "water_timing": {
+          "details": "Avoid large glasses with meals. Sips are fine.",
+          "label": "Water timing"
+        }
+      },
+      "Checks": {
+        "bloating": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Bloating"
+        },
+        "burping": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Burping"
+        },
+        "cravings": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Cravings"
+        },
+        "fullness": {
+          "options": {
+            "heavier": "Heavier",
+            "lighter": "Lighter",
+            "same": "Same"
+          },
+          "prompt": "Heaviness"
+        },
+        "gas": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Gas"
+        },
+        "overall": {
+          "options": {
+            "improved": "Improved",
+            "mixed": "Mixed",
+            "no_change": "No change"
+          },
+          "prompt": "Overall balance"
+        },
+        "reflux": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Reflujo"
+        },
+        "sleep_after_dinner": {
+          "options": {
+            "easier": "Easier",
+            "harder": "Harder",
+            "same": "Same"
+          },
+          "prompt": "Sleep after dinner"
+        },
+        "stool": {
+          "options": {
+            "improved": "Improved",
+            "same": "Same",
+            "worse": "Worse"
+          },
+          "prompt": "Transit"
+        }
+      },
+      "Day1": {
+        "learn": {
+          "body": "A calmer start and gentle post-meal movement often improves tolerance.",
+          "title": "Entry signal"
+        },
+        "title": "Simple plate"
+      },
+      "Day2": {
+        "learn": {
+          "body": "Spacing meals allows the migrating motor complex to clean the digestive tract.",
+          "title": "Rhythm"
+        },
+        "title": "Meal timing"
+      },
+      "Support": {
+        "common_questions": "Common questions"
+      }
+    },
+    "nervous_system_reset_10": {
+      "Actions": {
+        "body_scan_5min": {
+          "details": "Eyes open if preferred. Stop if uncomfortable.",
+          "label": "Body scan 5 minutes"
+        },
+        "boundary_1": {
+          "details": "Pick a small boundary. ‘Not today’, ‘10 minutes only’, ‘tomorrow’.",
+          "label": "One boundary today"
+        },
+        "breathing_2min": {
+          "details": "Natural breathing. Optionally lengthen the exhale.",
+          "label": "Breathe 2 minutes"
+        },
+        "breathing_3min": {
+          "details": "Slow inhale, slower exhale. Calms the system.",
+          "label": "Conscious breathing (3 min)"
+        },
+        "caffeine_boundary": {
+          "details": "Choose a latest time today. Keep the rest unchanged.",
+          "label": "Set caffeine boundary"
+        },
+        "downshift_10min": {
+          "details": "Low stimulation activity before sleep.",
+          "label": "Evening downshift (10 min)"
+        },
+        "downshift_3min": {
+          "details": "Slightly longer exhale. Soft gaze optional.",
+          "label": "Downshift 3 minutes"
+        },
+        "evening_light_dimmer": {
+          "details": "Reduce overhead bright light if possible. No full darkness required.",
+          "label": "Dim evening light"
+        },
+        "physiological_sigh": {
+          "details": "Two inhales + one long exhale. Stop if dizzy.",
+          "label": "Physiological sigh (1 min)"
+        },
+        "plan_next_5min": {
+          "details": "Choose one practice. Schedule it 2–3 days this week.",
+          "label": "Plan 5 minutes"
+        },
+        "reflection_2min": {
+          "details": "One sentence: what raised or lowered activation today. No judgement.",
+          "label": "Reflect 2 minutes"
+        },
+        "social_contact": {
+          "details": "Short message or voice note. In-person optional.",
+          "label": "Minimum social contact"
+        },
+        "walk_5min": {
+          "details": "Slow pace. Indoors or outdoors.",
+          "label": "Walk 5 minutes"
+        }
+      },
+      "Checks": {
+        "afternoon_energy": {
+          "options": {
+            "crash": "Crash",
+            "same": "Same",
+            "steadier": "Steadier"
+          },
+          "prompt": "Afternoon energy"
+        },
+        "body": {
+          "options": {
+            "looser": "Looser",
+            "neutral": "Neutral",
+            "tenser": "Tenser"
+          },
+          "prompt": "Body"
+        },
+        "calmness": {
+          "options": {
+            "high": "High (Relaxed)",
+            "low": "Low (Tense)",
+            "medium": "Medium"
+          },
+          "prompt": "Level of calmness"
+        },
+        "connection": {
+          "options": {
             "better": "Better",
             "same": "Same",
             "worse": "Worse"
+          },
+          "prompt": "Connection"
         },
-        "back_to_today": "Back to today",
-        "beta_label": "BETA",
-        "transmitting": "[ syncing ]"
-    },
-    "Components": {
-        "Alert": {
-            "context_info": "Contextual Information"
+        "evening_activation": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Evening activation"
         },
-        "Ambient": {
-            "msg_1": "System available. State may be captured at any moment.",
-            "msg_2": "System available. Observation may be recorded when present.",
-            "msg_3": "System available. Recording possible at any time.",
-            "status_ready": "SYSTEM AVAILABLE"
+        "load": {
+          "options": {
+            "higher": "Higher",
+            "lower": "Lower",
+            "same": "Same"
+          },
+          "prompt": "Internal load"
         },
-        "Select": {
-            "placeholder": "Select option..."
+        "overall": {
+          "options": {
+            "improved": "Improved",
+            "mixed": "Mixed",
+            "no_change": "No change"
+          },
+          "prompt": "Overall balance"
         },
-        "Topbar": {
-            "events": "Events",
-            "history": "History",
-            "logout": "Exit"
+        "reactivity": {
+          "options": {
+            "less": "Less",
+            "more": "More",
+            "same": "Same"
+          },
+          "prompt": "Reactivity"
         },
-        "Footer": {
-            "Support": {
-                "common_questions": "Common questions"
-            },
-            "all_rights_reserved": "All rights reserved.",
-            "privacy": "Privacy",
-            "rights": "HealthOS. All rights reserved.",
-            "tagline": "Habit protocol based on chronobiology",
-            "terms": "Terms"
+        "sleep_pressure": {
+          "options": {
+            "easier": "Easier",
+            "harder": "Harder",
+            "same": "Same"
+          },
+          "prompt": "Sleep pressure"
+        },
+        "sleep_quality": {
+          "options": {
+            "excellent": "Excellent",
+            "fair": "Fair",
+            "good": "Good",
+            "poor": "Poor"
+          },
+          "prompt": "Sleep quality"
+        },
+        "state": {
+          "options": {
+            "calmer": "Calmer",
+            "more_activated": "More activated",
+            "same": "Same"
+          },
+          "prompt": "Current state"
+        },
+        "tension_hotspot": {
+          "options": {
+            "identified": "Identified",
+            "none": "None noticed",
+            "unclear": "Unclear"
+          },
+          "prompt": "Main tension area"
         }
+      },
+      "Day1": {
+        "learn": {
+          "body": "Slow, controlled breathing activates the vagus nerve, reducing fight or flight response.",
+          "title": "Vagal tone"
+        },
+        "title": "Breathing 3 min"
+      },
+      "Day9": {
+        "learn": {
+          "body": "Prepare the nervous system for sleep with a disconnection routine.",
+          "title": "Discharge"
+        },
+        "title": "Evening Downshift"
+      },
+      "Support": {
+        "common_questions": "Common questions"
+      }
     },
-    "Protocol": {
-        "Actions": {
-            "add_fiber": {
-                "details": "Una sola fuente. Empieza pequeño.",
-                "label": "Añadir una fibra"
-            },
-            "breath_before_meal": {
-                "details": "Antes de una comida (una basta).",
-                "label": "Respirar 1 minuto antes"
-            },
-            "breathing_3min": {
-                "details": "Inhala lento, exhala más lento. Calma el sistema.",
-                "label": "Respiración consciente (3 min)"
-            },
-            "chew": {
-                "details": "En una comida. Sin contar. Solo más lento.",
-                "label": "Masticar un poco más"
-            },
-            "downshift_10min": {
-                "details": "Actividad de baja estimulación antes de dormir.",
-                "label": "Descarga nocturna (10 min)"
-            },
-            "kitchen_cutoff": {
-                "details": "Termina de comer 3h antes de dormir (ajusta si turnos).",
-                "label": "Corte de cocina (3h)"
-            },
-            "meal_order": {
-                "details": "Primero proteína/verdura. Carbohidrato al final (si aplica).",
-                "label": "Orden de comida"
-            },
-            "meal_pause": {
-                "details": "Respira y baja ritmo antes del primer bocado.",
-                "label": "Pausa 30 segundos antes de comer"
-            },
-            "no_snacking": {
-                "details": "Espacia las ingestas para dar descanso digestivo.",
-                "label": "Ritmo de comidas sin picoteo"
-            },
-            "one_change": {
-                "details": "Cambia una sola variable y deja el resto igual.",
-                "label": "Un cambio"
-            },
-            "plan_next_5min": {
-                "details": "Elige una práctica. Decide cuándo la harás 2-3 días esta semana.",
-                "label": "Plan mínimo 5 minutos"
-            },
-            "protein_anchor": {
-                "details": "Una comida con proteína simple y estable.",
-                "label": "Ancla de proteína"
-            },
-            "reflux_positioning": {
-                "details": "Opcional: lado izquierdo / elevar cabecera.",
-                "label": "Ajuste postural (reflujo)"
-            },
-            "simple_meal_today": {
-                "details": "Reduce la complejidad en una comida principal.",
-                "label": "Plato simple (2 ingredientes)"
-            },
-            "simple_plate": {
-                "details": "Una comida con menos mezcla, alimentos familiares.",
-                "label": "Plato simple"
-            },
-            "trigger_scan": {
-                "details": "Anota una variable posible (sin eliminar hoy).",
-                "label": "Escaneo de desencadenantes"
-            },
-            "walk_10min": {
-                "details": "Tras la comida principal. Ritmo suave.",
-                "label": "Caminar 10 minutos"
-            },
-            "water_timing": {
-                "details": "Evita grandes vasos con la comida. Sorbos ok.",
-                "label": "Ajuste de agua"
-            }
+    "recal_3d": {
+      "Day1": {
+        "learn": {
+          "body": "La luz solar es el ancla principal para estabilizar el ritmo circadiano.",
+          "title": "Contexto"
         },
-        "Checks": {
-            "bloating": {
-                "options": {
-                    "mild": "Leve",
-                    "moderate": "Moderada",
-                    "none": "Ninguna",
-                    "severe": "Severa"
-                },
-                "prompt": "Hinchazón/Distensión"
-            },
-            "burping": {
-                "options": {
-                    "higher": "Más",
-                    "lower": "Menos",
-                    "same": "Igual"
-                },
-                "prompt": "Eructos"
-            },
-            "calmness": {
-                "options": {
-                    "high": "Alto (Relajado)",
-                    "low": "Bajo (Tenso)",
-                    "medium": "Medio"
-                },
-                "prompt": "Nivel de calma"
-            },
-            "cravings": {
-                "options": {
-                    "higher": "Más",
-                    "lower": "Menos",
-                    "same": "Igual"
-                },
-                "prompt": "Antojos"
-            },
-            "fullness": {
-                "options": {
-                    "heavier": "Más pesada",
-                    "lighter": "Más ligera",
-                    "same": "Igual"
-                },
-                "prompt": "Pesadez"
-            },
-            "gas": {
-                "options": {
-                    "higher": "Más",
-                    "lower": "Menos",
-                    "same": "Igual"
-                },
-                "prompt": "Gases"
-            },
-            "hunger": {
-                "options": {
-                    "high": "Alta",
-                    "managable": "Manejable",
-                    "none": "Saciado/a"
-                },
-                "prompt": "Hambre entre comidas"
-            },
-            "overall": {
-                "options": {
-                    "improved": "Mejoró",
-                    "mixed": "Mixto",
-                    "no_change": "Sin cambio"
-                },
-                "prompt": "Balance global"
-            },
-            "reflux": {
-                "options": {
-                    "higher": "Más alto",
-                    "lower": "Más bajo",
-                    "same": "Igual"
-                },
-                "prompt": "Reflujo"
-            },
-            "sleep_after_dinner": {
-                "options": {
-                    "easier": "Más fácil",
-                    "harder": "Más difícil",
-                    "same": "Igual"
-                },
-                "prompt": "Dormir tras cenar"
-            },
-            "sleep_quality": {
-                "options": {
-                    "excellent": "Excelente",
-                    "fair": "Regular",
-                    "good": "Buena",
-                    "poor": "Mala"
-                },
-                "prompt": "Calidad de sueño"
-            },
-            "stool": {
-                "options": {
-                    "improved": "Mejoró",
-                    "same": "Igual",
-                    "worse": "Empeoró"
-                },
-                "prompt": "Tránsito"
-            }
+        "title": "Reset de luz matutina"
+      },
+      "Day2": {
+        "learn": {
+          "body": "Adelantar la cena facilita la reparación nocturna y la calidad del sueño.",
+          "title": "Contexto"
         },
-        "CircadianReset": {
-            "Actions": {
-                "bright_light_am": {
-                    "label": "Increase light upon waking"
-                },
-                "caffeine_cutoff": {
-                    "label": "Caffeine cutoff time"
-                },
-                "closure_plan": {
-                    "label": "Maintenance plan"
-                },
-                "delay_caffeine": {
-                    "label": "Delay first caffeine"
-                },
-                "downshift_3min": {
-                    "label": "Short 3-minute downshift"
-                },
-                "earlier_dinner": {
-                    "label": "Earlier dinner"
-                },
-                "food_order": {
-                    "label": "Food order in a meal"
-                },
-                "gentle_movement_am": {
-                    "label": "Gentle morning movement"
-                },
-                "morning_light": {
-                    "label": "Morning natural light"
-                },
-                "personal_tune": {
-                    "label": "Choose a main lever"
-                },
-                "post_meal_walk": {
-                    "label": "Short post-meal walk"
-                },
-                "reduce_blue_light": {
-                    "label": "Reduce blue light at night"
-                },
-                "week1_review": {
-                    "label": "Brief week review"
-                },
-                "wind_down": {
-                    "label": "Evening stimulus reduction"
-                }
-            },
-            "Checks": {
-                "afternoon_focus": {
-                    "prompt": "In the afternoon, how was your focus?"
-                },
-                "alertness_am": {
-                    "higher": "Higher",
-                    "lower": "Lower",
-                    "prompt": "How was your clarity upon waking?"
-                },
-                "best_lever": {
-                    "caffeine": "Caffeine",
-                    "dinner": "Dinner",
-                    "light": "Light",
-                    "prompt": "Which lever was most sustainable for you?"
-                },
-                "energy_2h_after": {
-                    "prompt": "Two or three hours later, how was your energy?"
-                },
-                "evening_anxiety": {
-                    "higher": "Higher",
-                    "lower": "Lower",
-                    "prompt": "In the evening, how was mental tension?"
-                },
-                "headache": {
-                    "mild": "Mild",
-                    "none": "No",
-                    "prompt": "Was there a headache when delaying caffeine?",
-                    "strong": "Strong"
-                },
-                "midday_crash": {
-                    "less": "Less",
-                    "more": "More",
-                    "prompt": "How was the midday crash?"
-                },
-                "next_step": {
-                    "maintain": "Keep minimal version",
-                    "prompt": "Recommended next step",
-                    "repeat": "Repeat 14 days",
-                    "switch": "Switch to another protocol"
-                },
-                "night_quality": {
-                    "deeper": "Deeper",
-                    "lighter": "Lighter",
-                    "prompt": "How did you feel the sleep quality?"
-                },
-                "night_waking": {
-                    "one_two": "One or two",
-                    "prompt": "How many times did you wake up at night?",
-                    "three_plus": "Three or more",
-                    "zero": "Zero"
-                },
-                "overall_week": {
-                    "improving": "Improving",
-                    "neutral": "Neutral",
-                    "prompt": "Overall, the week feels..."
-                },
-                "post_meal_energy": {
-                    "dip": "Dipping",
-                    "prompt": "After the meal, your energy was...",
-                    "stable": "Stable",
-                    "variable": "Variable"
-                },
-                "sleep_latency": {
-                    "faster": "Faster",
-                    "prompt": "How was the time to fall asleep?",
-                    "slower": "Slower"
-                },
-                "sleep_onset": {
-                    "easier": "Easier",
-                    "harder": "Harder",
-                    "prompt": "When going to bed, how was falling asleep?"
-                }
-            },
-            "Title": "Circadian Reset (14 days)"
+        "title": "Ajuste de cena"
+      },
+      "Day3": {
+        "learn": {
+          "body": "Mantener las dos señales previas consolida el patrón base.",
+          "title": "Contexto"
         },
-        "Support": {
-            "common_questions": "Dudas comunes"
-        },
-        "circadian_reset_14": {
-            "Day1": {
-                "learn": {
-                    "body": "La exposición a luz brillante temprano en el día es la señal más potente para sincronizar tu ritmo circadiano.",
-                    "title": "Contexto"
-                },
-                "title": "Luz de mañana"
-            },
-            "Day2": {
-                "learn": {
-                    "body": "Adelantar la última ingesta facilita la digestión y mejora la calidad del sueño profundo.",
-                    "title": "Contexto"
-                },
-                "title": "Cena más temprano"
-            },
-            "Day3": {
-                "learn": {
-                    "body": "La luz azul de las pantallas suprime la melatonina. Reducirla por la noche ayuda a preparar el cuerpo para dormir.",
-                    "title": "Contexto"
-                },
-                "title": "Pantallas y oscuridad"
-            },
-            "Day4": {
-                "learn": {
-                    "body": "La cafeína tiene una vida media larga. Retrasar su consumo al despertar evita el 'crash' de la tarde.",
-                    "title": "Contexto"
-                },
-                "title": "Cafeína"
-            },
-            "Day5": {
-                "learn": {
-                    "body": "Caminar a paso ligero por la mañana eleva la temperatura corporal y refuerza la señal de vigilia.",
-                    "title": "Contexto"
-                },
-                "title": "Movimiento suave"
-            },
-            "Day6": {
-                "learn": {
-                    "body": "Mantener el ambiente oscuro antes de dormir señala al cerebro que es hora de descansar.",
-                    "title": "Contexto"
-                },
-                "title": "Oscuridad nocturna"
-            },
-            "Day9": {
-                "learn": {
-                    "body": "Una rutina de desaceleración ayuda a transicionar del estado de alerta al de reposo.",
-                    "title": "Contexto"
-                },
-                "title": "Descarga nocturna"
-            }
-        },
-        "digestive_reset_14": {
-            "Actions": {
-                "add_fiber": {
-                    "details": "One source only. Start small.",
-                    "label": "Add one fiber"
-                },
-                "breath_before_meal": {
-                    "details": "Before one meal (one is enough).",
-                    "label": "Breathe 1 minute before"
-                },
-                "chew": {
-                    "details": "One meal. No counting. Just slower.",
-                    "label": "Chew a bit more"
-                },
-                "kitchen_cutoff": {
-                    "details": "Finish food 3h before sleep (adjust for shift work).",
-                    "label": "Kitchen cutoff (3h)"
-                },
-                "meal_order": {
-                    "details": "Protein/veg first. Carbs last (if applicable).",
-                    "label": "Meal order"
-                },
-                "meal_pause": {
-                    "details": "Breathe and slow down before the first bite.",
-                    "label": "Pause 30 seconds before eating"
-                },
-                "no_snacking": {
-                    "label": "No snacking between meals"
-                },
-                "one_change": {
-                    "details": "Change one variable only. Keep the rest the same.",
-                    "label": "One change"
-                },
-                "plan_next": {
-                    "details": "Choose one practice and schedule it 2–3 days.",
-                    "label": "Minimal plan (5 min)"
-                },
-                "protein_anchor": {
-                    "details": "One meal with simple, stable protein.",
-                    "label": "Protein anchor"
-                },
-                "reflux_positioning": {
-                    "details": "Optional: left side / elevate head.",
-                    "label": "Posture adjustment (reflux)"
-                },
-                "review_trigger": {
-                    "details": "Pick one minimal adjustment for tomorrow.",
-                    "label": "Review trigger"
-                },
-                "simple_meal_today": {
-                    "label": "Simple plate (2 ingredients)"
-                },
-                "simple_plate": {
-                    "details": "One meal with less mixing, familiar foods.",
-                    "label": "Simple plate"
-                },
-                "trigger_scan": {
-                    "details": "Note one possible variable (no elimination today).",
-                    "label": "Trigger scan"
-                },
-                "walk_10min": {
-                    "details": "After the main meal. Gentle pace.",
-                    "label": "Walk 10 minutes"
-                },
-                "water_timing": {
-                    "details": "Avoid large glasses with meals. Sips are fine.",
-                    "label": "Water timing"
-                }
-            },
-            "Checks": {
-                "bloating": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Bloating"
-                },
-                "burping": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Burping"
-                },
-                "cravings": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Cravings"
-                },
-                "fullness": {
-                    "options": {
-                        "heavier": "Heavier",
-                        "lighter": "Lighter",
-                        "same": "Same"
-                    },
-                    "prompt": "Heaviness"
-                },
-                "gas": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Gas"
-                },
-                "overall": {
-                    "options": {
-                        "improved": "Improved",
-                        "mixed": "Mixed",
-                        "no_change": "No change"
-                    },
-                    "prompt": "Overall balance"
-                },
-                "reflux": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Reflujo"
-                },
-                "sleep_after_dinner": {
-                    "options": {
-                        "easier": "Easier",
-                        "harder": "Harder",
-                        "same": "Same"
-                    },
-                    "prompt": "Sleep after dinner"
-                },
-                "stool": {
-                    "options": {
-                        "improved": "Improved",
-                        "same": "Same",
-                        "worse": "Worse"
-                    },
-                    "prompt": "Transit"
-                }
-            },
-            "Day1": {
-                "learn": {
-                    "body": "A calmer start and gentle post-meal movement often improves tolerance.",
-                    "title": "Entry signal"
-                },
-                "title": "Simple plate"
-            },
-            "Day2": {
-                "learn": {
-                    "body": "Spacing meals allows the migrating motor complex to clean the digestive tract.",
-                    "title": "Rhythm"
-                },
-                "title": "Meal timing"
-            },
-            "Support": {
-                "common_questions": "Common questions"
-            }
-        },
-        "nervous_system_reset_10": {
-            "Actions": {
-                "body_scan_5min": {
-                    "details": "Eyes open if preferred. Stop if uncomfortable.",
-                    "label": "Body scan 5 minutes"
-                },
-                "boundary_1": {
-                    "details": "Pick a small boundary. ‘Not today’, ‘10 minutes only’, ‘tomorrow’.",
-                    "label": "One boundary today"
-                },
-                "breathing_2min": {
-                    "details": "Natural breathing. Optionally lengthen the exhale.",
-                    "label": "Breathe 2 minutes"
-                },
-                "breathing_3min": {
-                    "details": "Slow inhale, slower exhale. Calms the system.",
-                    "label": "Conscious breathing (3 min)"
-                },
-                "caffeine_boundary": {
-                    "details": "Choose a latest time today. Keep the rest unchanged.",
-                    "label": "Set caffeine boundary"
-                },
-                "downshift_10min": {
-                    "details": "Low stimulation activity before sleep.",
-                    "label": "Evening downshift (10 min)"
-                },
-                "downshift_3min": {
-                    "details": "Slightly longer exhale. Soft gaze optional.",
-                    "label": "Downshift 3 minutes"
-                },
-                "evening_light_dimmer": {
-                    "details": "Reduce overhead bright light if possible. No full darkness required.",
-                    "label": "Dim evening light"
-                },
-                "physiological_sigh": {
-                    "details": "Two inhales + one long exhale. Stop if dizzy.",
-                    "label": "Physiological sigh (1 min)"
-                },
-                "plan_next_5min": {
-                    "details": "Choose one practice. Schedule it 2–3 days this week.",
-                    "label": "Plan 5 minutes"
-                },
-                "reflection_2min": {
-                    "details": "One sentence: what raised or lowered activation today. No judgement.",
-                    "label": "Reflect 2 minutes"
-                },
-                "social_contact": {
-                    "details": "Short message or voice note. In-person optional.",
-                    "label": "Minimum social contact"
-                },
-                "walk_5min": {
-                    "details": "Slow pace. Indoors or outdoors.",
-                    "label": "Walk 5 minutes"
-                }
-            },
-            "Checks": {
-                "afternoon_energy": {
-                    "options": {
-                        "crash": "Crash",
-                        "same": "Same",
-                        "steadier": "Steadier"
-                    },
-                    "prompt": "Afternoon energy"
-                },
-                "body": {
-                    "options": {
-                        "looser": "Looser",
-                        "neutral": "Neutral",
-                        "tenser": "Tenser"
-                    },
-                    "prompt": "Body"
-                },
-                "calmness": {
-                    "options": {
-                        "high": "High (Relaxed)",
-                        "low": "Low (Tense)",
-                        "medium": "Medium"
-                    },
-                    "prompt": "Level of calmness"
-                },
-                "connection": {
-                    "options": {
-                        "better": "Better",
-                        "same": "Same",
-                        "worse": "Worse"
-                    },
-                    "prompt": "Connection"
-                },
-                "evening_activation": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Evening activation"
-                },
-                "load": {
-                    "options": {
-                        "higher": "Higher",
-                        "lower": "Lower",
-                        "same": "Same"
-                    },
-                    "prompt": "Internal load"
-                },
-                "overall": {
-                    "options": {
-                        "improved": "Improved",
-                        "mixed": "Mixed",
-                        "no_change": "No change"
-                    },
-                    "prompt": "Overall balance"
-                },
-                "reactivity": {
-                    "options": {
-                        "less": "Less",
-                        "more": "More",
-                        "same": "Same"
-                    },
-                    "prompt": "Reactivity"
-                },
-                "sleep_pressure": {
-                    "options": {
-                        "easier": "Easier",
-                        "harder": "Harder",
-                        "same": "Same"
-                    },
-                    "prompt": "Sleep pressure"
-                },
-                "sleep_quality": {
-                    "options": {
-                        "excellent": "Excellent",
-                        "fair": "Fair",
-                        "good": "Good",
-                        "poor": "Poor"
-                    },
-                    "prompt": "Sleep quality"
-                },
-                "state": {
-                    "options": {
-                        "calmer": "Calmer",
-                        "more_activated": "More activated",
-                        "same": "Same"
-                    },
-                    "prompt": "Current state"
-                },
-                "tension_hotspot": {
-                    "options": {
-                        "identified": "Identified",
-                        "none": "None noticed",
-                        "unclear": "Unclear"
-                    },
-                    "prompt": "Main tension area"
-                }
-            },
-            "Day1": {
-                "learn": {
-                    "body": "Slow, controlled breathing activates the vagus nerve, reducing fight or flight response.",
-                    "title": "Vagal tone"
-                },
-                "title": "Breathing 3 min"
-            },
-            "Day9": {
-                "learn": {
-                    "body": "Prepare the nervous system for sleep with a disconnection routine.",
-                    "title": "Discharge"
-                },
-                "title": "Evening Downshift"
-            },
-            "Support": {
-                "common_questions": "Common questions"
-            }
-        },
-        "recal_3d": {
-            "Day1": {
-                "learn": {
-                    "body": "La luz solar es el ancla principal para estabilizar el ritmo circadiano.",
-                    "title": "Contexto"
-                },
-                "title": "Reset de luz matutina"
-            },
-            "Day2": {
-                "learn": {
-                    "body": "Adelantar la cena facilita la reparación nocturna y la calidad del sueño.",
-                    "title": "Contexto"
-                },
-                "title": "Ajuste de cena"
-            },
-            "Day3": {
-                "learn": {
-                    "body": "Mantener las dos señales previas consolida el patrón base.",
-                    "title": "Contexto"
-                },
-                "title": "Consolidación de anclas"
-            }
-        }
-    },
-    "Public": {
-        "Blog": {
-            "read_more": "Read article",
-            "subtitle": "Articles on metabolic health and systems",
-            "title": "Blog"
-        },
-        "Community": {
-            "channels_title": "Active channels",
-            "join_cta": "Join the discussion",
-            "subtitle": "Real conversations with real people",
-            "title": "Community"
-        },
-        "Courses": {
-            "cta_start": "Start course",
-            "subtitle": "Go deeper into the HealthOS methodology",
-            "title": "Courses"
-        },
-        "Landing": {
-            "ecosystem": {
-                "coming_soon": "Coming soon",
-                "intro": "Protocols, community and tools aligned with your biology.",
-                "tabs": {
-                    "blog": "Reads",
-                    "community": "Community",
-                    "courses": "Courses",
-                    "products": "Tools",
-                    "protocols": "Protocols"
-                },
-                "title": "Everything you need to move forward",
-                "view_all": "View full catalog"
-            },
-            "final": {
-                "cta_primary": "Start now",
-                "cta_secondary": "I already have an account",
-                "subtitle": "No credit card. No mandatory supplements. Just physiology.",
-                "title": "Start your recalibration today"
-            },
-            "goals": {
-                "digestion": "Digestion",
-                "energy": "Energy",
-                "goal_aria_prefix": "Start protocol for: {goal}",
-                "performance": "Performance",
-                "sleep": "Sleep",
-                "stress": "Stress",
-                "title": "What do you want to improve first?",
-                "weight": "Weight"
-            },
-            "hero": {
-                "badge": "Chronobiology-based protocol",
-                "cta_primary": "Assess your state in 2 minutes",
-                "cta_secondary": "See how it works",
-                "subtitle": "HealthOS is a habit protocol that recalibrates your sleep, energy and digestion by aligning your biological rhythms — no mandatory supplements.",
-                "title": "Your body runs on rhythms. Start respecting yours.",
-                "trust_line": "No credit card. Free plan available."
-            },
-            "hiw": {
-                "step1": {
-                    "desc": "A 2-minute assessment identifies your circadian misalignments and sets your baseline.",
-                    "title": "Assess your state"
-                },
-                "step2": {
-                    "desc": "A personalised habit protocol — no mandatory supplements, no impossible routines.",
-                    "title": "Receive your route"
-                },
-                "step3": {
-                    "desc": "The system records your daily signals. Improvement patterns are visible within 7–14 days.",
-                    "title": "Observe the change"
-                },
-                "title": "How HealthOS works"
-            },
-            "trust": {
-                "intro": "Based on chronobiology, evolutionary physiology and circadian rhythms. No medical claims — habit protocols with published evidence.",
-                "label_community": "Active community",
-                "label_evidence": "Evidence-based",
-                "label_longterm": "Sustainable outcomes",
-                "title": "Science, not trends"
-            }
-        },
-        "Learn": {
-            "featured_title": "Featured for you",
-            "latest_title": "Latest",
-            "search_placeholder": "What do you want to learn today?",
-            "start_here": "Start here",
-            "subtitle": "Guides, protocols and resources for your health",
-            "tab_articles": "Articles",
-            "tab_courses": "Courses",
-            "tab_guides": "Guides",
-            "title": "Learning Hub"
-        },
-        "Nav": {
-            "blog": "Blog",
-            "community": "Community",
-            "courses": "Courses",
-            "learn": "Learn",
-            "login": "Sign in",
-            "products": "Products",
-            "start": "Get started"
-        },
-        "Products": {
-            "cta_view": "View details",
-            "subtitle": "Tools for your daily practice",
-            "title": "Products"
-        }
-    },
-    "Resources": {
-        "CircadianReset": {
-            "Day1": {
-                "blog1": {
-                    "title": "Why morning light matters",
-                    "why": "Context on the body clock and the start signal."
-                },
-                "thread": {
-                    "title": "Day 1 · Circadian Reset",
-                    "why": "Day-specific questions and experiences."
-                }
-            },
-            "Day10": {
-                "blog1": {
-                    "title": "Naps: a simple policy",
-                    "why": "Avoid naps breaking nighttime sleep."
-                },
-                "thread": {
-                    "title": "Day 10 · Naps",
-                    "why": "Pick a rule that fits."
-                }
-            },
-            "Day11": {
-                "blog1": {
-                    "title": "Week 2 adjustments",
-                    "why": "What to tweak once the base is in place."
-                },
-                "thread": {
-                    "title": "Day 11 · Adjustments",
-                    "why": "Today’s notes."
-                }
-            },
-            "Day12": {
-                "blog1": {
-                    "title": "Caffeine: friction troubleshooting",
-                    "why": "Options if delaying caffeine is hard."
-                },
-                "thread": {
-                    "title": "Day 12 · Friction",
-                    "why": "What obstacle showed up."
-                }
-            },
-            "Day13": {
-                "blog1": {
-                    "title": "Weekend social jet lag",
-                    "why": "How to reduce impact without rigidity."
-                },
-                "thread": {
-                    "title": "Day 13 · Weekend",
-                    "why": "A soft strategy."
-                }
-            },
-            "Day14": {
-                "blog1": {
-                    "title": "Minimum viable maintenance",
-                    "why": "Sustain the gains without relying on the protocol."
-                },
-                "course1": {
-                    "title": "Next step: advanced sleep",
-                    "why": "Optional deepening."
-                },
-                "thread": {
-                    "title": "Day 14 · Closure",
-                    "why": "What you’re keeping (optional)."
-                }
-            },
-            "Day2": {
-                "blog1": {
-                    "title": "Delaying caffeine: a useful window",
-                    "why": "How caffeine timing affects energy and sleep."
-                },
-                "recipe1": {
-                    "title": "Stable breakfast (template)",
-                    "why": "Simple example to reduce variability."
-                },
-                "thread": {
-                    "title": "Day 2 · Caffeine",
-                    "why": "How you applied it today."
-                }
-            },
-            "Day3": {
-                "blog1": {
-                    "title": "Earlier dinner and sleep",
-                    "why": "Relationship between dinner time and rest."
-                },
-                "recipe1": {
-                    "title": "Earlier dinner (template)",
-                    "why": "Simple options to shift earlier without complexity."
-                },
-                "thread": {
-                    "title": "Day 3 · Dinner",
-                    "why": "Strategies for different schedules."
-                }
-            },
-            "Day4": {
-                "blog1": {
-                    "title": "Gentle morning movement",
-                    "why": "Light activation without adding stress."
-                },
-                "thread": {
-                    "title": "Day 4 · Movement",
-                    "why": "Choose a minimal form that fits."
-                }
-            },
-            "Day5": {
-                "blog1": {
-                    "title": "Midday light to stabilize",
-                    "why": "Reinforces circadian signaling and energy."
-                },
-                "thread": {
-                    "title": "Day 5 · Midday",
-                    "why": "How it fit into your day."
-                }
-            },
-            "Day6": {
-                "blog1": {
-                    "title": "Night darkness and screens",
-                    "why": "Reduce “daytime” signals late in the day."
-                },
-                "product1": {
-                    "title": "Blue-blocking glasses (optional)",
-                    "why": "Support tool if screens are high-friction."
-                },
-                "thread": {
-                    "title": "Day 6 · Darkness",
-                    "why": "Realistic night adjustments."
-                }
-            },
-            "Day7": {
-                "blog1": {
-                    "title": "Week 1 review (minimum viable)",
-                    "why": "How to consolidate without raising demands."
-                },
-                "course1": {
-                    "title": "Mini-course: circadian basics",
-                    "why": "Short recap to organize the map."
-                },
-                "thread": {
-                    "title": "Day 7 · Review",
-                    "why": "Share observations if you want."
-                }
-            },
-            "Day8": {
-                "blog1": {
-                    "title": "Sleep pressure and daytime activity",
-                    "why": "Simple ways to build natural sleepiness."
-                },
-                "thread": {
-                    "title": "Day 8 · Sleep pressure",
-                    "why": "What worked for you."
-                }
-            },
-            "Day9": {
-                "blog1": {
-                    "title": "Temperature and sleep onset",
-                    "why": "How cooling supports falling asleep."
-                },
-                "product1": {
-                    "title": "Sleep mask (optional)",
-                    "why": "Support if ambient light is present."
-                },
-                "thread": {
-                    "title": "Day 9 · Temperature",
-                    "why": "Small adjustments, not perfection."
-                }
-            }
-        },
-        "DigestiveRepair": {
-            "Day1": {
-                "blog1": {
-                    "title": "Why slowing down helps",
-                    "why": "Context on meal pace and tolerance."
-                },
-                "recipe1": {
-                    "title": "Simple protein breakfast",
-                    "why": "Stable meal example to reduce variability."
-                },
-                "thread": {
-                    "title": "Day 1 · Digestive Repair",
-                    "why": "Day-specific questions and experiences."
-                }
-            },
-            "Day10": {
-                "blog1": {
-                    "title": "Night reflux: positioning",
-                    "why": "Optional adjustments for better sleep."
-                },
-                "thread": {
-                    "title": "Day 10 · Reflux",
-                    "why": "Realistic strategies."
-                }
-            },
-            "Day11": {
-                "blog1": {
-                    "title": "Fiber introduction",
-                    "why": "Slow progression for tolerance."
-                },
-                "recipe1": {
-                    "title": "Fiber in small portion",
-                    "why": "Example to start."
-                },
-                "thread": {
-                    "title": "Day 11 · Fiber",
-                    "why": "Gas/bloating observations."
-                }
-            },
-            "Day12": {
-                "blog1": {
-                    "title": "Protein anchor",
-                    "why": "Stability to reduce noise."
-                },
-                "recipe1": {
-                    "title": "Anchor meal",
-                    "why": "Simple and repeatable template."
-                },
-                "thread": {
-                    "title": "Day 12 · Anchor",
-                    "why": "Which anchor did you pick."
-                }
-            },
-            "Day13": {
-                "blog1": {
-                    "title": "Minimal adjustment for tomorrow",
-                    "why": "Closure without overreacting."
-                },
-                "thread": {
-                    "title": "Day 13 · Adjustment",
-                    "why": "What adjustment will you make."
-                }
-            },
-            "Day14": {
-                "blog1": {
-                    "title": "Minimal viable maintenance",
-                    "why": "How to continue without loading the system."
-                },
-                "course1": {
-                    "title": "Next step: advanced digestive",
-                    "why": "Optional deeper dive."
-                },
-                "thread": {
-                    "title": "Day 14 · Closure",
-                    "why": "What you keep."
-                }
-            },
-            "Day2": {
-                "blog1": {
-                    "title": "Meal order",
-                    "why": "Practical guide to ordering your meal."
-                },
-                "recipe1": {
-                    "title": "Plate: protein + veg + (optional) carb",
-                    "why": "Simple template to apply the order."
-                },
-                "thread": {
-                    "title": "Day 2 · Meal order",
-                    "why": "Real apply in today's meals."
-                }
-            },
-            "Day3": {
-                "blog1": {
-                    "title": "Late dinner, reflux and sleep",
-                    "why": "Relationship between dinner timing and night symptoms."
-                },
-                "recipe1": {
-                    "title": "Early light dinner",
-                    "why": "Simple options to move dinner earlier."
-                },
-                "thread": {
-                    "title": "Day 3 · Kitchen cutoff",
-                    "why": "Strategies based on schedules."
-                }
-            },
-            "Day4": {
-                "blog1": {
-                    "title": "Chewing: without counting",
-                    "why": "How to apply without making it a chore."
-                },
-                "product1": {
-                    "title": "Mint/ginger infusion (optional)",
-                    "why": "Comfort tool, not required."
-                },
-                "recipe1": {
-                    "title": "Simple plate (one meal)",
-                    "why": "Reduce mixing to better observe."
-                },
-                "thread": {
-                    "title": "Day 4 · Chewing",
-                    "why": "Minimal applicable adjustments."
-                }
-            },
-            "Day5": {
-                "blog1": {
-                    "title": "How to observe triggers",
-                    "why": "One-variable methodology without abrupt eliminations."
-                },
-                "product1": {
-                    "title": "Digestive support pack (optional)",
-                    "why": "Only if there is friction or discomfort."
-                },
-                "recipe1": {
-                    "title": "Two-ingredient meal",
-                    "why": "Low complexity example."
-                },
-                "thread": {
-                    "title": "Day 5 · Triggers",
-                    "why": "Record observation."
-                }
-            },
-            "Day6": {
-                "blog1": {
-                    "title": "Water with meals",
-                    "why": "How to adjust without dehydrating."
-                },
-                "thread": {
-                    "title": "Day 6 · Water timing",
-                    "why": "What changes and what doesn't."
-                }
-            },
-            "Day7": {
-                "blog1": {
-                    "title": "Reading transit signals",
-                    "why": "Practical interpretation of changes."
-                },
-                "course1": {
-                    "title": "Mini-course: digestive basics",
-                    "why": "Brief context to consolidate."
-                },
-                "recipe1": {
-                    "title": "Simple soup",
-                    "why": "Easy option for sensitive days."
-                },
-                "thread": {
-                    "title": "Day 7 · Signals",
-                    "why": "Share patterns (if you want)."
-                }
-            },
-            "Day8": {
-                "blog1": {
-                    "title": "Breathe before eating",
-                    "why": "Entry to rest-digest mode."
-                },
-                "thread": {
-                    "title": "Day 8 · Pre-breathing",
-                    "why": "How you applied it."
-                }
-            },
-            "Day9": {
-                "blog1": {
-                    "title": "One-variable experiments",
-                    "why": "Avoid confusion from multiple changes."
-                },
-                "thread": {
-                    "title": "Day 9 · One change",
-                    "why": "What variable did you pick."
-                }
-            }
-        },
-        "NervousRegulation": {
-            "Day1": {
-                "blog1": {
-                    "title": "Activation baseline",
-                    "why": "A simple frame to observe activation without judgment."
-                },
-                "thread": {
-                    "title": "Day 1 · Nervous Regulation",
-                    "why": "Context and day-specific questions."
-                }
-            },
-            "Day10": {
-                "blog1": {
-                    "title": "Minimum viable maintenance",
-                    "why": "Sustain regulation without long rituals."
-                },
-                "course1": {
-                    "title": "Next step: advanced stress",
-                    "why": "Optional deepening."
-                },
-                "thread": {
-                    "title": "Day 10 · Closure",
-                    "why": "What you will keep."
-                }
-            },
-            "Day2": {
-                "blog1": {
-                    "title": "Physiological sigh",
-                    "why": "A short tool to downshift in the moment."
-                },
-                "thread": {
-                    "title": "Day 2 · Sigh",
-                    "why": "How you used it today."
-                }
-            },
-            "Day3": {
-                "blog1": {
-                    "title": "Caffeine boundaries",
-                    "why": "Reduce activation without abrupt removal."
-                },
-                "thread": {
-                    "title": "Day 3 · Caffeine",
-                    "why": "Which boundary you tried."
-                }
-            },
-            "Day4": {
-                "blog1": {
-                    "title": "Evening wind-down ritual",
-                    "why": "Transition to rest without perfectionism."
-                },
-                "thread": {
-                    "title": "Day 4 · Evening",
-                    "why": "What fits for you."
-                }
-            },
-            "Day5": {
-                "blog1": {
-                    "title": "Body scan (2 min)",
-                    "why": "Notice tension without over-analyzing."
-                },
-                "thread": {
-                    "title": "Day 5 · Tension",
-                    "why": "Where you feel it."
-                }
-            },
-            "Day6": {
-                "blog1": {
-                    "title": "Micro-breaks during the day",
-                    "why": "Reduce accumulated load."
-                },
-                "thread": {
-                    "title": "Day 6 · Breaks",
-                    "why": "Which break you did."
-                }
-            },
-            "Day7": {
-                "blog1": {
-                    "title": "Week 1 review",
-                    "why": "Consolidation with minimal intervention."
-                },
-                "course1": {
-                    "title": "Mini-course: nervous system basics",
-                    "why": "A short recap to organize the map."
-                },
-                "thread": {
-                    "title": "Day 7 · Review",
-                    "why": "What changed."
-                }
-            },
-            "Day8": {
-                "blog1": {
-                    "title": "One boundary (one thing)",
-                    "why": "Reduce load with a small decision."
-                },
-                "thread": {
-                    "title": "Day 8 · Boundary",
-                    "why": "Which one you chose."
-                }
-            },
-            "Day9": {
-                "blog1": {
-                    "title": "Sleep entry: lowering activation",
-                    "why": "How to prepare the end of the day."
-                },
-                "thread": {
-                    "title": "Day 9 · Sleep",
-                    "why": "What worked for you."
-                }
-            }
-        },
-        "digestive_reset_14": {
-            "Day1": {
-                "blog1": {
-                    "title": "Por qué bajar el ritmo ayuda",
-                    "why": "Contexto sobre ritmo de comida y tolerancia."
-                },
-                "recipe1": {
-                    "title": "Desayuno simple con proteína",
-                    "why": "Ejemplo de comida estable para reducir variabilidad."
-                },
-                "thread": {
-                    "title": "Día 1 · Reparación Digestiva",
-                    "why": "Preguntas y experiencias del día."
-                }
-            },
-            "Day10": {
-                "blog1": {
-                    "title": "Reflujo nocturno: posición",
-                    "why": "Ajustes opcionales para dormir mejor."
-                },
-                "thread": {
-                    "title": "Día 10 · Reflujo",
-                    "why": "Estrategias realistas."
-                }
-            },
-            "Day11": {
-                "blog1": {
-                    "title": "Introducción de fibra",
-                    "why": "Progresión lenta para tolerancia."
-                },
-                "recipe1": {
-                    "title": "Fibra en porción pequeña",
-                    "why": "Ejemplo para empezar."
-                },
-                "thread": {
-                    "title": "Día 11 · Fibra",
-                    "why": "Observaciones de gas/hinchazón."
-                }
-            },
-            "Day12": {
-                "blog1": {
-                    "title": "Ancla de proteína",
-                    "why": "Estabilidad para reducir ruido."
-                },
-                "recipe1": {
-                    "title": "Comida ancla",
-                    "why": "Plantilla simple y repetible."
-                },
-                "thread": {
-                    "title": "Día 12 · Ancla",
-                    "why": "Qué ancla elegiste."
-                }
-            },
-            "Day13": {
-                "blog1": {
-                    "title": "Ajuste mínimo para mañana",
-                    "why": "Cierre sin sobrerreacción."
-                },
-                "thread": {
-                    "title": "Día 13 · Ajuste",
-                    "why": "Qué ajuste harás."
-                }
-            },
-            "Day14": {
-                "blog1": {
-                    "title": "Mantenimiento mínimo viable",
-                    "why": "Cómo seguir sin cargar el sistema."
-                },
-                "course1": {
-                    "title": "Siguiente paso: avanzado digestivo",
-                    "why": "Profundización opcional."
-                },
-                "thread": {
-                    "title": "Día 14 · Cierre",
-                    "why": "Qué te quedas."
-                }
-            },
-            "Day2": {
-                "blog1": {
-                    "title": "Secuencia de la comida",
-                    "why": "Guía práctica para ordenar la comida."
-                },
-                "recipe1": {
-                    "title": "Plato: proteína + verduras + (opcional) carbo",
-                    "why": "Plantilla simple para aplicar el orden."
-                },
-                "thread": {
-                    "title": "Día 2 · Orden de comida",
-                    "why": "Aplicación real en comidas del día."
-                }
-            },
-            "Day3": {
-                "blog1": {
-                    "title": "Cena tardía, reflujo y sueño",
-                    "why": "Relación entre horario de cena y síntomas nocturnos."
-                },
-                "recipe1": {
-                    "title": "Cena temprana ligera",
-                    "why": "Opciones sencillas para adelantar sin complicar."
-                },
-                "thread": {
-                    "title": "Día 3 · Corte de cocina",
-                    "why": "Estrategias según horarios."
-                }
-            },
-            "Day4": {
-                "blog1": {
-                    "title": "Masticación: sin contar",
-                    "why": "Cómo aplicar sin convertirlo en tarea pesada."
-                },
-                "product1": {
-                    "title": "Infusión menta/jengibre (opcional)",
-                    "why": "Herramienta de confort, no necesaria."
-                },
-                "recipe1": {
-                    "title": "Plato simple (una comida)",
-                    "why": "Reduce mezcla para observar mejor."
-                },
-                "thread": {
-                    "title": "Día 4 · Masticación",
-                    "why": "Ajustes mínimos aplicables."
-                }
-            },
-            "Day5": {
-                "blog1": {
-                    "title": "Cómo observar desencadenantes",
-                    "why": "Metodología de una variable sin eliminaciones bruscas."
-                },
-                "product1": {
-                    "title": "Pack soporte digestivo (opcional)",
-                    "why": "Solo si hay fricción o molestias."
-                },
-                "recipe1": {
-                    "title": "Comida de dos ingredientes",
-                    "why": "Ejemplo de baja complejidad."
-                },
-                "thread": {
-                    "title": "Día 5 · Desencadenantes",
-                    "why": "Registro de observaciones."
-                }
-            },
-            "Day6": {
-                "blog1": {
-                    "title": "Agua con las comidas",
-                    "why": "Cómo ajustar sin deshidratarte."
-                },
-                "thread": {
-                    "title": "Día 6 · Timing de agua",
-                    "why": "Qué cambia y qué no."
-                }
-            },
-            "Day7": {
-                "blog1": {
-                    "title": "Leer señales de tránsito",
-                    "why": "Interpretación práctica de cambios."
-                },
-                "course1": {
-                    "title": "Mini-curso: bases digestivas",
-                    "why": "Contexto breve para consolidar."
-                },
-                "recipe1": {
-                    "title": "Sopa simple",
-                    "why": "Opción fácil para días de sensibilidad."
-                },
-                "thread": {
-                    "title": "Día 7 · Señales",
-                    "why": "Comparte patrones (si quieres)."
-                }
-            },
-            "Day8": {
-                "blog1": {
-                    "title": "Respirar antes de comer",
-                    "why": "Entrada al modo descanso-digestión."
-                },
-                "thread": {
-                    "title": "Día 8 · Pre-respiración",
-                    "why": "Cómo lo aplicaste."
-                }
-            },
-            "Day9": {
-                "blog1": {
-                    "title": "Experimentos de una variable",
-                    "why": "Evita confusión por múltiples cambios."
-                },
-                "thread": {
-                    "title": "Día 9 · Un cambio",
-                    "why": "Qué variable elegiste."
-                }
-            }
-        },
-        "energy_stability_7": {
-            "Actions": {
-                "eat_before_hunger": "Eat before intense hunger",
-                "eat_within_60min": "Eat within the first hour",
-                "no_sugar_isolated": "Avoid isolated sugar",
-                "protein_breakfast": "Add protein to first meal",
-                "repeat_best_day_pattern": "Repeat best day pattern",
-                "steady_meal_timing": "Maintain regular timing",
-                "water_before_caffeine": "Drink water before caffeine"
-            },
-            "Checks": {
-                "afternoon_energy": "Afternoon energy",
-                "energy_stability": "Morning stability",
-                "focus_clarity": "Mental clarity",
-                "midday_crash": "Midday crash",
-                "morning_energy": "Energy upon waking",
-                "overall_energy": "Overall daily energy",
-                "post_activity_energy": "Energy after activity"
-            },
-            "title": "Energy Stability (7 days)"
-        },
-        "metabolic_flexibility_10": {
-            "Actions": {
-                "carbs_evening_only": "Carbs in evening only",
-                "consistent_lunch_time": "Consistent lunch time",
-                "early_dinner_window": "Early dinner window",
-                "fixed_breakfast_time": "Fixed breakfast time",
-                "fixed_meal_structure": "Fixed meal structure",
-                "no_caloric_drinks_morning": "No caloric drinks in the morning",
-                "no_snacking_between_meals": "No snacking between meals",
-                "protein_first_meal": "Protein first in meal",
-                "repeatable_breakfast": "Repeatable breakfast",
-                "walk_after_meal_10min": "10-minute walk after meal"
-            },
-            "Checks": {
-                "afternoon_energy": "Afternoon energy",
-                "daily_energy_variation": "Daily energy variation",
-                "energy_midmorning": "Mid-morning energy",
-                "hunger_between_meals": "Hunger between meals",
-                "morning_clarity": "Morning clarity",
-                "morning_hunger": "Morning hunger",
-                "night_hunger": "Night hunger",
-                "postmeal_alertness": "Post-meal alertness",
-                "postmeal_state": "Post-meal state",
-                "sleep_onset": "Sleep onset"
-            },
-            "title": "Metabolic Flexibility (10 days)"
-        }
-    },
-    "SystemMessages": {
-        "Closure": {
-            "auto_disengaged": "Intervención suspendida por inactividad. El sistema vuelve a modo de monitorización base.",
-            "auto_integrated": "Intervención finalizada por integración. Se mantiene el registro para observación de estabilidad.",
-            "circadian_end": "El sistema ha completado la fase de intervención activa. Se mantiene el registro en modo pasivo.",
-            "energy_stable": "More stable energy pattern detected.",
-            "metabolic_stable": "Energy rhythm stabilized. No intervention required.",
-            "summary": "Closure: choose one minimal practice to continue.",
-            "user_ended": "Protocolo cerrado. El sistema entra en fase de monitorización pasiva."
-        },
-        "MinimalMode": {
-            "level1": "Minimal mode (L1): 1 action + 1 check.",
-            "level2": "Minimal mode (L2): 1 action."
-        },
-        "Normalization": {
-            "activation": "Higher activation observed. This can occur during change. Keep minimum viable load if needed.",
-            "digestive_variability": "Digestive variability observed. Small changes can have latency. Keep minimum viable load if needed.",
-            "energy_crash": "The crash is a physiological signal, not lack of discipline.",
-            "glucose_drop": "Expected glucose drop during adjustment.",
-            "low_morning_energy": "Morning energy adjusts after stabilizing the start of the day.",
-            "postmeal_insulin": "Postprandial sleepiness associated with insulin response.",
-            "reactive_hunger": "Reactive hunger detected. Metabolic signal recalibrating."
-        },
-        "Orientation": {
-            "continue": "Consistent logging observed. Continue with planned load.",
-            "default": "The system records signals when available."
-        },
-        "Recalibration": {
-            "ack": "Status updated.",
-            "progress": "Recalibration in progress. Record perception after action.",
-            "start": "Recalibration log active. The goal is to restore main anchors."
-        },
-        "Reengagement": {
-            "48h": "Inactivity detected. Minimal load applied to restart.",
-            "96h": "Extended inactivity. Minimum viable load maintained.",
-            "energy_inactive": "No recent records. Energy is observed when it appears.",
-            "resume_anchor": "Resume temporal anchor. One meal at fixed time."
-        },
-        "Reentry": {
-            "drift_detected": "Drift pattern detected in recent signals. Minimal recalibration available (optional).",
-            "instability_detected": "Return with negative signal after a period of silence. Recalibration available (optional)."
-        },
-        "Simplification": {
-            "active": "Reduced load active. Only essentials are shown.",
-            "energy_reduce": "Reducing load. Prioritize only the first meal."
-        },
-        "Transition": {
-            "next_options": "Status: Observation. Record your perception when you consider it necessary.",
-            "silence_is_data": "Calibration note: periods without records are valid data and part of the pattern."
-        },
-        "circadian": {
-            "CLOSURE": "Protocol closure. Keep one main lever and define a minimal version for days with little margin.",
-            "NORMALIZATION_WORSE": "If it felt worse today, it may be a temporary response to the change. Observe for two days before concluding.",
-            "ORIENTATION": "This protocol adjusts day and night signals. A single stable action per day is enough.",
-            "RE_ENGAGEMENT_48H": "A pause was detected. If you return today, use the minimal version: a brief action without optimizing anything else.",
-            "RE_ENGAGEMENT_96H": "An extended pause was detected. Restart with a single lever for 48 hours and then resume.",
-            "SIMPLIFICATION": "Reduced load active. Keep only the simplest step today. Stability matters more than volume.",
-            "TRANSITION": "Today prioritize a simple signal. The goal is to reduce friction and maintain consistency."
-        },
-        "minimal": {
-            "OFF": "Minimal mode disabled.",
-            "ON_L1": "Minimal mode active: one action and one check.",
-            "ON_L2": "Minimal mode active: one action. No check today."
-        }
+        "title": "Consolidación de anclas"
+      }
     }
+  },
+  "Public": {
+    "Blog": {
+      "read_more": "Read article",
+      "subtitle": "Articles on metabolic health and systems",
+      "title": "Blog"
+    },
+    "Community": {
+      "channels_title": "Active channels",
+      "join_cta": "Join the discussion",
+      "subtitle": "Real conversations with real people",
+      "title": "Community"
+    },
+    "Courses": {
+      "cta_start": "Start course",
+      "subtitle": "Go deeper into the HealthOS methodology",
+      "title": "Courses"
+    },
+    "Landing": {
+      "ecosystem": {
+        "coming_soon": "Coming soon",
+        "intro": "Protocols, community and tools aligned with your biology.",
+        "tabs": {
+          "blog": "Reads",
+          "community": "Community",
+          "courses": "Courses",
+          "products": "Tools",
+          "protocols": "Protocols"
+        },
+        "title": "Everything you need to move forward",
+        "view_all": "View full catalog"
+      },
+      "final": {
+        "cta_primary": "Start now",
+        "cta_secondary": "I already have an account",
+        "subtitle": "No credit card. No mandatory supplements. Just physiology.",
+        "title": "Start your recalibration today"
+      },
+      "goals": {
+        "digestion": "Digestion",
+        "energy": "Energy",
+        "goal_aria_prefix": "Start protocol for: {goal}",
+        "performance": "Performance",
+        "sleep": "Sleep",
+        "stress": "Stress",
+        "title": "What do you want to improve first?",
+        "weight": "Weight"
+      },
+      "hero": {
+        "badge": "Chronobiology-based protocol",
+        "cta_primary": "Assess your state in 2 minutes",
+        "cta_secondary": "See how it works",
+        "subtitle": "HealthOS is a habit protocol that recalibrates your sleep, energy and digestion by aligning your biological rhythms — no mandatory supplements.",
+        "title": "Your body runs on rhythms. Start respecting yours.",
+        "trust_line": "No credit card. Free plan available."
+      },
+      "hiw": {
+        "step1": {
+          "desc": "A 2-minute assessment identifies your circadian misalignments and sets your baseline.",
+          "title": "Assess your state"
+        },
+        "step2": {
+          "desc": "A personalised habit protocol — no mandatory supplements, no impossible routines.",
+          "title": "Receive your route"
+        },
+        "step3": {
+          "desc": "The system records your daily signals. Improvement patterns are visible within 7–14 days.",
+          "title": "Observe the change"
+        },
+        "title": "How HealthOS works"
+      },
+      "trust": {
+        "intro": "Based on chronobiology, evolutionary physiology and circadian rhythms. No medical claims — habit protocols with published evidence.",
+        "label_community": "Active community",
+        "label_evidence": "Evidence-based",
+        "label_longterm": "Sustainable outcomes",
+        "title": "Science, not trends"
+      }
+    },
+    "Learn": {
+      "featured_title": "Featured for you",
+      "latest_title": "Latest",
+      "search_placeholder": "What do you want to learn today?",
+      "start_here": "Start here",
+      "subtitle": "Guides, protocols and resources for your health",
+      "tab_articles": "Articles",
+      "tab_courses": "Courses",
+      "tab_guides": "Guides",
+      "title": "Learning Hub"
+    },
+    "Nav": {
+      "blog": "Blog",
+      "community": "Community",
+      "courses": "Courses",
+      "learn": "Learn",
+      "login": "Sign in",
+      "products": "Products",
+      "start": "Get started"
+    },
+    "Products": {
+      "cta_view": "View details",
+      "subtitle": "Tools for your daily practice",
+      "title": "Products"
+    }
+  },
+  "Resources": {
+    "CircadianReset": {
+      "Day1": {
+        "blog1": {
+          "title": "Why morning light matters",
+          "why": "Context on the body clock and the start signal."
+        },
+        "thread": {
+          "title": "Day 1 · Circadian Reset",
+          "why": "Day-specific questions and experiences."
+        }
+      },
+      "Day10": {
+        "blog1": {
+          "title": "Naps: a simple policy",
+          "why": "Avoid naps breaking nighttime sleep."
+        },
+        "thread": {
+          "title": "Day 10 · Naps",
+          "why": "Pick a rule that fits."
+        }
+      },
+      "Day11": {
+        "blog1": {
+          "title": "Week 2 adjustments",
+          "why": "What to tweak once the base is in place."
+        },
+        "thread": {
+          "title": "Day 11 · Adjustments",
+          "why": "Today’s notes."
+        }
+      },
+      "Day12": {
+        "blog1": {
+          "title": "Caffeine: friction troubleshooting",
+          "why": "Options if delaying caffeine is hard."
+        },
+        "thread": {
+          "title": "Day 12 · Friction",
+          "why": "What obstacle showed up."
+        }
+      },
+      "Day13": {
+        "blog1": {
+          "title": "Weekend social jet lag",
+          "why": "How to reduce impact without rigidity."
+        },
+        "thread": {
+          "title": "Day 13 · Weekend",
+          "why": "A soft strategy."
+        }
+      },
+      "Day14": {
+        "blog1": {
+          "title": "Minimum viable maintenance",
+          "why": "Sustain the gains without relying on the protocol."
+        },
+        "course1": {
+          "title": "Next step: advanced sleep",
+          "why": "Optional deepening."
+        },
+        "thread": {
+          "title": "Day 14 · Closure",
+          "why": "What you’re keeping (optional)."
+        }
+      },
+      "Day2": {
+        "blog1": {
+          "title": "Delaying caffeine: a useful window",
+          "why": "How caffeine timing affects energy and sleep."
+        },
+        "recipe1": {
+          "title": "Stable breakfast (template)",
+          "why": "Simple example to reduce variability."
+        },
+        "thread": {
+          "title": "Day 2 · Caffeine",
+          "why": "How you applied it today."
+        }
+      },
+      "Day3": {
+        "blog1": {
+          "title": "Earlier dinner and sleep",
+          "why": "Relationship between dinner time and rest."
+        },
+        "recipe1": {
+          "title": "Earlier dinner (template)",
+          "why": "Simple options to shift earlier without complexity."
+        },
+        "thread": {
+          "title": "Day 3 · Dinner",
+          "why": "Strategies for different schedules."
+        }
+      },
+      "Day4": {
+        "blog1": {
+          "title": "Gentle morning movement",
+          "why": "Light activation without adding stress."
+        },
+        "thread": {
+          "title": "Day 4 · Movement",
+          "why": "Choose a minimal form that fits."
+        }
+      },
+      "Day5": {
+        "blog1": {
+          "title": "Midday light to stabilize",
+          "why": "Reinforces circadian signaling and energy."
+        },
+        "thread": {
+          "title": "Day 5 · Midday",
+          "why": "How it fit into your day."
+        }
+      },
+      "Day6": {
+        "blog1": {
+          "title": "Night darkness and screens",
+          "why": "Reduce “daytime” signals late in the day."
+        },
+        "product1": {
+          "title": "Blue-blocking glasses (optional)",
+          "why": "Support tool if screens are high-friction."
+        },
+        "thread": {
+          "title": "Day 6 · Darkness",
+          "why": "Realistic night adjustments."
+        }
+      },
+      "Day7": {
+        "blog1": {
+          "title": "Week 1 review (minimum viable)",
+          "why": "How to consolidate without raising demands."
+        },
+        "course1": {
+          "title": "Mini-course: circadian basics",
+          "why": "Short recap to organize the map."
+        },
+        "thread": {
+          "title": "Day 7 · Review",
+          "why": "Share observations if you want."
+        }
+      },
+      "Day8": {
+        "blog1": {
+          "title": "Sleep pressure and daytime activity",
+          "why": "Simple ways to build natural sleepiness."
+        },
+        "thread": {
+          "title": "Day 8 · Sleep pressure",
+          "why": "What worked for you."
+        }
+      },
+      "Day9": {
+        "blog1": {
+          "title": "Temperature and sleep onset",
+          "why": "How cooling supports falling asleep."
+        },
+        "product1": {
+          "title": "Sleep mask (optional)",
+          "why": "Support if ambient light is present."
+        },
+        "thread": {
+          "title": "Day 9 · Temperature",
+          "why": "Small adjustments, not perfection."
+        }
+      }
+    },
+    "DigestiveRepair": {
+      "Day1": {
+        "blog1": {
+          "title": "Why slowing down helps",
+          "why": "Context on meal pace and tolerance."
+        },
+        "recipe1": {
+          "title": "Simple protein breakfast",
+          "why": "Stable meal example to reduce variability."
+        },
+        "thread": {
+          "title": "Day 1 · Digestive Repair",
+          "why": "Day-specific questions and experiences."
+        }
+      },
+      "Day10": {
+        "blog1": {
+          "title": "Night reflux: positioning",
+          "why": "Optional adjustments for better sleep."
+        },
+        "thread": {
+          "title": "Day 10 · Reflux",
+          "why": "Realistic strategies."
+        }
+      },
+      "Day11": {
+        "blog1": {
+          "title": "Fiber introduction",
+          "why": "Slow progression for tolerance."
+        },
+        "recipe1": {
+          "title": "Fiber in small portion",
+          "why": "Example to start."
+        },
+        "thread": {
+          "title": "Day 11 · Fiber",
+          "why": "Gas/bloating observations."
+        }
+      },
+      "Day12": {
+        "blog1": {
+          "title": "Protein anchor",
+          "why": "Stability to reduce noise."
+        },
+        "recipe1": {
+          "title": "Anchor meal",
+          "why": "Simple and repeatable template."
+        },
+        "thread": {
+          "title": "Day 12 · Anchor",
+          "why": "Which anchor did you pick."
+        }
+      },
+      "Day13": {
+        "blog1": {
+          "title": "Minimal adjustment for tomorrow",
+          "why": "Closure without overreacting."
+        },
+        "thread": {
+          "title": "Day 13 · Adjustment",
+          "why": "What adjustment will you make."
+        }
+      },
+      "Day14": {
+        "blog1": {
+          "title": "Minimal viable maintenance",
+          "why": "How to continue without loading the system."
+        },
+        "course1": {
+          "title": "Next step: advanced digestive",
+          "why": "Optional deeper dive."
+        },
+        "thread": {
+          "title": "Day 14 · Closure",
+          "why": "What you keep."
+        }
+      },
+      "Day2": {
+        "blog1": {
+          "title": "Meal order",
+          "why": "Practical guide to ordering your meal."
+        },
+        "recipe1": {
+          "title": "Plate: protein + veg + (optional) carb",
+          "why": "Simple template to apply the order."
+        },
+        "thread": {
+          "title": "Day 2 · Meal order",
+          "why": "Real apply in today's meals."
+        }
+      },
+      "Day3": {
+        "blog1": {
+          "title": "Late dinner, reflux and sleep",
+          "why": "Relationship between dinner timing and night symptoms."
+        },
+        "recipe1": {
+          "title": "Early light dinner",
+          "why": "Simple options to move dinner earlier."
+        },
+        "thread": {
+          "title": "Day 3 · Kitchen cutoff",
+          "why": "Strategies based on schedules."
+        }
+      },
+      "Day4": {
+        "blog1": {
+          "title": "Chewing: without counting",
+          "why": "How to apply without making it a chore."
+        },
+        "product1": {
+          "title": "Mint/ginger infusion (optional)",
+          "why": "Comfort tool, not required."
+        },
+        "recipe1": {
+          "title": "Simple plate (one meal)",
+          "why": "Reduce mixing to better observe."
+        },
+        "thread": {
+          "title": "Day 4 · Chewing",
+          "why": "Minimal applicable adjustments."
+        }
+      },
+      "Day5": {
+        "blog1": {
+          "title": "How to observe triggers",
+          "why": "One-variable methodology without abrupt eliminations."
+        },
+        "product1": {
+          "title": "Digestive support pack (optional)",
+          "why": "Only if there is friction or discomfort."
+        },
+        "recipe1": {
+          "title": "Two-ingredient meal",
+          "why": "Low complexity example."
+        },
+        "thread": {
+          "title": "Day 5 · Triggers",
+          "why": "Record observation."
+        }
+      },
+      "Day6": {
+        "blog1": {
+          "title": "Water with meals",
+          "why": "How to adjust without dehydrating."
+        },
+        "thread": {
+          "title": "Day 6 · Water timing",
+          "why": "What changes and what doesn't."
+        }
+      },
+      "Day7": {
+        "blog1": {
+          "title": "Reading transit signals",
+          "why": "Practical interpretation of changes."
+        },
+        "course1": {
+          "title": "Mini-course: digestive basics",
+          "why": "Brief context to consolidate."
+        },
+        "recipe1": {
+          "title": "Simple soup",
+          "why": "Easy option for sensitive days."
+        },
+        "thread": {
+          "title": "Day 7 · Signals",
+          "why": "Share patterns (if you want)."
+        }
+      },
+      "Day8": {
+        "blog1": {
+          "title": "Breathe before eating",
+          "why": "Entry to rest-digest mode."
+        },
+        "thread": {
+          "title": "Day 8 · Pre-breathing",
+          "why": "How you applied it."
+        }
+      },
+      "Day9": {
+        "blog1": {
+          "title": "One-variable experiments",
+          "why": "Avoid confusion from multiple changes."
+        },
+        "thread": {
+          "title": "Day 9 · One change",
+          "why": "What variable did you pick."
+        }
+      }
+    },
+    "NervousRegulation": {
+      "Day1": {
+        "blog1": {
+          "title": "Activation baseline",
+          "why": "A simple frame to observe activation without judgment."
+        },
+        "thread": {
+          "title": "Day 1 · Nervous Regulation",
+          "why": "Context and day-specific questions."
+        }
+      },
+      "Day10": {
+        "blog1": {
+          "title": "Minimum viable maintenance",
+          "why": "Sustain regulation without long rituals."
+        },
+        "course1": {
+          "title": "Next step: advanced stress",
+          "why": "Optional deepening."
+        },
+        "thread": {
+          "title": "Day 10 · Closure",
+          "why": "What you will keep."
+        }
+      },
+      "Day2": {
+        "blog1": {
+          "title": "Physiological sigh",
+          "why": "A short tool to downshift in the moment."
+        },
+        "thread": {
+          "title": "Day 2 · Sigh",
+          "why": "How you used it today."
+        }
+      },
+      "Day3": {
+        "blog1": {
+          "title": "Caffeine boundaries",
+          "why": "Reduce activation without abrupt removal."
+        },
+        "thread": {
+          "title": "Day 3 · Caffeine",
+          "why": "Which boundary you tried."
+        }
+      },
+      "Day4": {
+        "blog1": {
+          "title": "Evening wind-down ritual",
+          "why": "Transition to rest without perfectionism."
+        },
+        "thread": {
+          "title": "Day 4 · Evening",
+          "why": "What fits for you."
+        }
+      },
+      "Day5": {
+        "blog1": {
+          "title": "Body scan (2 min)",
+          "why": "Notice tension without over-analyzing."
+        },
+        "thread": {
+          "title": "Day 5 · Tension",
+          "why": "Where you feel it."
+        }
+      },
+      "Day6": {
+        "blog1": {
+          "title": "Micro-breaks during the day",
+          "why": "Reduce accumulated load."
+        },
+        "thread": {
+          "title": "Day 6 · Breaks",
+          "why": "Which break you did."
+        }
+      },
+      "Day7": {
+        "blog1": {
+          "title": "Week 1 review",
+          "why": "Consolidation with minimal intervention."
+        },
+        "course1": {
+          "title": "Mini-course: nervous system basics",
+          "why": "A short recap to organize the map."
+        },
+        "thread": {
+          "title": "Day 7 · Review",
+          "why": "What changed."
+        }
+      },
+      "Day8": {
+        "blog1": {
+          "title": "One boundary (one thing)",
+          "why": "Reduce load with a small decision."
+        },
+        "thread": {
+          "title": "Day 8 · Boundary",
+          "why": "Which one you chose."
+        }
+      },
+      "Day9": {
+        "blog1": {
+          "title": "Sleep entry: lowering activation",
+          "why": "How to prepare the end of the day."
+        },
+        "thread": {
+          "title": "Day 9 · Sleep",
+          "why": "What worked for you."
+        }
+      }
+    },
+    "digestive_reset_14": {
+      "Day1": {
+        "blog1": {
+          "title": "Por qué bajar el ritmo ayuda",
+          "why": "Contexto sobre ritmo de comida y tolerancia."
+        },
+        "recipe1": {
+          "title": "Desayuno simple con proteína",
+          "why": "Ejemplo de comida estable para reducir variabilidad."
+        },
+        "thread": {
+          "title": "Día 1 · Reparación Digestiva",
+          "why": "Preguntas y experiencias del día."
+        }
+      },
+      "Day10": {
+        "blog1": {
+          "title": "Reflujo nocturno: posición",
+          "why": "Ajustes opcionales para dormir mejor."
+        },
+        "thread": {
+          "title": "Día 10 · Reflujo",
+          "why": "Estrategias realistas."
+        }
+      },
+      "Day11": {
+        "blog1": {
+          "title": "Introducción de fibra",
+          "why": "Progresión lenta para tolerancia."
+        },
+        "recipe1": {
+          "title": "Fibra en porción pequeña",
+          "why": "Ejemplo para empezar."
+        },
+        "thread": {
+          "title": "Día 11 · Fibra",
+          "why": "Observaciones de gas/hinchazón."
+        }
+      },
+      "Day12": {
+        "blog1": {
+          "title": "Ancla de proteína",
+          "why": "Estabilidad para reducir ruido."
+        },
+        "recipe1": {
+          "title": "Comida ancla",
+          "why": "Plantilla simple y repetible."
+        },
+        "thread": {
+          "title": "Día 12 · Ancla",
+          "why": "Qué ancla elegiste."
+        }
+      },
+      "Day13": {
+        "blog1": {
+          "title": "Ajuste mínimo para mañana",
+          "why": "Cierre sin sobrerreacción."
+        },
+        "thread": {
+          "title": "Día 13 · Ajuste",
+          "why": "Qué ajuste harás."
+        }
+      },
+      "Day14": {
+        "blog1": {
+          "title": "Mantenimiento mínimo viable",
+          "why": "Cómo seguir sin cargar el sistema."
+        },
+        "course1": {
+          "title": "Siguiente paso: avanzado digestivo",
+          "why": "Profundización opcional."
+        },
+        "thread": {
+          "title": "Día 14 · Cierre",
+          "why": "Qué te quedas."
+        }
+      },
+      "Day2": {
+        "blog1": {
+          "title": "Secuencia de la comida",
+          "why": "Guía práctica para ordenar la comida."
+        },
+        "recipe1": {
+          "title": "Plato: proteína + verduras + (opcional) carbo",
+          "why": "Plantilla simple para aplicar el orden."
+        },
+        "thread": {
+          "title": "Día 2 · Orden de comida",
+          "why": "Aplicación real en comidas del día."
+        }
+      },
+      "Day3": {
+        "blog1": {
+          "title": "Cena tardía, reflujo y sueño",
+          "why": "Relación entre horario de cena y síntomas nocturnos."
+        },
+        "recipe1": {
+          "title": "Cena temprana ligera",
+          "why": "Opciones sencillas para adelantar sin complicar."
+        },
+        "thread": {
+          "title": "Día 3 · Corte de cocina",
+          "why": "Estrategias según horarios."
+        }
+      },
+      "Day4": {
+        "blog1": {
+          "title": "Masticación: sin contar",
+          "why": "Cómo aplicar sin convertirlo en tarea pesada."
+        },
+        "product1": {
+          "title": "Infusión menta/jengibre (opcional)",
+          "why": "Herramienta de confort, no necesaria."
+        },
+        "recipe1": {
+          "title": "Plato simple (una comida)",
+          "why": "Reduce mezcla para observar mejor."
+        },
+        "thread": {
+          "title": "Día 4 · Masticación",
+          "why": "Ajustes mínimos aplicables."
+        }
+      },
+      "Day5": {
+        "blog1": {
+          "title": "Cómo observar desencadenantes",
+          "why": "Metodología de una variable sin eliminaciones bruscas."
+        },
+        "product1": {
+          "title": "Pack soporte digestivo (opcional)",
+          "why": "Solo si hay fricción o molestias."
+        },
+        "recipe1": {
+          "title": "Comida de dos ingredientes",
+          "why": "Ejemplo de baja complejidad."
+        },
+        "thread": {
+          "title": "Día 5 · Desencadenantes",
+          "why": "Registro de observaciones."
+        }
+      },
+      "Day6": {
+        "blog1": {
+          "title": "Agua con las comidas",
+          "why": "Cómo ajustar sin deshidratarte."
+        },
+        "thread": {
+          "title": "Día 6 · Timing de agua",
+          "why": "Qué cambia y qué no."
+        }
+      },
+      "Day7": {
+        "blog1": {
+          "title": "Leer señales de tránsito",
+          "why": "Interpretación práctica de cambios."
+        },
+        "course1": {
+          "title": "Mini-curso: bases digestivas",
+          "why": "Contexto breve para consolidar."
+        },
+        "recipe1": {
+          "title": "Sopa simple",
+          "why": "Opción fácil para días de sensibilidad."
+        },
+        "thread": {
+          "title": "Día 7 · Señales",
+          "why": "Comparte patrones (si quieres)."
+        }
+      },
+      "Day8": {
+        "blog1": {
+          "title": "Respirar antes de comer",
+          "why": "Entrada al modo descanso-digestión."
+        },
+        "thread": {
+          "title": "Día 8 · Pre-respiración",
+          "why": "Cómo lo aplicaste."
+        }
+      },
+      "Day9": {
+        "blog1": {
+          "title": "Experimentos de una variable",
+          "why": "Evita confusión por múltiples cambios."
+        },
+        "thread": {
+          "title": "Día 9 · Un cambio",
+          "why": "Qué variable elegiste."
+        }
+      }
+    },
+    "energy_stability_7": {
+      "Actions": {
+        "eat_before_hunger": "Eat before intense hunger",
+        "eat_within_60min": "Eat within the first hour",
+        "no_sugar_isolated": "Avoid isolated sugar",
+        "protein_breakfast": "Add protein to first meal",
+        "repeat_best_day_pattern": "Repeat best day pattern",
+        "steady_meal_timing": "Maintain regular timing",
+        "water_before_caffeine": "Drink water before caffeine"
+      },
+      "Checks": {
+        "afternoon_energy": "Afternoon energy",
+        "energy_stability": "Morning stability",
+        "focus_clarity": "Mental clarity",
+        "midday_crash": "Midday crash",
+        "morning_energy": "Energy upon waking",
+        "overall_energy": "Overall daily energy",
+        "post_activity_energy": "Energy after activity"
+      },
+      "title": "Energy Stability (7 days)"
+    },
+    "metabolic_flexibility_10": {
+      "Actions": {
+        "carbs_evening_only": "Carbs in evening only",
+        "consistent_lunch_time": "Consistent lunch time",
+        "early_dinner_window": "Early dinner window",
+        "fixed_breakfast_time": "Fixed breakfast time",
+        "fixed_meal_structure": "Fixed meal structure",
+        "no_caloric_drinks_morning": "No caloric drinks in the morning",
+        "no_snacking_between_meals": "No snacking between meals",
+        "protein_first_meal": "Protein first in meal",
+        "repeatable_breakfast": "Repeatable breakfast",
+        "walk_after_meal_10min": "10-minute walk after meal"
+      },
+      "Checks": {
+        "afternoon_energy": "Afternoon energy",
+        "daily_energy_variation": "Daily energy variation",
+        "energy_midmorning": "Mid-morning energy",
+        "hunger_between_meals": "Hunger between meals",
+        "morning_clarity": "Morning clarity",
+        "morning_hunger": "Morning hunger",
+        "night_hunger": "Night hunger",
+        "postmeal_alertness": "Post-meal alertness",
+        "postmeal_state": "Post-meal state",
+        "sleep_onset": "Sleep onset"
+      },
+      "title": "Metabolic Flexibility (10 days)"
+    }
+  },
+  "SystemMessages": {
+    "Closure": {
+      "auto_disengaged": "Intervención suspendida por inactividad. El sistema vuelve a modo de monitorización base.",
+      "auto_integrated": "Intervención finalizada por integración. Se mantiene el registro para observación de estabilidad.",
+      "circadian_end": "El sistema ha completado la fase de intervención activa. Se mantiene el registro en modo pasivo.",
+      "energy_stable": "More stable energy pattern detected.",
+      "metabolic_stable": "Energy rhythm stabilized. No intervention required.",
+      "summary": "Closure: choose one minimal practice to continue.",
+      "user_ended": "Protocolo cerrado. El sistema entra en fase de monitorización pasiva."
+    },
+    "MinimalMode": {
+      "level1": "Minimal mode (L1): 1 action + 1 check.",
+      "level2": "Minimal mode (L2): 1 action."
+    },
+    "Normalization": {
+      "activation": "Higher activation observed. This can occur during change. Keep minimum viable load if needed.",
+      "digestive_variability": "Digestive variability observed. Small changes can have latency. Keep minimum viable load if needed.",
+      "energy_crash": "The crash is a physiological signal, not lack of discipline.",
+      "glucose_drop": "Expected glucose drop during adjustment.",
+      "low_morning_energy": "Morning energy adjusts after stabilizing the start of the day.",
+      "postmeal_insulin": "Postprandial sleepiness associated with insulin response.",
+      "reactive_hunger": "Reactive hunger detected. Metabolic signal recalibrating."
+    },
+    "Orientation": {
+      "continue": "Consistent logging observed. Continue with planned load.",
+      "default": "The system records signals when available."
+    },
+    "Recalibration": {
+      "ack": "Status updated.",
+      "progress": "Recalibration in progress. Record perception after action.",
+      "start": "Recalibration log active. The goal is to restore main anchors."
+    },
+    "Reengagement": {
+      "48h": "Inactivity detected. Minimal load applied to restart.",
+      "96h": "Extended inactivity. Minimum viable load maintained.",
+      "energy_inactive": "No recent records. Energy is observed when it appears.",
+      "resume_anchor": "Resume temporal anchor. One meal at fixed time."
+    },
+    "Reentry": {
+      "drift_detected": "Drift pattern detected in recent signals. Minimal recalibration available (optional).",
+      "instability_detected": "Return with negative signal after a period of silence. Recalibration available (optional)."
+    },
+    "Simplification": {
+      "active": "Reduced load active. Only essentials are shown.",
+      "energy_reduce": "Reducing load. Prioritize only the first meal."
+    },
+    "Transition": {
+      "next_options": "Status: Observation. Record your perception when you consider it necessary.",
+      "silence_is_data": "Calibration note: periods without records are valid data and part of the pattern."
+    },
+    "circadian": {
+      "CLOSURE": "Protocol closure. Keep one main lever and define a minimal version for days with little margin.",
+      "NORMALIZATION_WORSE": "If it felt worse today, it may be a temporary response to the change. Observe for two days before concluding.",
+      "ORIENTATION": "This protocol adjusts day and night signals. A single stable action per day is enough.",
+      "RE_ENGAGEMENT_48H": "A pause was detected. If you return today, use the minimal version: a brief action without optimizing anything else.",
+      "RE_ENGAGEMENT_96H": "An extended pause was detected. Restart with a single lever for 48 hours and then resume.",
+      "SIMPLIFICATION": "Reduced load active. Keep only the simplest step today. Stability matters more than volume.",
+      "TRANSITION": "Today prioritize a simple signal. The goal is to reduce friction and maintain consistency."
+    },
+    "minimal": {
+      "OFF": "Minimal mode disabled.",
+      "ON_L1": "Minimal mode active: one action and one check.",
+      "ON_L2": "Minimal mode active: one action. No check today."
+    }
+  }
 }

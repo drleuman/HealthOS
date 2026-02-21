@@ -20,7 +20,12 @@ export default function AuthPage({ params: { locale } }: { params: { locale: str
         setLoading(true);
         try {
             // Call login API to set HttpOnly session cookie
-            await api.login(email);
+            const res = await api.login(email);
+
+            if (res.user?.plan === 'admin' || res.user?.role === 'admin') {
+                router.push(`/${locale}/admin`);
+                return;
+            }
 
             // In a real app we'd await api.post('/auth/email', { email }) ...
             // For this "Instrument" demo, we call login and then push to returnTo
