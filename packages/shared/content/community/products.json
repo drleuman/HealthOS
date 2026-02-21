@@ -7,18 +7,18 @@
         "priceCents": 3900,
         "currency": "EUR",
         "title": {
-            "es": "Lentes Amarillas (Día)",
-            "en": "Yellow Lenses (Day)"
+            "es": "Mithohacks Sol (Día)",
+            "en": "Mithohacks Sun (Day)"
         },
         "excerpt": {
             "es": "Protección 100% contra luces artificiales, filtrando hasta 450nm para proteger la salud del ojo y del sistema hormonal.",
             "en": "100% protection against artificial lights, filtering up to 450nm to protect eye health and the hormonal system."
         },
         "image": {
-            "src": "https://images.unsplash.com/photo-1577803645773-f96470509666?w=800&q=80",
+            "src": "https://mithohacks.com/wp-content/uploads/2025/11/915D-AMARILLA-F-scaled.jpg",
             "alt": {
-                "es": "Lentes amarillas",
-                "en": "Yellow lenses"
+                "es": "Mithohacks Sol (Día)",
+                "en": "Mithohacks Sun (Day)"
             }
         }
     },
@@ -30,18 +30,18 @@
         "priceCents": 4500,
         "currency": "EUR",
         "title": {
-            "es": "Lentes Rojas (Noche)",
-            "en": "Red Lenses (Night)"
+            "es": "Mithohacks Calma Noche",
+            "en": "Mithohacks Calm Night"
         },
         "excerpt": {
             "es": "Bloqueo total de luz azul y verde para maximizar la producción de melatonina antes de dormir.",
             "en": "Total blue and green light block to maximize melatonin production before sleep."
         },
         "image": {
-            "src": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&q=80",
+            "src": "https://mithohacks.com/wp-content/uploads/2025/11/PK11E-ROJA-F-scaled.jpg",
             "alt": {
-                "es": "Lentes rojas",
-                "en": "Red lenses"
+                "es": "Calma Noche",
+                "en": "Calm Night"
             }
         }
     },
