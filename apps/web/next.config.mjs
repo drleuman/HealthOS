@@ -13,6 +13,16 @@ const nextConfig = {
         hostname: 'loving-nash.217-154-177-201.plesk.page',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'mithohacks.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lanutricionadora.com',
+        pathname: '/**',
+      },
     ],
   },
 
