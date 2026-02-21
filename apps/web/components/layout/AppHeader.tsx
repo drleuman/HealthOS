@@ -9,7 +9,7 @@ export function AppHeader() {
 
     const tabs = [
         { href: '/app/today', label: t('today') },
-        { href: '/app/route', label: t('history') },
+        { href: '/app/history', label: t('history') },
         { href: '/app/protocols', label: t('protocols') },
     ];
 
