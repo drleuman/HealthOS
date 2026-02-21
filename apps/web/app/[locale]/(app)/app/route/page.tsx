@@ -31,9 +31,12 @@ export default function RoutePage() {
         const loadRoute = async () => {
             try {
                 const result = await api.getRoute();
-                // Handle new API envelope if present
+                // Handle new API envelope { data: {...} } or direct response
                 const routeData = result?.data || result;
-                if (mounted) setData(routeData);
+                // Only set data if it has a valid days array
+                if (mounted) {
+                    setData(Array.isArray(routeData?.days) ? routeData : { ...routeData, days: [] });
+                }
             } catch (err) {
                 console.error('Error loading route:', err);
             } finally {
@@ -52,6 +55,9 @@ export default function RoutePage() {
     if (loading) return <div className="flex items-center justify-center min-h-[50vh]"><div className="w-5 h-5 border-2 border-slate-700 border-t-slate-400 rounded-full animate-spin"></div></div>;
     if (!data) return null;
 
+    // Defensive: ensure days is always an array
+    const days = Array.isArray(data.days) ? data.days : [];
+
     // Helper to group days
     const getGroup = (day: RouteDay, current: number) => {
         if (day.day === current) return 'Hoy';
@@ -69,7 +75,7 @@ export default function RoutePage() {
 
                 <div className="space-y-8">
                     {['Hoy', 'Ayer', 'Anteriormente'].map((group) => {
-                        const groupDays = data.days.filter(d => getGroup(d, data.current_day) === group).reverse();
+                        const groupDays = days.filter(d => getGroup(d, data.current_day) === group).reverse();
 
                         if (groupDays.length === 0) return null;
 
@@ -106,8 +112,15 @@ export default function RoutePage() {
                         );
                     })}
 
-                    {/* Empty State */}
-                    {data.days.filter(d => d.status === 'done').length === 0 && (
+                    {/* Empty State: no days or no completions yet */}
+                    {days.length === 0 ? (
+                        <div className="rounded-xl border border-dashed border-slate-800 bg-slate-900/10 p-12 text-center">
+                            <p className="text-slate-500 text-sm mb-4">Aún no tienes un protocolo activo. Completa el onboarding para comenzar.</p>
+                            <button onClick={() => router.push('/app/today')} className="text-sky-400 hover:text-sky-300 hover:underline text-xs font-medium uppercase tracking-wide">
+                                Ir al registro de hoy
+                            </button>
+                        </div>
+                    ) : days.filter(d => d.status === 'done').length === 0 && (
                         <div className="rounded-xl border border-dashed border-slate-800 bg-slate-900/10 p-12 text-center">
                             <p className="text-slate-500 text-sm mb-4">{t('empty')}</p>
                             <button onClick={() => router.push('/app/today')} className="text-sky-400 hover:text-sky-300 hover:underline text-xs font-medium uppercase tracking-wide">

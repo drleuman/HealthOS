@@ -426,7 +426,15 @@ export class HealthService {
       return this.planService.buildEnvelope(data, userPlan, 'route_phase_max', isGated);
     } catch (e) {
       console.error('getRoute Error:', e);
-      return { data: { error: 'Failed to fetch route' } };
+      // Always return a valid shape so frontend never crashes on .filter()
+      return {
+        data: {
+          program_id: null,
+          current_day: 1,
+          duration_days: 0,
+          days: [],
+        }
+      };
     }
   }
 

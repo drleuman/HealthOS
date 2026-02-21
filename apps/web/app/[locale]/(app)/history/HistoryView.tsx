@@ -85,7 +85,7 @@ export default function HistoryView() {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.get<HistoryPayload>('/history');
+            const res = await api.get<HistoryPayload>('/user/history');
             setPayload(res);
         } catch (e: any) {
             setError(e?.message || 'Failed to load');
