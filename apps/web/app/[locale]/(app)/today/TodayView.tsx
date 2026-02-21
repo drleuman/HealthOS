@@ -589,28 +589,38 @@ function CheckBlock({
     );
 }
 
-function TechnicalAccordion({ data }: { data: any }) {
+function SystemContextPanel({ data }: { data: any }) {
     const t = useTranslations('App.Today');
-    const [open, setOpen] = useState(false);
 
     return (
-        <div className="rounded-xl border border-slate-800 bg-slate-950/30">
-            <button
-                type="button"
-                onClick={() => setOpen(v => !v)}
-                className="flex w-full items-center justify-between px-4 py-3 text-left"
-            >
-                <div className="text-sm text-slate-300">{t('technical_details')}</div>
-                <div className="text-xs text-slate-500">{open ? t('collapse') : t('expand')}</div>
-            </button>
-
-            {open ? (
-                <div className="border-t border-slate-800 px-4 py-3">
-                    <pre className="whitespace-pre-wrap break-words text-xs text-slate-400">
-                        {JSON.stringify(data, null, 2)}
-                    </pre>
+        <div className="mt-8 rounded-2xl border border-slate-800/60 bg-slate-900/10 p-4">
+            <div className="flex items-center gap-2 mb-4">
+                <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+                <div className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                    {t('context_title')}
                 </div>
-            ) : null}
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="rounded-xl bg-slate-800/30 p-3 border border-slate-700/30">
+                    <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Modo</div>
+                    <div className="text-sm font-medium text-slate-200">{data.mode === 'OBSERVATION' ? 'Observación' : data.mode === 'PROTOCOL' ? 'Protocolo' : data.mode || 'N/A'}</div>
+                </div>
+                <div className="rounded-xl bg-slate-800/30 p-3 border border-slate-700/30">
+                    <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Día</div>
+                    <div className="text-sm font-medium text-slate-200">{data.day || '-'}</div>
+                </div>
+                <div className="rounded-xl bg-slate-800/30 p-3 border border-slate-700/30">
+                    <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Acciones</div>
+                    <div className="text-sm font-medium text-slate-200">{data.actionsCount}</div>
+                </div>
+                <div className="rounded-xl bg-slate-800/30 p-3 border border-slate-700/30">
+                    <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Check</div>
+                    <div className="text-sm font-medium text-slate-200">{data.check ? 'Requerido' : 'Opcional'}</div>
+                </div>
+            </div>
         </div>
     );
 }
@@ -806,7 +816,7 @@ export default function TodayView() {
                                 </>
                             )}
 
-                            <TechnicalAccordion
+                            <SystemContextPanel
                                 data={{
                                     mode: payload?.uiMode,
                                     day: payload?.day,
