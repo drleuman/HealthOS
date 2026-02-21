@@ -10,7 +10,8 @@
     "prisma:studio": "prisma studio",
     "prisma:generate": "prisma generate",
     "postinstall": "prisma generate",
-    "start:prod": "npx prisma migrate deploy && node dist/services/api/src/main.js",
+    "start:prod": "node dist/services/api/src/main.js",
+    "db:migrate": "npx prisma migrate deploy",
     "beta:digest": "ts-node src/analytics/daily-digest.ts",
     "beta:weekly": "ts-node src/analytics/weekly-report.ts",
     "beta:log": "ts-node src/ops/log-interaction.ts"
