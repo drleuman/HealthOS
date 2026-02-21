@@ -2,153 +2,269 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 
 const CATEGORIES = [
   {
-    id: 'sleep',
-    labelKey: 'SLEEP_CYCLE',
+    id: 'sueño',
+    title: 'Sueño',
+    description: 'Optimiza tu descanso y mejora la calidad de tu sueño para recuperarte mejor.',
+    gradient: 'from-[#6366f1] to-[#8b5cf6]',
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
       </svg>
     )
   },
   {
-    id: 'energy',
-    labelKey: 'ENERGY_METABOLISM',
+    id: 'energía',
+    title: 'Energía',
+    description: 'Aumenta tus niveles de energía durante el día y reduce la fatiga crónica.',
+    gradient: 'from-[#f59e0b] to-[#f97316]',
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
     )
   },
   {
-    id: 'digestion',
-    labelKey: 'DIGESTIVE_SYSTEM',
+    id: 'digestión',
+    title: 'Digestión',
+    description: 'Mejora tu salud intestinal y optimiza la absorción de nutrientes.',
+    gradient: 'from-[#10b981] to-[#06b6d4]',
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
       </svg>
     )
   },
   {
-    id: 'stress',
-    labelKey: 'NERVOUS_SYSTEM',
+    id: 'estrés',
+    title: 'Estrés',
+    description: 'Gestiona mejor el estrés y encuentra el equilibrio emocional.',
+    gradient: 'from-[#ec4899] to-[#f43f5e]',
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     )
   },
   {
-    id: 'weight',
-    labelKey: 'BODY_COMPOSITION',
+    id: 'peso',
+    title: 'Peso',
+    description: 'Alcanza tu peso ideal de forma saludable y sostenible.',
+    gradient: 'from-[#3b82f6] to-[#06b6d4]',
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
       </svg>
     )
   },
   {
-    id: 'performance',
-    labelKey: 'PHYSICAL_ACTIVITY',
+    id: 'rendimiento',
+    title: 'Rendimiento',
+    description: 'Maximiza tu rendimiento físico y mental en todas las áreas.',
+    gradient: 'from-[#8b5cf6] to-[#d946ef]',
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
       </svg>
     )
   }
 ];
 
 export default function OnboardingScreen() {
-  const t = useTranslations('App.Onboarding');
   const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!selected) return;
-    setSubmitting(true);
-    // Simulate API setup
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  };
+
+  const selectOption = (option: string) => {
+    setSelected(option);
     setTimeout(() => {
       router.push('/app/today');
     }, 600);
   };
 
   return (
-    <div className="layout-container justify-center">
-      <div className="spacer" />
+    <div className="min-h-screen flex items-center justify-center p-8 bg-transparent">
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .feature-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+        }
 
-      <div className="animate-fade w-full">
-        {/* Header */}
-        <div className="mb-6 border-b border-white/10 pb-4">
-          <small className="meta text-[10px] tracking-widest opacity-60">{t('initial_configuration')}</small>
-          <h1 className="mt-2 text-white font-light text-[18px] tracking-tight">
-            {t('dataset_classification')}
-          </h1>
-        </div>
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent 40%, rgba(99, 102, 241, 0.3) 50%, transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
 
-        {/* Selection */}
-        <div className="section">
-          <small className="meta block mb-4 text-xs opacity-50">{t('select_primary')}</small>
-          <div className="flex flex-col gap-3">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelected(cat.id)}
-                className={`
-                            w-full text-left p-4 rounded-lg border transition-all duration-200 flex items-center gap-4 group
-                            ${selected === cat.id
-                    ? 'bg-blue-500/10 border-blue-500'
-                    : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
-                  }
-                        `}
-              >
-                <div
-                  className={`
-                    w-10 h-10 rounded-full flex items-center justify-center transition-colors
-                    ${selected === cat.id ? 'bg-blue-500 text-white' : 'bg-white/5 text-white/40 group-hover:text-white/80'}
-                  `}
-                >
-                  {cat.icon}
-                </div>
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(99, 102, 241, 0.15), 
+                transparent 40%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
 
-                <span className={`
-                  text-sm font-medium tracking-wide transition-colors
-                  ${selected === cat.id ? 'text-white' : 'text-white/60 group-hover:text-white'}
-                `}>
-                  {t(`categories.${cat.labelKey}`)}
-                </span>
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5),
+                        0 0 30px -10px rgba(99, 102, 241, 0.2);
+        }
 
-                {selected === cat.id && (
-                  <div className="ml-auto w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+        .feature-card.selected {
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3);
+        }
 
-        {/* Submit */}
-        <div className="mt-8">
-          <button
-            onClick={handleSubmit}
-            disabled={!selected || submitting}
-            className={`
-              w-full py-4 rounded-lg text-sm font-bold uppercase tracking-widest transition-all duration-300
-              ${!selected || submitting
-                ? 'bg-white/5 text-white/20 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg hover:shadow-blue-500/20'
-              }
-            `}
-          >
-            {submitting ? t('initializing') : t('finalize')}
-          </button>
+        .feature-card:hover::before,
+        .feature-card:hover::after,
+        .feature-card.selected::before,
+        .feature-card.selected::after {
+            opacity: 1;
+        }
+
+        .card-icon-container {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover .card-icon-container,
+        .feature-card.selected .card-icon-container {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.6);
+        }
+
+        .card-icon-container svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .card-arrow {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .card-arrow,
+        .feature-card.selected .card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-card {
+            animation: fadeInUp 0.6s ease backwards;
+        }
+      `}} />
+
+      <div className="max-w-[1200px] w-full text-center">
+        <h1 className="text-[#f8fafc] text-3xl md:text-4xl font-semibold mb-12 tracking-tight">
+          ¿Qué quieres mejorar primero?
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+          {CATEGORIES.map((cat, idx) => (
+            <div
+              key={cat.id}
+              className={`feature-card animate-card ${selected === cat.id ? 'selected' : ''}`}
+              style={{ animationDelay: `${0.1 * (idx + 1)}s` }}
+              onMouseMove={handleMouseMove}
+              onClick={() => selectOption(cat.id)}
+            >
+              <div className={`card-icon-container bg-gradient-to-br ${cat.gradient}`}>
+                {cat.icon}
+              </div>
+
+              <div className="relative z-10">
+                <h3 className="text-[#f1f5f9] text-xl font-semibold mb-2 flex items-center gap-2">
+                  {cat.title}
+                </h3>
+                <p className="text-[#94a3b8] text-sm leading-relaxed">
+                  {cat.description}
+                </p>
+              </div>
+
+              <div className="card-arrow">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-4 h-4 text-[#6366f1]">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-
-      <div className="spacer" />
     </div>
   );
 }
+
