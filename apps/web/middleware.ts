@@ -23,9 +23,9 @@ export default function middleware(request: NextRequest) {
         default-src 'self';
         script-src ${scriptSrc};
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        img-src 'self' data: blob: https://loving-nash.217-154-177-201.plesk.page;
+        img-src 'self' data: blob: https://loving-nash.217-154-177-201.plesk.page https://mithohacks.com https://images.unsplash.com;
         font-src 'self' https://fonts.gstatic.com;
-        connect-src 'self' https://loving-nash.217-154-177-201.plesk.page http://localhost:4001 http://localhost:3333;
+        connect-src 'self' https://loving-nash.217-154-177-201.plesk.page http://localhost:4001 http://localhost:3333 https://mithohacks.com;
         frame-src 'none';
         object-src 'none';
         base-uri 'self';
