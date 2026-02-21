@@ -6,7 +6,8 @@ const intlMiddleware = createMiddleware(routing);
 
 export default function middleware(request: NextRequest) {
     // 1. Generar un nonce criptográfico único por cada request
-    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+    // Next.js Middleware corre en Edge, por lo que Buffer NO está disponible. Usamos btoa nativo.
+    const nonce = btoa(crypto.randomUUID());
 
     // 2. Preparar CSP basado en el entorno
     // Fast Refresh de Next.js en desarrollo requiere 'unsafe-eval' e 'unsafe-inline'
