@@ -16,6 +16,13 @@ export class LoggingInterceptor implements NestInterceptor {
         const requestId = request.headers['x-request-id'] || uuidv4();
         request['id'] = requestId;
 
+        // Skip logging for noisy paths (assets, health checks)
+        const path = request.originalUrl || request.url;
+        const noisyPaths = ['/_next', '/favicon', '/static', '/health', '/ops/sentry-test'];
+        if (noisyPaths.some(p => path.startsWith(p))) {
+            return next.handle();
+        }
+
         return next.handle().pipe(
             tap(() => {
                 const duration_ms = Date.now() - start;

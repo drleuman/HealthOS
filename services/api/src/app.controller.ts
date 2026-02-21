@@ -4,13 +4,18 @@ import { SystemMessageService } from './behavioral/system-message.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { SubscriptionGuard } from './subscription.guard';
 import { Public } from './public.decorator';
+import { MetricsService } from './metrics/metrics.service';
+import { ConfigService } from '@nestjs/config';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Controller()
 @UseGuards(JwtAuthGuard, SubscriptionGuard)
 export class AppController {
     constructor(
         private behaviorService: BehaviorService,
-        private systemMessageService: SystemMessageService
+        private systemMessageService: SystemMessageService,
+        private metricsService: MetricsService,
+        private config: ConfigService
     ) { }
 
     @Public()
@@ -20,6 +25,30 @@ export class AppController {
             ok: true,
             ts: new Date().toISOString(),
             version: '0.1.0'
+        };
+    }
+
+    @Public()
+    @Get('/ops/sentry-test')
+    testSentry() {
+        throw new Error('Sentry backend test');
+    }
+
+    @Public()
+    @Get('/internal/health-check')
+    async getInternalHealth(@Req() req: any) {
+        const secret = req.headers['x-internal-secret'];
+        const configuredSecret = this.config.get('INTERNAL_HEALTH_SECRET') || 'internal_dev_secret';
+
+        if (secret !== configuredSecret) {
+            throw new UnauthorizedException('Invalid internal secret');
+        }
+
+        const metrics = await this.metricsService.getSystemHealthMetrics();
+        return {
+            ok: true,
+            ts: new Date().toISOString(),
+            metrics
         };
     }
 

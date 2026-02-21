@@ -47,6 +47,7 @@ import { StateTrajectoryService } from './behavioral/state-trajectory.service';
 import { CatalogModule } from './catalog/catalog.module';
 import { AdminModule } from './admin/admin.module';
 import { SystemAlertsModule } from './system-alerts/system-alerts.module';
+import { MetricsModule } from './metrics/metrics.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { SystemAlertsModule } from './system-alerts/system-alerts.module';
     CatalogModule,
     AdminModule,
     SystemAlertsModule,
+    MetricsModule,
   ],
   controllers: [
     AppController,

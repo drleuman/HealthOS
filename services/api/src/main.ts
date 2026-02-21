@@ -14,15 +14,18 @@ import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { SystemAlertsService } from './system-alerts/system-alerts.service';
 
+const env = process.env.NODE_ENV || 'development';
+const sentrySampleRate = env === 'production' ? 0.1 : (env === 'staging' ? 0.5 : 1.0);
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [
     nodeProfilingIntegration(),
   ],
-  tracesSampleRate: 0.1,
-  profilesSampleRate: 0.1,
+  tracesSampleRate: sentrySampleRate,
+  profilesSampleRate: sentrySampleRate,
   release: process.env.npm_package_version || '1.0.0',
-  environment: process.env.NODE_ENV || 'development',
+  environment: env,
 });
 
 async function bootstrap() {
