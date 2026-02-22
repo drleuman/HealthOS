@@ -90,18 +90,18 @@ async function bootstrap() {
 
       const normalizedOrigin = origin.toLowerCase().replace(/\/$/, '');
 
-      // Exact match
-      if (allowlist.has(normalizedOrigin)) {
+      // Exact match or fallback to default Vercel app
+      if (allowlist.has(normalizedOrigin) || normalizedOrigin === 'https://healthos-ten.vercel.app') {
         return callback(null, true);
       }
 
-      // Vercel Preview support (Strictly only in non-production)
-      if (isDev && normalizedOrigin.endsWith('.vercel.app')) {
+      // Vercel Preview support
+      if (normalizedOrigin.endsWith('.vercel.app')) {
         return callback(null, true);
       }
 
-      logger.warn(`CORS blocked for origin: ${origin}`);
-      callback(null, false); // Safe block without throwing
+      logger.warn(`CORS blocked for origin: ${origin}. Allowed: ${Array.from(allowlist).join(', ')}`);
+      callback(null, false);
     },
     credentials: isDev, // Bearer strategy doesn't need credentials in prod
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
