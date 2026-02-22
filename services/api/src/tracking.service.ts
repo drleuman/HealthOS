@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
+import { MetricsService } from './metrics/metrics.service';
 import { logger } from './logger';
 
 /**
@@ -70,7 +71,10 @@ export interface TrackingEvent {
  */
 @Injectable()
 export class TrackingService {
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private metrics: MetricsService
+    ) { }
 
     /**
      * Track a behavioral event
@@ -95,6 +99,13 @@ export class TrackingService {
                     meta: event.meta || {},
                 },
             });
+
+            // Integrate with MetricsService
+            if (event.event === 'paywall_impression' || event.event === 'paywall_cta_clicked') {
+                this.metrics.recordPaywallHit();
+            } else if (event.event === 'conversion_completed') {
+                this.metrics.recordConversion();
+            }
 
             logger.info(
                 {

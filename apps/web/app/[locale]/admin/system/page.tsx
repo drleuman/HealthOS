@@ -79,11 +79,11 @@ export default function AdminSystem({ params: { locale } }: { params: { locale: 
                             bg={systemInfo.errorsLastHour > 0 ? "bg-rose-500/10" : "bg-emerald-500/10"}
                         />
                         <MetricCard
-                            title="Uptime"
-                            value={formatDuration(systemInfo.uptime)}
-                            icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />}
-                            color="text-emerald-400"
-                            bg="bg-emerald-500/10"
+                            title="Paywall (1h)"
+                            value={systemInfo.paywallHitsLastHour}
+                            icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.407 2.67 1.055M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.407-2.67-1.055M12 16V15" />}
+                            color="text-amber-400"
+                            bg="bg-amber-500/10"
                         />
                         <MetricCard
                             title="Critical Alerts"

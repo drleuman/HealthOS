@@ -10,6 +10,7 @@ interface MetricBucket {
     rateLimitHits: number;
     tokenReuse: number;
     paywallHits: number;
+    conversions: number;
     latencies: number[];
 }
 
@@ -41,6 +42,7 @@ export class MetricsService implements OnModuleInit {
                 rateLimitHits: 0,
                 tokenReuse: 0,
                 paywallHits: 0,
+                conversions: 0,
                 latencies: []
             };
             this.buckets.set(key, bucket);
@@ -77,6 +79,11 @@ export class MetricsService implements OnModuleInit {
         bucket.paywallHits++;
     }
 
+    recordConversion() {
+        const bucket = this.getOrCreateBucket(this.getBucketKey());
+        bucket.conversions++;
+    }
+
     async flushBuckets() {
         const nowKey = this.getBucketKey();
         const keysToFlush = Array.from(this.buckets.keys()).filter(k => k < nowKey);
@@ -102,6 +109,7 @@ export class MetricsService implements OnModuleInit {
                 { name: 'rate_limit_hits_per_min', value: bucket.rateLimitHits },
                 { name: 'token_reuse_detected_per_min', value: bucket.tokenReuse },
                 { name: 'paywall_hits_per_min', value: bucket.paywallHits },
+                { name: 'conversions_per_min', value: bucket.conversions },
                 { name: 'api_latency_avg', value: avgLatency },
                 { name: 'api_latency_p95', value: p95Latency }
             ];
@@ -141,12 +149,59 @@ export class MetricsService implements OnModuleInit {
             })
         ]);
 
-        return {
-            requestsCurrentMinute: bucket?.requests || 0,
-            errorsLastHour: totalAlerts,
-            criticalLastHour: criticalAlerts,
-            status: criticalAlerts > 5 ? 'at_risk' : (criticalAlerts > 0 ? 'degraded' : 'healthy'),
-            uptime: Math.floor(process.uptime())
+        // Fetch aggregated metrics for the last hour from the database
+        const lastHourMetrics = await (this.prisma as any).metricSnapshot.findMany({
+            where: {
+                createdAt: { gte: hourAgo },
+                window: '1m'
+            },
+            select: {
+                name: true,
+                value: true
+            }
+        });
+
+        const aggregatedLastHour = lastHourMetrics.reduce((acc: any, metric: any) => {
+            acc[metric.name] = (acc[metric.name] || 0) + metric.value;
+            return acc;
+        }, {} as Record<string, number>);
+
+        const current = {
+            requests: bucket?.requests || 0,
+            errors5xx: bucket?.errors5xx || 0,
+            paywallHits: bucket?.paywallHits || 0,
+            logins: bucket?.logins || 0,
         };
+
+        const last60 = {
+            requests: aggregatedLastHour['requests_per_min'] || 0,
+            errors5xx: aggregatedLastHour['errors_5xx_per_min'] || 0,
+            paywallHits: aggregatedLastHour['paywall_hits_per_min'] || 0,
+            conversions: aggregatedLastHour['conversions_per_min'] || 0,
+            logins: aggregatedLastHour['login_success_per_min'] || 0,
+        };
+
+        return {
+            status: this.getAggregatedStatus(current),
+            uptime: process.uptime(),
+            requestsCurrentMinute: current.requests,
+            errorsLastHour: last60.errors5xx,
+            paywallHitsLastHour: last60.paywallHits,
+            conversionsLastHour: last60.conversions,
+            criticalLastHour: await (this.prisma as any).systemAlert.count({
+                where: {
+                    severity: 'critical',
+                    createdAt: { gte: new Date(Date.now() - 60 * 60 * 1000) }
+                }
+            })
+        };
+    }
+
+    private getAggregatedStatus(currentMetrics: { requests: number; errors5xx: number; paywallHits: number; logins: number }): 'healthy' | 'degraded' | 'at_risk' {
+        if (currentMetrics.errors5xx > 0) {
+            return 'degraded';
+        }
+        // Add more complex logic here based on other metrics if needed
+        return 'healthy';
     }
 }
