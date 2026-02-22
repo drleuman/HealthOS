@@ -52,7 +52,7 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-    // Match only internationalized pathnames
-    // Aplica a la raíz y a todos los sub-paths localizados
-    matcher: ['/', '/(es|en)/:path*']
+    // Matcher que permite a next-intl manejar redirecciones de locales
+    // Excluye archivos estáticos, api y _next
+    matcher: ['/((?!api|_next|.*\\..*).*)']
 };
