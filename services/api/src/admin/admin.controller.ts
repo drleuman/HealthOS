@@ -98,4 +98,10 @@ export class AdminController {
         const safeLimit = Math.min(parseInt(limit) || 50, 200);
         return this.systemAlerts.getAlerts(periodDays, severity, type, safeLimit);
     }
+
+    @Get('insights')
+    getInsights(@Query('period') period: string) {
+        const periodDays = period === '30d' ? 30 : (period === '24h' ? 1 : 7);
+        return this.adminService.getInsights(periodDays);
+    }
 }

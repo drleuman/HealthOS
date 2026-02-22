@@ -438,6 +438,13 @@ class ApiClient {
         return this.get(`/admin/system/health`);
     }
 
+    /**
+     * Admin: Get intelligent insights (Anomalies, Baselines, Growth)
+     */
+    async adminInsights(period: string = '7d'): Promise<any> {
+        return this.get(`/admin/insights?period=${period}`);
+    }
+
     private updateLastEventTimestamp(): void {
         if (typeof window !== 'undefined') {
             localStorage.setItem('healthos_last_event_at', Date.now().toString());

@@ -3,6 +3,8 @@ import { PrismaService } from '../prisma.service';
 import { TrackingService } from '../tracking.service';
 import { Prisma } from '@prisma/client';
 import { MetricsService } from '../metrics/metrics.service';
+import { BaselineService } from '../metrics/baseline.service';
+import { GrowthIntelligenceService } from '../analytics/growth-intelligence.service';
 
 @Injectable()
 export class AdminService {
@@ -13,7 +15,9 @@ export class AdminService {
     constructor(
         private prisma: PrismaService,
         private tracking: TrackingService,
-        private metrics: MetricsService
+        private metrics: MetricsService,
+        private baseline: BaselineService,
+        private growth: GrowthIntelligenceService
     ) { }
 
     async getOverview(periodDays: number = 7) {
@@ -260,6 +264,26 @@ export class AdminService {
             timestamp: new Date(),
             version: process.env.npm_package_version || '1.0.0',
             nodeEnv: process.env.NODE_ENV || 'development'
+        };
+    }
+
+    async getInsights(periodDays: number = 7) {
+        const [growthInsights, anomalies, baselines] = await Promise.all([
+            this.growth.getConversionInsights(periodDays),
+            (this.prisma as any).incident.findMany({
+                where: {
+                    createdAt: { gte: new Date(Date.now() - periodDays * 24 * 60 * 60 * 1000) }
+                },
+                orderBy: { createdAt: 'desc' },
+                take: 50
+            }),
+            Promise.resolve(this.baseline.getAllBaselines())
+        ]);
+
+        return {
+            growth: growthInsights,
+            anomalies,
+            baselines
         };
     }
 }

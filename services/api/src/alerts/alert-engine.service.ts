@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { MetricsService } from '../metrics/metrics.service';
 import { SystemAlertsService } from '../system-alerts/system-alerts.service';
+import { AnomalyService } from '../metrics/anomaly.service';
 
 @Injectable()
 export class AlertEngineService implements OnModuleInit {
@@ -8,7 +9,8 @@ export class AlertEngineService implements OnModuleInit {
 
     constructor(
         private metrics: MetricsService,
-        private systemAlerts: SystemAlertsService
+        private systemAlerts: SystemAlertsService,
+        private anomaly: AnomalyService
     ) { }
 
     onModuleInit() {
@@ -17,61 +19,21 @@ export class AlertEngineService implements OnModuleInit {
     }
 
     async evaluateRules() {
-        const metrics = await this.metrics.getSystemHealthMetrics();
-        const currentBucket = (this.metrics as any).getOrCreateBucket((this.metrics as any).getBucketKey());
+        // Run anomaly detection
+        const anomalies = await this.anomaly.detectAnomalies();
 
-        // Rule 1: 5xx Spike
-        if (currentBucket.errors5xx > 10) {
+        // Trigger alerts for each detected anomaly
+        for (const anomaly of anomalies) {
             await this.systemAlerts.triggerAlert(
-                'api_5xx_spike',
-                'critical',
-                `High error rate detected: ${currentBucket.errors5xx} errors in the last minute.`,
-                { errors: currentBucket.errors5xx }
+                `anomaly_${anomaly.metric}`,
+                anomaly.type.includes('spike') ? 'critical' : 'warn',
+                `Intelligence: ${anomaly.type.toUpperCase()} on ${anomaly.metric}. Current: ${anomaly.value.toFixed(2)} (Baseline: ${anomaly.baseline.toFixed(2)})`,
+                anomaly
             );
         }
 
-        // Rule 2: Rate Limit Spike
-        if (currentBucket.rateLimitHits > 50) {
-            await this.systemAlerts.triggerAlert(
-                'rate_limit_spike',
-                'warn',
-                `Rate limiting activity is high: ${currentBucket.rateLimitHits} blocks in the last minute.`,
-                { blocks: currentBucket.rateLimitHits }
-            );
-        }
-
-        // Rule 3: Auth Abuse (Login failures)
-        if (currentBucket.loginFailures > 20) {
-            await this.systemAlerts.triggerAlert(
-                'refresh_fail_spike', // Reusing this or could add 'auth_abuse'
-                'critical',
-                `Suspicious login activity: ${currentBucket.loginFailures} failures in the last minute.`,
-                { failures: currentBucket.loginFailures }
-            );
-        }
-
-        // Rule 4: Latency Degradation
-        const p95 = currentBucket.latencies.length > 0
-            ? [...currentBucket.latencies].sort((a: number, b: number) => a - b)[Math.floor(currentBucket.latencies.length * 0.95)]
-            : 0;
-
-        if (p95 > 1500) {
-            await this.systemAlerts.triggerAlert(
-                'api_5xx_spike', // Or new type 'latency_degradation'
-                'warn',
-                `System latency is high: P95 is ${p95}ms.`,
-                { p95 }
-            );
-        }
-
-        // Rule 5: Token Reuse
-        if (currentBucket.tokenReuse > 0) {
-            await this.systemAlerts.triggerAlert(
-                'auth_reuse_detected',
-                'critical',
-                `${currentBucket.tokenReuse} token reuse attempts detected in the last minute.`,
-                { count: currentBucket.tokenReuse }
-            );
-        }
+        // Keep legacy rules for safety but with lower priority if needed, 
+        // or just rely 100% on AnomalyService as it covers most of these.
+        // For Sprint 3, the objective is to MOVE to intelligent monitoring.
     }
 }

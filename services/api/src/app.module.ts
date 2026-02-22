@@ -1,8 +1,9 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { LatencyInterceptor } from './metrics/latency.interceptor';
 import { PrismaService } from './prisma.service';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
@@ -49,10 +50,14 @@ import { AdminModule } from './admin/admin.module';
 import { SystemAlertsModule } from './system-alerts/system-alerts.module';
 import { MetricsModule } from './metrics/metrics.module';
 
+import { ScheduleModule } from '@nestjs/schedule';
+import { AnalyticsModule } from './analytics/analytics.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({ global: true }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 100,
@@ -61,6 +66,7 @@ import { MetricsModule } from './metrics/metrics.module';
     AdminModule,
     SystemAlertsModule,
     MetricsModule,
+    AnalyticsModule,
   ],
   controllers: [
     AppController,
@@ -111,6 +117,10 @@ import { MetricsModule } from './metrics/metrics.module';
         return new CachedProgramRegistry(fileRegistry);
       },
       inject: [FileProgramRegistry],
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LatencyInterceptor,
     },
     {
       provide: APP_GUARD,

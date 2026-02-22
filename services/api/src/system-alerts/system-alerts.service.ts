@@ -25,7 +25,7 @@ export class SystemAlertsService {
     }
 
     async triggerAlert(
-        type: 'auth_reuse_detected' | 'api_5xx_spike' | 'rate_limit_spike' | 'admin_action' | 'refresh_fail_spike',
+        type: string,
         severity: 'info' | 'warn' | 'critical',
         message: string,
         meta: any = {}
@@ -33,7 +33,7 @@ export class SystemAlertsService {
         this.logger.warn(`Triggering System Alert: [${severity.toUpperCase()}] ${type} - ${message}`);
 
         // Persist to DB
-        const alert = await this.prisma.systemAlert.create({
+        const alert = await (this.prisma as any).systemAlert.create({
             data: {
                 type,
                 severity,
@@ -90,7 +90,7 @@ export class SystemAlertsService {
         if (severity) where.severity = severity;
         if (type) where.type = type;
 
-        return this.prisma.systemAlert.findMany({
+        return (this.prisma as any).systemAlert.findMany({
             where,
             take: limit,
             orderBy: { createdAt: 'desc' }
@@ -101,7 +101,7 @@ export class SystemAlertsService {
         const dateLimit = new Date();
         dateLimit.setDate(dateLimit.getDate() - 1); // last 24h MVP
 
-        const count = await this.prisma.systemAlert.count({
+        const count = await (this.prisma as any).systemAlert.count({
             where: {
                 createdAt: { gte: dateLimit },
                 severity: 'critical'

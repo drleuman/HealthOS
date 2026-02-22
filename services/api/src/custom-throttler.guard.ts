@@ -4,16 +4,27 @@ import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { MetricsService } from './metrics/metrics.service';
 
+import { SelfHealingService } from './analytics/self-healing.service';
+
 @Injectable()
 export class CustomThrottlerGuard extends ThrottlerGuard {
     constructor(
         options: ThrottlerModuleOptions,
         storageService: ThrottlerStorage,
         reflector: Reflector,
-        private metrics: MetricsService
+        private metrics: MetricsService,
+        private healing: SelfHealingService
     ) {
         super(options, storageService, reflector);
     }
+    protected async handleRequest(requestProps: any): Promise<boolean> {
+        // If SelfHealing is active, tighten the limit by 50%
+        if (this.healing.isThrottlingTightened()) {
+            requestProps.limit = Math.floor(requestProps.limit / 2);
+        }
+        return super.handleRequest(requestProps);
+    }
+
     protected async getTracker(req: Record<string, any>): Promise<string> {
         // Rate limit by IP + userId (if authenticated)
         const ip = req.ip || req.connection?.remoteAddress || 'unknown';

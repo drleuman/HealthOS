@@ -383,3 +383,18 @@ model MetricSnapshot {
   @@index([name, createdAt])
 }
 
+model Incident {
+  id         String    @id @default(uuid())
+  type       String    // 'anomaly_spike', 'anomaly_drop', 'pattern_break', 'abuse'
+  severity   String    // 'info', 'warn', 'critical'
+  metric     String
+  value      Float
+  baseline   Float
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+
+  @@index([createdAt])
+  @@index([type])
+  @@index([severity])
+}
+
