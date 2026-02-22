@@ -35,7 +35,7 @@ export class SentryExceptionFilter extends BaseExceptionFilter {
 
             this.systemAlerts.register5xxError(route, errorMsg).catch(e => console.error(e));
 
-            Sentry.withScope((scope) => {
+            Sentry.withScope((scope: Sentry.Scope) => {
                 scope.setTag('route', route);
                 scope.setTag('method', request.method);
                 scope.setTag('status', status.toString());
