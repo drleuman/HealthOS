@@ -9,6 +9,8 @@ const inter = Inter({
   display: 'swap',
 });
 
+import { PostHogProvider } from '@/components/providers/posthog-provider';
+
 export default async function RootLayout({
   children,
   params: { locale }
@@ -24,9 +26,11 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="font-sans">
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <PostHogProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

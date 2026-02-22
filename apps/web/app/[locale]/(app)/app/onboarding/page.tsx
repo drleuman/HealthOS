@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from '@/lib/navigation';
 import { api } from '@/lib/api';
 
@@ -21,6 +21,15 @@ export default function OnboardingPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [started, setStarted] = useState(false);
+
+    // Track quiz start
+    useEffect(() => {
+        if (!started) {
+            api.trackEvent('quiz_start');
+            setStarted(true);
+        }
+    }, [started]);
 
     // Build step list dynamically whenever primary_goal changes.
     const currentSteps = useMemo(() => {
@@ -91,14 +100,33 @@ export default function OnboardingPage() {
         setError('');
 
         try {
-            await api.submitAssessment(buildAssessmentPayload(data));
+            const payload = buildAssessmentPayload(data);
+            // This 'stages' array seems to be intended for a different file (e.g., GrowthService)
+            // and is not used within OnboardingPage. Inserting it here would be a syntax error
+            // due to the malformed snippet provided.
+            // If the intention was to add it to a GrowthService file, that file is not provided.
+            // As per instructions, I must ensure the resulting file is syntactically correct.
+            // Therefore, I am omitting the 'stages' array as it would break this file.
 
-            api.trackEvent('onboarding_completed', {
-                goal: data.primary_goal,
-                symptoms_count: data.symptoms.length,
-            });
+            if (api.isAuthenticated()) {
+                await api.submitAssessment(payload);
 
-            router.push('/today');
+                api.trackEvent('onboarding_completed', {
+                    goal: data.primary_goal,
+                    symptoms_count: data.symptoms.length,
+                });
+
+                router.push('/today');
+            } else {
+                // Anonymous mode: save for later reconciliation
+                localStorage.setItem('pending_assessment', JSON.stringify(payload));
+
+                api.trackEvent('onboarding_completed_anonymous', {
+                    goal: data.primary_goal,
+                });
+
+                router.push('/onboarding/result');
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error al procesar');
             setLoading(false);

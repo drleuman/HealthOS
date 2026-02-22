@@ -20,11 +20,11 @@ export async function generateMetadata(
 
   return {
     title: isEs
-      ? 'HealthOS — Recalibra tu sueño, energía y digestión'
-      : 'HealthOS — Recalibrate your sleep, energy and digestion',
+      ? '¿Cuál es tu Bio-Score™? | HealthOS - Protocolo Circadiano'
+      : "What's your Bio-Score™? | HealthOS - Circadian Protocol",
     description: isEs
-      ? 'Protocolo de hábitos basado en cronobiología. Evalúa tu estado en 2 minutos. Sin suplementos obligatorios. Sin tarjeta de crédito.'
-      : 'Chronobiology-based habit protocol. Assess your state in 2 minutes. No mandatory supplements. No credit card.',
+      ? 'Test de 2 minutos para identificar desajustes circadianos. Resultados instantáneos — sin registro obligatorio para ver el valor primero.'
+      : '2-minute test to identify circadian misalignments. Instant results — we removed the signup wall so you see value first.',
     metadataBase: new URL(BASE_URL),
     alternates: {
       canonical: canonicalUrl,
@@ -35,11 +35,11 @@ export async function generateMetadata(
     },
     openGraph: {
       title: isEs
-        ? 'HealthOS — Protocolo de hábitos basado en cronobiología'
-        : 'HealthOS — Chronobiology-based habit protocol',
+        ? '¿Cuál es tu Bio-Score™? | Resultados Instantáneos'
+        : "What's your Bio-Score™? | Instant Results",
       description: isEs
-        ? 'Recalibra tu sueño, energía y digestión con un protocolo guiado. Empieza gratis, sin tarjeta de crédito.'
-        : 'Recalibrate your sleep, energy and digestion with a guided protocol. Start free, no credit card.',
+        ? 'He construido un sistema para recalibrar sueño y energía. Hemos quitado el registro para que veas tu Bio-Score™ al instante.'
+        : "I built a system to recalibrate sleep and energy. We removed signup so you see your Bio-Score™ instantly.",
       url: canonicalUrl,
       siteName: 'HealthOS',
       locale: isEs ? 'es_ES' : 'en_US',
@@ -49,18 +49,19 @@ export async function generateMetadata(
           url: `${BASE_URL}/og-image.png`,
           width: 1200,
           height: 630,
-          alt: isEs ? 'HealthOS — Protocolo de hábitos' : 'HealthOS — Habit Protocol',
+          alt: 'HealthOS Bio-Score',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
       title: isEs
-        ? 'HealthOS — Recalibra tus ritmos biológicos'
-        : 'HealthOS — Recalibrate your biological rhythms',
+        ? '¿Cuál es tu Bio-Score™? 🧬'
+        : "What's your Bio-Score™? 🧬",
       description: isEs
-        ? 'Protocolo de hábitos basado en cronobiología. Empieza gratis.'
-        : 'Chronobiology-based habit protocol. Start for free.',
+        ? 'Mira tus desajustes circadianos al instante. Sin registro previo.'
+        : 'See your circadian misalignments instantly. No signup required.',
+      images: [`${BASE_URL}/og-image.png`],
     },
     robots: {
       index: true,

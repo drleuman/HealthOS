@@ -312,7 +312,9 @@
       "users": "Users",
       "events": "Events",
       "system": "System",
-      "insights": "Intelligence",
+      "insights": "Insights",
+      "growth": "Growth",
+      "experiments": "Experiments",
       "search": "Search...",
       "logout": "Logout",
       "no_data": "No data available",
@@ -364,6 +366,21 @@
       },
       "confirm_block": "Are you sure you want to block this user?",
       "confirm_revoke": "Are you sure you want to revoke all sessions for this user?"
+    },
+    "Paywall": {
+      "title": "Unlock Full Bio-Intelligence",
+      "description": "Get personalized protocol adjustments, advanced physiological clustering, and 24/7 symptom drift detection. Start your {days}-day trial today.",
+      "cta": "Start {days}-Day Free Trial",
+      "cancel_anytime": "Cancel anytime during trial. No risk.",
+      "feature_1": "Dynamic Protocol Engine",
+      "feature_2": "Advanced Body Analytics",
+      "feature_3": "Community Insight Access",
+      "feature_4": "Real-time Recalibration"
+    },
+    "Privacy": {
+      "title": "Privacy & Data Ethics",
+      "body": "We use de-anonymized physiological signals to personalize your protocols. Your data is encrypted and never sold. By continuing, you agree to our research-driven data processing.",
+      "accept": "I Understand"
     }
   },
   "Auth": {
@@ -1179,12 +1196,12 @@
         "weight": "Weight"
       },
       "hero": {
-        "badge": "Chronobiology-based protocol",
-        "cta_primary": "Assess your state in 2 minutes",
+        "badge": "Experiment: No signup required",
+        "cta_primary": "Get my Bio-Score™",
         "cta_secondary": "See how it works",
-        "subtitle": "HealthOS is a habit protocol that recalibrates your sleep, energy and digestion by aligning your biological rhythms — no mandatory supplements.",
-        "title": "Your body runs on rhythms. Start respecting yours.",
-        "trust_line": "No credit card. Free plan available."
+        "subtitle": "A 2-minute assessment identifies your circadian misalignments. Instant results — we've removed the signup wall so you see value first.",
+        "title": "What's your Bio-Score™? Recalibrate your biology.",
+        "trust_line": "No credit card. Results visible in 7 days."
       },
       "hiw": {
         "step1": {

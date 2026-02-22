@@ -13,6 +13,55 @@
         "NERVOUS_SYSTEM": "SISTEMA NERVIOSO",
         "BODY_COMPOSITION": "COMPOSICIÓN CORPORAL",
         "PHYSICAL_ACTIVITY": "RENDIMIENTO FÍSICO"
+      },
+      "Result": {
+        "title": "Tu Plan Personalizado",
+        "subtitle": "Análisis Completado",
+        "profile_detected": "Perfil Detectado",
+        "program_assigned": "Programa asignado",
+        "daily_commitment": "Compromiso diario",
+        "projected_efficacy": "Eficacia proyectada",
+        "sync_button": "Sincronizar Dispositivo y Empezar Día 1",
+        "disclaimer": "Al sincronizar, activarás el protocolo en tu entorno local. No se requiere tarjeta de crédito para el periodo gratuito.",
+        "edit_responses": "Editar respuestas",
+        "first_win": {
+          "title": "Tu primera victoria (60s)",
+          "subtitle": "Acción recomendada para hoy",
+          "bio_score": "Tu Bio-Score™ Local",
+          "score_label": "Índice de Estabilidad",
+          "next_days": "Próximos Pasos Proyectados",
+          "day_2": "Día 2: Reset de Cortisol",
+          "day_3": "Día 3: Ventana de Dopamina",
+          "tomorrow": {
+            "title": "Mañana: Tu primer Gran Cambio",
+            "subtitle": "Ajustaremos tu ventana de luz para fijar el ritmo.",
+            "benefit": "Notarás más claridad mental antes de las 11:00 AM."
+          },
+          "share": {
+            "button": "Compartir Bio-Score™",
+            "title": "Mi Bio-Score™ es {score}/100",
+            "text": "Acabo de recibir mi protocolo HealthOS. ¿Cuál es tu ritmo?"
+          },
+          "actions": {
+            "light": "9:00 AM — 10 min de luz natural (sin gafas)",
+            "caffeine": "10:30 AM — Primera cafeína (retraso 90 min)",
+            "digestive": "14:00 PM — Priorizar proteína sólida"
+          }
+        },
+        "profiles": {
+          "circadian": {
+            "title": "Perfil Circadiano Optimizable",
+            "description": "Tu ritmo biológico muestra señales de desajuste. Este programa recalibrará tu producción de melatonina y cortisol."
+          },
+          "energy": {
+            "title": "Metabolismo de Energía",
+            "description": "Tus picos de fatiga son reversibles mediante el ajuste de ventanas metabólicas y exposición solar."
+          },
+          "base": {
+            "title": "Protocolo de Resiliencia",
+            "description": "Basado en tus objetivos, hemos diseñado una línea base de hábitos para estabilizar tu sistema."
+          }
+        }
       }
     },
     "ControlCenter": {
@@ -102,6 +151,18 @@
       }
     },
     "Paywall": {
+      "title": "Activa tu Enfoque Ilimitado",
+      "title_emotional": "No pierdas tu racha. Asegura tu progreso hoy.",
+      "social_proof": "+1,400 usuarios estabilizando su ritmo esta semana",
+      "testimonial": "\"Ajustar mi cafeína según el perfil me devolvió las tardes.\" - Maria G.",
+      "whats_included": "Lo que incluye tu membresía",
+      "description": "Comienza tu prueba gratuita de {days} días y desbloquea el protocolo completo, comunidad privada y análisis predictivo.",
+      "cta": "Empezar prueba de {days} días",
+      "cancel_anytime": "Cancela en cualquier momento. Sin compromisos.",
+      "feature_1": "Protocolos Personalizados",
+      "feature_2": "Acceso a Comunidad",
+      "feature_3": "Soporte de Inteligencia",
+      "feature_4": "Historial Ilimitado",
       "route_phase_max": "Has alcanzado el límite de tu plan actual. Actualiza a Miembro para desbloquear la fase completa del protocolo.",
       "daily_log_max_total": "Has alcanzado el límite de registros de tu plan. Actualiza para llevar un historial ilimitado.",
       "thread_reads_24h": "Has leído el límite diario de hilos para tu plan. Actualiza para acceso ilimitado a la comunidad.",
@@ -319,6 +380,8 @@
       "events": "Eventos",
       "system": "Sistema",
       "insights": "Inteligencia",
+      "growth": "Crecimiento",
+      "experiments": "Experimentos",
       "search": "Buscar...",
       "logout": "Cerrar sesión",
       "no_data": "Sin datos",
@@ -1185,12 +1248,12 @@
         "weight": "Peso"
       },
       "hero": {
-        "badge": "Protocolo basado en cronobiología",
-        "cta_primary": "Evalúa tu estado en 2 minutos",
+        "badge": "Experimento: Sin registro obligatorio",
+        "cta_primary": "Conseguir mi Bio-Score™",
         "cta_secondary": "Ver cómo funciona",
-        "subtitle": "HealthOS es un protocolo de hábitos que recalibra tu sueño, energía y digestión ajustando tus ritmos biológicos — sin suplementos obligatorios.",
-        "title": "Tu cuerpo funciona con ritmos. Empieza a respetar los tuyos.",
-        "trust_line": "Sin tarjeta de crédito. Plan gratuito disponible."
+        "subtitle": "Un test de 2 minutos identifica tus desajustes circadianos. Resultados instantáneos — hemos eliminado el muro de registro para que veas el valor primero.",
+        "title": "¿Cuál es tu Bio-Score™? Recalibra tu ritmo biológico.",
+        "trust_line": "Sin tarjeta de crédito. Resultados visibles en 7 días."
       },
       "hiw": {
         "step1": {

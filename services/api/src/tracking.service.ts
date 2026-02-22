@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { MetricsService } from './metrics/metrics.service';
+import { AnalyticsIntegrationService } from './analytics/analytics-integration.service';
 import { logger } from './logger';
 
 /**
@@ -73,7 +74,8 @@ export interface TrackingEvent {
 export class TrackingService {
     constructor(
         private prisma: PrismaService,
-        private metrics: MetricsService
+        private metrics: MetricsService,
+        private analytics: AnalyticsIntegrationService
     ) { }
 
     /**
@@ -100,11 +102,34 @@ export class TrackingService {
                 },
             });
 
+            // Increment totalLogs for behavioral events (Categories B, C, D)
+            const behavioralEvents = [
+                'day_viewed', 'day_started', 'action_marked_done', 'action_marked_failed',
+                'day_completed', 'lesson_replayed', 'help_opened', 'skipped_day',
+                'auto_simplified', 'return_after_drop', 'tool_opened_store'
+            ];
+
+            if (event.userId && behavioralEvents.includes(event.event)) {
+                await this.prisma.user.update({
+                    where: { id: event.userId },
+                    data: { totalLogs: { increment: 1 } }
+                }).catch(err => logger.error({ err, userId: event.userId }, 'Failed to increment totalLogs'));
+            }
+
             // Integrate with MetricsService
             if (event.event === 'paywall_impression' || event.event === 'paywall_cta_clicked') {
                 this.metrics.recordPaywallHit();
             } else if (event.event === 'conversion_completed') {
                 this.metrics.recordConversion();
+            }
+
+            // Mirror to PostHog
+            if (event.userId) {
+                this.analytics.track(event.userId, event.event, {
+                    ...event.context,
+                    ...event.meta,
+                    $session_id: event.sessionId
+                }).catch(err => logger.error({ err }, 'PostHog mirroring failed'));
             }
 
             logger.info(

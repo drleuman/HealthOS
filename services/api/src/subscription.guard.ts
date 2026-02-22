@@ -1,6 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from './prisma.service';
+import { TrialService } from './behavioral/trial.service';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const REQUIRED_PLAN_KEY = 'requiredPlan';
@@ -14,6 +15,7 @@ export class SubscriptionGuard implements CanActivate {
     constructor(
         private reflector: Reflector,
         private prisma: PrismaService,
+        private trialService: TrialService,
     ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -76,6 +78,12 @@ export class SubscriptionGuard implements CanActivate {
         const requiredPlanLevel = planHierarchy[requiredPlan] ?? 1;
 
         if (userPlanLevel < requiredPlanLevel) {
+            // If user is on 'free' plan, check if they are in trial or haven't reached paywall trigger
+            if (dbUser.plan === 'free') {
+                const isGated = await this.trialService.isGated(user.id);
+                if (!isGated) return true; // Allow access
+            }
+
             throw new ForbiddenException(
                 `Active ${requiredPlan} subscription required. Current plan: ${dbUser.plan}`,
             );

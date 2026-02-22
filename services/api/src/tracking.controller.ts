@@ -1,5 +1,6 @@
 import { Controller, Post, Body, Get, Query, Headers, UnauthorizedException, HttpException, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { TrackingService, TrackingEvent } from './tracking.service';
+import { ExperimentService } from './analytics/experiment.service';
 import { Public, RequiredPlan } from './public.decorator';
 import { logger } from './logger';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -12,7 +13,8 @@ import { EventSignatureGuard } from './tracking/guards/event-signature.guard';
 @UseGuards(JwtAuthGuard, SubscriptionGuard)
 export class TrackingController {
     constructor(
-        private trackingService: TrackingService
+        private trackingService: TrackingService,
+        private experimentService: ExperimentService
     ) { }
 
     /**
@@ -124,5 +126,21 @@ export class TrackingController {
     ) {
         if (secret) await this.validateAnalyticsAccess(undefined, secret);
         return this.trackingService.getToolConversionRate();
+    }
+
+    /**
+     * GET /events/experiments/assignment
+     * Fetch deterministic assignment for a user
+     */
+    @Get('experiments/assignment')
+    async getExperimentAssignment(
+        @Query('name') name: string,
+        @Req() req: any
+    ) {
+        if (!name) throw new HttpException('Experiment name required', HttpStatus.BAD_REQUEST);
+        if (!req.user?.id) throw new UnauthorizedException();
+
+        const variant = await this.experimentService.getVariant(req.user.id, name);
+        return { variant };
     }
 }

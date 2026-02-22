@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { ClinicalInterpretationService } from './behavioral/clinical-interpretation.service';
+import { ExperimentService } from './analytics/experiment.service';
 import fetch from 'node-fetch';
 
 export interface ThreadFilter {
@@ -31,7 +32,8 @@ export class CommunityService {
         private prisma: PrismaService,
         private clinicalModeration: ClinicalInterpretationService,
         private planService: PlanService,
-        private tracking: TrackingService
+        private tracking: TrackingService,
+        private experimentService: ExperimentService
     ) { }
 
     async getThreads(filter: ThreadFilter) {
@@ -66,7 +68,18 @@ export class CommunityService {
                 }
             });
 
-            if (readCount >= policy.threadReads24h) {
+            // Dynamic limit based on A/B test 'community_limit'
+            const variant = await this.experimentService.getVariant(userId, 'community_limit');
+            let dynamicLimit = policy.threadReads24h; // Fallback to policy (usually 3)
+
+            switch (variant) {
+                case 'v5': dynamicLimit = 5; break;
+                case 'v10': dynamicLimit = 10; break;
+                case 'control':
+                default: dynamicLimit = 3; break;
+            }
+
+            if (readCount >= dynamicLimit) {
                 this.tracking.trackPlanGated(userId, userPlan, 'thread_reads_24h', true).catch(() => { });
                 const thread = await this.prisma.communityThread.findUnique({
                     where: { id },

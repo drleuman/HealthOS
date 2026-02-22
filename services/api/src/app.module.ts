@@ -49,6 +49,8 @@ import { CatalogModule } from './catalog/catalog.module';
 import { AdminModule } from './admin/admin.module';
 import { SystemAlertsModule } from './system-alerts/system-alerts.module';
 import { MetricsModule } from './metrics/metrics.module';
+import { HealthDataService } from './behavioral/health-data.service';
+import { TrialService } from './behavioral/trial.service';
 
 import { ScheduleModule } from '@nestjs/schedule';
 import { AnalyticsModule } from './analytics/analytics.module';
@@ -111,6 +113,8 @@ import { AnalyticsModule } from './analytics/analytics.module';
     CommunityService,
     ClinicalInterpretationService,
     StateTrajectoryService,
+    HealthDataService,
+    TrialService,
     {
       provide: ProgramRegistry,
       useFactory: (fileRegistry: FileProgramRegistry) => {

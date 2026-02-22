@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { BehaviorService } from './behavior.service';
 import { SystemMessageService } from './behavioral/system-message.service';
 import { MetricsService } from './metrics/metrics.service';
@@ -7,6 +7,7 @@ import { SubscriptionGuard } from './subscription.guard';
 import { Public } from './public.decorator';
 import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
+import { TrialService } from './behavioral/trial.service';
 
 @Controller()
 @UseGuards(JwtAuthGuard, SubscriptionGuard)
@@ -15,7 +16,8 @@ export class AppController {
         private behaviorService: BehaviorService,
         private systemMessageService: SystemMessageService,
         private metrics: MetricsService,
-        private config: ConfigService
+        private config: ConfigService,
+        private trialService: TrialService
     ) { }
 
     @Public()
@@ -66,5 +68,11 @@ export class AppController {
 
         // 2. Build Response (State + Content + Message)
         return this.systemMessageService.buildDailySystemState(userState);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/user/trial/start')
+    async startTrial(@Req() req: any) {
+        return this.trialService.startTrial(req.user.id);
     }
 }

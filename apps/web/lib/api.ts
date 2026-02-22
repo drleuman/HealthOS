@@ -445,6 +445,21 @@ class ApiClient {
         return this.get(`/admin/insights?period=${period}`);
     }
 
+    /**
+     * Admin: Get growth metrics (Funnel, Retention)
+     */
+    async adminGrowth(period: string = '30d'): Promise<any> {
+        return this.get(`/admin/growth?period=${period}`);
+    }
+
+    async getAdminExperiments(): Promise<any[]> {
+        return this.get('/admin/experiments');
+    }
+
+    async getAdminExperimentResult(key: string): Promise<any> {
+        return this.get(`/admin/experiments/${key}`);
+    }
+
     private updateLastEventTimestamp(): void {
         if (typeof window !== 'undefined') {
             localStorage.setItem('healthos_last_event_at', Date.now().toString());

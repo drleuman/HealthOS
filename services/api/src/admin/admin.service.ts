@@ -5,6 +5,8 @@ import { Prisma } from '@prisma/client';
 import { MetricsService } from '../metrics/metrics.service';
 import { BaselineService } from '../metrics/baseline.service';
 import { GrowthIntelligenceService } from '../analytics/growth-intelligence.service';
+import { GrowthService } from '../analytics/growth.service';
+import { ExperimentService } from '../analytics/experiment.service';
 
 @Injectable()
 export class AdminService {
@@ -17,7 +19,9 @@ export class AdminService {
         private tracking: TrackingService,
         private metrics: MetricsService,
         private baseline: BaselineService,
-        private growth: GrowthIntelligenceService
+        private growth: GrowthIntelligenceService,
+        private growthAnalytics: GrowthService,
+        private experimentService: ExperimentService
     ) { }
 
     async getOverview(periodDays: number = 7) {
@@ -131,7 +135,7 @@ export class AdminService {
     }
 
     async updateUser(adminId: string, targetUserId: string, updateData: { plan?: string; role?: string; status?: string; metadata?: any }) {
-        const targetUser = await this.prisma.user.findUnique({ where: { id: targetUserId } });
+        const targetUser = await this.prisma.user.findUnique({ where: { id: targetUserId } }) as any;
         if (!targetUser) throw new NotFoundException('User not found');
 
         if (adminId === targetUser.id && updateData.status === 'blocked') {
@@ -150,14 +154,14 @@ export class AdminService {
             data.metadata = updateData.metadata;
         }
 
-        const updated = await this.prisma.user.update({
+        const updated = await (this.prisma.user as any).update({
             where: { id: targetUserId },
             data,
             select: { id: true, plan: true, role: true, status: true, metadata: true, email: true }
         });
 
         // Auditing
-        if (updateData.status && updateData.status !== targetUser.status) {
+        if (updateData.status && updateData.status !== (targetUser as any).status) {
             this.tracking.track({
                 event: updateData.status === 'blocked' ? 'admin_user_blocked' : 'admin_user_unblocked',
                 userId: adminId,
@@ -285,5 +289,28 @@ export class AdminService {
             anomalies,
             baselines
         };
+    }
+
+    async getGrowthMetrics(periodDays: number = 30) {
+        const [funnel, retention, cohorts] = await Promise.all([
+            this.growthAnalytics.getFunnel(periodDays),
+            this.growthAnalytics.getRetentionStats(),
+            this.growthAnalytics.getCohortRetention(8) // Default 8 weeks
+        ]);
+
+        return {
+            funnel,
+            retention,
+            cohorts,
+            timestamp: new Date()
+        };
+    }
+
+    async getExperiments() {
+        return this.experimentService.getActiveExperiments();
+    }
+
+    async getExperimentResult(key: string) {
+        return this.experimentService.getExperimentResult(key);
     }
 }

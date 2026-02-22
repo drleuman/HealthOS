@@ -470,7 +470,27 @@ export class HealthService {
       });
 
       // Update Legacy/Gamified State (The "Scoreboard")
-      const nextStreak = input.action_completed ? state.streak + 1 : 0;
+      let nextStreak = input.action_completed ? state.streak + 1 : 0;
+      let freezesToConsume = 0;
+
+      // Streak Preservation Logic
+      if (!input.action_completed && state.streak > 0) {
+        // If user has a freeze, use it!
+        const dbUser = await this.prisma.user.findUnique({
+          where: { id: user.id },
+          select: { streakFreezes: true }
+        });
+
+        if (dbUser && dbUser.streakFreezes > 0) {
+          nextStreak = state.streak; // Preserve streak
+          freezesToConsume = 1;
+          this.tracking.track({
+            userId: user.id,
+            event: 'streak_freeze_used',
+            context: { streak: nextStreak }
+          });
+        }
+      }
 
       await this.prisma.userState.update({
         where: { userId: user.id },
@@ -480,6 +500,13 @@ export class HealthService {
           lastActive: new Date(),
         }
       });
+
+      if (freezesToConsume > 0) {
+        await this.prisma.user.update({
+          where: { id: user.id },
+          data: { streakFreezes: { decrement: freezesToConsume } }
+        });
+      }
 
       // Map GenerateMessage to SystemMessage
       const rawMsg = behaviorResult.systemMessage;

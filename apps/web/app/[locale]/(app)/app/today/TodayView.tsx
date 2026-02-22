@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Paywall } from '@/components/public/Paywall';
 
 
 type TodayAction = {
@@ -632,6 +633,7 @@ export default function TodayView() {
     const [loading, setLoading] = useState(true);
     const [payload, setPayload] = useState<any>(null); // We use any for avoiding strict type duels locally
     const [error, setError] = useState<string | null>(null);
+    const [isGated, setIsGated] = useState(false);
     const router = useRouter();
 
     async function load() {
@@ -640,15 +642,41 @@ export default function TodayView() {
         try {
             const res = await api.get<any>('/today');
             setPayload(res);
+            setIsGated(false);
         } catch (e: any) {
-            setError(e?.message || 'Failed to load');
+            if (e?.status === 403 || e?.statusCode === 403) {
+                setIsGated(true);
+            } else {
+                setError(e?.message || 'Failed to load');
+            }
         } finally {
             setLoading(false);
         }
     }
 
+    async function reconcileAssessment() {
+        if (!api.isAuthenticated()) return;
+
+        const pending = localStorage.getItem('pending_assessment');
+        if (pending) {
+            try {
+                const payload = JSON.parse(pending);
+                await api.submitAssessment(payload);
+                localStorage.removeItem('pending_assessment');
+                // Tracking
+                api.trackEvent('onboarding_reconciled');
+            } catch (e) {
+                console.error('Failed to reconcile assessment', e);
+            }
+        }
+    }
+
     useEffect(() => {
-        void load();
+        const init = async () => {
+            await reconcileAssessment();
+            await load();
+        };
+        void init();
     }, []);
 
     const protocol = payload?.protocol;
@@ -666,6 +694,26 @@ export default function TodayView() {
         await api.post('/user/day-log', { checkId: p.checkId, value: p.value });
         localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
         router.push(`/${locale}/app/history`);
+    }
+
+    async function handleStartTrial() {
+        setLoading(true);
+        try {
+            await api.post('/user/trial/start', {});
+            await load(); // Refresh
+        } catch (e: any) {
+            setError(e.message || 'Failed to start trial');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    if (isGated) {
+        return (
+            <div className="mx-auto w-full max-w-2xl px-4 py-12">
+                <Paywall onUpgrade={handleStartTrial} />
+            </div>
+        );
     }
 
     return (

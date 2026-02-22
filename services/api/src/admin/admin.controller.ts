@@ -104,4 +104,20 @@ export class AdminController {
         const periodDays = period === '30d' ? 30 : (period === '24h' ? 1 : 7);
         return this.adminService.getInsights(periodDays);
     }
+
+    @Get('growth')
+    getGrowth(@Query('period') period: string) {
+        const periodDays = period === '30d' ? 30 : (period === '24h' ? 1 : 7);
+        return this.adminService.getGrowthMetrics(periodDays);
+    }
+
+    @Get('experiments')
+    getExperiments() {
+        return this.adminService.getExperiments();
+    }
+
+    @Get('experiments/:key')
+    getExperimentResult(@Param('key') key: string) {
+        return this.adminService.getExperimentResult(key);
+    }
 }

@@ -94,7 +94,7 @@ export default function OnboardingScreen() {
   const selectOption = (option: string) => {
     setSelected(option);
     setTimeout(() => {
-      router.push('/app/today');
+      router.push('/app/onboarding');
     }, 600);
   };
 

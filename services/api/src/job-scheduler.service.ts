@@ -4,6 +4,7 @@ import { JobsService } from './jobs.service';
 import { BehaviorService } from './behavior.service';
 import { logger } from './logger';
 import { OpsDigestService } from './analytics/ops-digest.service';
+import { ReactivationService } from './analytics/reactivation.service';
 import { PrismaService } from './prisma.service';
 
 import { NotificationHubService } from './notifications/notification-hub.service';
@@ -19,7 +20,8 @@ export class JobScheduler implements OnModuleInit, OnModuleDestroy {
         private opsDigestService: OpsDigestService,
         private prisma: PrismaService,
         private notificationHub: NotificationHubService,
-        private trajectoryService: StateTrajectoryService
+        private trajectoryService: StateTrajectoryService,
+        private reactivationService: ReactivationService
     ) { }
 
     onModuleInit() {
@@ -155,8 +157,19 @@ export class JobScheduler implements OnModuleInit, OnModuleDestroy {
             }
         }, { timezone: 'Europe/Madrid' });
 
-        this.tasks.push(inactivityTask, summaryTask, behaviorTask, serTask, digestTask, notificationTask, snapshotTask);
-        logger.info('Job scheduler initialized with 7 cron tasks');
+        // Daily Reactivation Scan (08:00 Europe/Madrid)
+        const reactivationTask = cron.schedule('0 8 * * *', async () => {
+            logger.info('Running Daily Reactivation Scan');
+            try {
+                const processed = await this.reactivationService.scanForInactiveUsers();
+                logger.info({ processed }, 'Reactivation scan completed');
+            } catch (error) {
+                logger.error({ error }, 'Reactivation scan failed');
+            }
+        }, { timezone: 'Europe/Madrid' });
+
+        this.tasks.push(inactivityTask, summaryTask, behaviorTask, serTask, digestTask, notificationTask, snapshotTask, reactivationTask);
+        logger.info('Job scheduler initialized with 8 cron tasks');
     }
 
     onModuleDestroy() {

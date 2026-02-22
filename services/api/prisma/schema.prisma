@@ -16,12 +16,17 @@ model User {
   status    String    @default("active") // 'active' or 'blocked'
   metadata  Json?
   lastSeen  DateTime?
+  trialUntil DateTime?
+  trialStartedAt DateTime?
+  totalLogs Int @default(0)
+  streakFreezes Int @default(0)
   createdAt DateTime  @default(now())
 
   @@index([plan])
   @@index([status])
   @@index([createdAt])
   @@index([lastSeen])
+  @@index([trialUntil])
 
   assessment     Assessments?
   state          UserState?
@@ -36,7 +41,9 @@ model User {
   replies        CommunityReply[]
   completions    ProtocolCompletion[]
   stateSnapshots DailyStateSnapshot[]
-  refreshTokens  RefreshToken[]
+  refreshTokens   RefreshToken[]
+  assignments     ExperimentAssignment[]
+  externalMetrics ExternalMetric[]
 }
 
 model NotificationEvent {
@@ -257,13 +264,44 @@ model BehaviorAnalysis {
 }
 
 model Experiment {
-  id           String   @id @default(uuid())
-  decisionHash String
-  startedAt    DateTime @default(now())
-  expiresAt    DateTime
+  id           String   @id @default(cuid())
+  key          String   @unique
+  description  String?
   status       String   @default("active") // 'active', 'completed'
-  metadata     Json? // stores the ProductDecision object
+  variants     Json     // e.g. { "control": 50, "treatment": 50 }
   createdAt    DateTime @default(now())
+
+  assignments  ExperimentAssignment[]
+}
+
+model ExperimentAssignment {
+  id           String   @id @default(cuid())
+  experimentId String
+  userId       String?
+  variant      String
+  createdAt    DateTime @default(now())
+
+  user         User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  experiment   Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+
+  @@index([experimentId])
+  @@index([userId])
+}
+
+model ExternalMetric {
+  id        String   @id @default(cuid())
+  userId    String
+  source    String   // 'apple_health', 'google_fit', 'oura', 'whoop'
+  type      String   // 'sleep', 'steps', 'hrv', 'resting_hr', 'activity'
+  value     Float
+  unit      String?
+  timestamp DateTime
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, timestamp])
 }
 
 model CommunityThread {
