@@ -20,7 +20,10 @@ export function useExperiment(key: string, defaultVariant: string = 'control') {
 
         async function fetchVariant() {
             try {
-                const response = await api.get(`/events/experiments/assignment?name=${key}`);
+                interface ExperimentResponse {
+                    variant: string;
+                }
+                const response = await api.get<ExperimentResponse>(`/events/experiments/assignment?name=${key}`);
                 const selectedVariant = response.variant || defaultVariant;
 
                 if (isMounted) {
