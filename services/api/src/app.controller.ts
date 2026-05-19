@@ -21,53 +21,15 @@ export class AppController {
     ) { }
 
     @Public()
-    @Get('/internal/metrics')
-    async getInternalMetrics(@Req() req: any) {
-        const secret = req.headers['x-internal-health-secret'] || req.headers['x-internal-secret'];
-        const configuredSecret = this.config.get('INTERNAL_HEALTH_SECRET') || 'dev_secret';
-
-        if (secret !== configuredSecret) {
-            throw new UnauthorizedException('Invalid internal secret');
-        }
-        return this.metrics.getSystemHealthMetrics();
-    }
-
-    @Public()
-    @Get('/health')
-    getHealth() {
-        return {
-            ok: true,
-            ts: new Date().toISOString(),
-            version: '0.1.0'
-        };
-    }
-
-    @Public()
     @Get('/ops/sentry-test')
     testSentry() {
         throw new Error('Sentry backend test');
-    }
-
-    @Public()
-    @Get('/internal/health-check')
-    async getInternalHealth(@Req() req: any) {
-        return this.getInternalMetrics(req);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/user/history') // Matches frontend api call
     async getHistory(@Req() req: any) {
         return this.behaviorService.getUserHistory(req.user.id);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Get('/today')
-    async getToday(@Req() req: any) {
-        // 1. Get User State (DB)
-        const userState = await this.behaviorService.getUserState(req.user.id);
-
-        // 2. Build Response (State + Content + Message)
-        return this.systemMessageService.buildDailySystemState(userState);
     }
 
     @UseGuards(JwtAuthGuard)

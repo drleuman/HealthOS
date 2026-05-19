@@ -1,6 +1,6 @@
 # HealthOS Hybrid MVP — Monorepo
 
-**Stack**: Next.js (Web) + NestJS (API) + Prisma (Postgres) + pnpm
+**Stack**: Next.js (Web) + NestJS (API) + Prisma (MySQL) + pnpm
 
 ## 🚨 Security & Hygiene
 This repository enforces strict rules for secrets and artifacts.
@@ -59,4 +59,4 @@ Event tracking is implemented via `POST /events`.
 See `DEPLOYMENT.md` (if available) or standard Vercel/Railway docs.
 - **Web**: Deploy to Vercel.
 - **API**: Deploy to Railway/Render/AWS.
-- **DB**: Managed Postgres (Supabase/Neon).
+- **DB**: Managed MySQL (Aiven/AWS RDS).

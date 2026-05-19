@@ -25,7 +25,6 @@ export class TrackingController {
      */
     @Public()
     @Throttle({ default: { limit: 20, ttl: 60000 } }) // Stricter limit: 20 req/min
-    @UseGuards(EventSignatureGuard)
     @Post()
     async trackEvent(
         @Body() event: TrackingEvent,

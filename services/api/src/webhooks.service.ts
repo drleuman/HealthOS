@@ -32,7 +32,7 @@ export class WebhooksService {
         where: { email: payload.email },
         create: { email: payload.email, plan: 'member' },
         update: { plan: 'member' },
-      }).catch(() => ({ id: 'mock-uuid', email: payload.email }));
+      });
 
       // 3. Robust Idempotency
       const existing = await this.prisma.purchase.findFirst({
@@ -45,7 +45,7 @@ export class WebhooksService {
         try {
           await this.prisma.purchase.create({
             data: {
-              userId: user.id !== 'mock-uuid' ? user.id : null,
+              userId: user.id,
               orderId: payload.order_id,
               productSlug: item.product_slug
             },
@@ -53,7 +53,7 @@ export class WebhooksService {
 
           await this.prisma.recommendation.create({
             data: {
-              userId: user.id !== 'mock-uuid' ? user.id : 'fallback',
+              userId: user.id,
               type: 'content',
               slug: `guide_${item.product_slug}`,
               reason: `Compra #${payload.order_id}`,

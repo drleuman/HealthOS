@@ -99,3 +99,7 @@ Thumbs.db
 
 docker-data/
 *.tar
+
+# Build info / ZIP archives
+*.tsbuildinfo
+*.zip

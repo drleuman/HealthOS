@@ -4,7 +4,7 @@ This document describes the high-level architecture of the HealthOS platform, wi
 
 ## High-Level Overview
 
-HealthOS is built on a modern decoupled architecture using Next.js for the frontend and NestJS for the backend, with Prisma as the ORM and PostgreSQL as the database.
+HealthOS is built on a modern decoupled architecture using Next.js for the frontend and NestJS for the backend, with Prisma as the ORM and MySQL as the database.
 
 ```mermaid
 graph TD
@@ -32,7 +32,7 @@ graph TD
     end
 
     subgraph "Data & Persistence"
-        DB[("PostgreSQL")]
+        DB[("MySQL")]
     end
 
     subgraph "Operations"

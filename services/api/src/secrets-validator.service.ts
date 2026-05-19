@@ -48,8 +48,8 @@ export class SecretsValidator implements OnModuleInit {
 
         // Validate DATABASE_URL format
         const dbUrl = this.config.get<string>('DATABASE_URL');
-        if (dbUrl && !dbUrl.startsWith('postgresql://') && !dbUrl.startsWith('postgres://')) {
-            warnings.push('DATABASE_URL should use postgresql:// protocol');
+        if (dbUrl && !dbUrl.startsWith('mysql://')) {
+            warnings.push('DATABASE_URL should use mysql:// protocol');
         }
 
         // Check NODE_ENV

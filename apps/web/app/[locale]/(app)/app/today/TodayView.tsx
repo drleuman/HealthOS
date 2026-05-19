@@ -634,13 +634,14 @@ export default function TodayView() {
     const [payload, setPayload] = useState<any>(null); // We use any for avoiding strict type duels locally
     const [error, setError] = useState<string | null>(null);
     const [isGated, setIsGated] = useState(false);
+    const [duplicateError, setDuplicateError] = useState(false);
     const router = useRouter();
 
     async function load() {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.get<any>('/today');
+            const res = await api.getToday();
             setPayload(res);
             setIsGated(false);
         } catch (e: any) {
@@ -684,16 +685,39 @@ export default function TodayView() {
     const check = protocol?.check;
 
     async function recordAction(action: any) {
-        // Map new action.id/labelKey to generic log
-        await api.post('/user/day-log', { actionType: action.id, ts: new Date().toISOString() });
-        localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
-        router.push(`/${locale}/app/history`);
+        try {
+            const res = await api.post<any>('/user/day-log', {
+                day: payload?.day || 1,
+                action_completed: true,
+                self_report_effect: { actionType: action.id }
+            });
+            if (res && res.ok === false && res.error === 'DUPLICATE_SUBMISSION') {
+                setDuplicateError(true);
+                return;
+            }
+            localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
+            router.push(`/${locale}/app/history`);
+        } catch (e: any) {
+            console.error('recordAction error', e);
+        }
     }
 
     async function submitCheck(p: { checkId: string; value: any }) {
-        await api.post('/user/day-log', { checkId: p.checkId, value: p.value });
-        localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
-        router.push(`/${locale}/app/history`);
+        try {
+            const res = await api.post<any>('/user/day-log', {
+                day: payload?.day || 1,
+                action_completed: true,
+                self_report_effect: { checkId: p.checkId, value: p.value }
+            });
+            if (res && res.ok === false && res.error === 'DUPLICATE_SUBMISSION') {
+                setDuplicateError(true);
+                return;
+            }
+            localStorage.setItem('healthos_last_recorded_at', new Date().toISOString());
+            router.push(`/${locale}/app/history`);
+        } catch (e: any) {
+            console.error('submitCheck error', e);
+        }
     }
 
     async function handleStartTrial() {
@@ -712,6 +736,43 @@ export default function TodayView() {
         return (
             <div className="mx-auto w-full max-w-2xl px-4 py-12">
                 <Paywall onUpgrade={handleStartTrial} />
+            </div>
+        );
+    }
+
+    if (duplicateError) {
+        return (
+            <div className="mx-auto w-full max-w-md px-4 py-16 text-center">
+                <div className="bg-slate-900/40 backdrop-blur rounded-2xl border border-slate-800/60 p-8 shadow-2xl space-y-6">
+                    <div className="flex justify-center">
+                        <div className="p-4 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400">
+                            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <h2 className="text-xl font-bold text-slate-100 tracking-tight">{t('duplicate_title')}</h2>
+                        <p className="text-sm text-slate-400 leading-relaxed">{t('duplicate_desc')}</p>
+                    </div>
+
+                    <div className="flex flex-col gap-2 pt-2">
+                        <button
+                            type="button"
+                            onClick={() => setDuplicateError(false)}
+                            className="w-full rounded-xl bg-slate-100 text-slate-950 font-semibold px-4 py-3 hover:bg-white transition-all shadow-lg active:scale-[0.98]"
+                        >
+                            {t('duplicate_cta_today')}
+                        </button>
+                        <Link
+                            href={`/${locale}/app/history`}
+                            className="w-full rounded-xl border border-slate-700 bg-transparent text-slate-200 font-semibold px-4 py-3 hover:bg-slate-900/40 hover:text-white transition-all text-center"
+                        >
+                            {t('duplicate_cta_history')}
+                        </Link>
+                    </div>
+                </div>
             </div>
         );
     }

@@ -84,6 +84,18 @@ export class HealthService {
         },
       });
 
+      // Telemetry: Track onboarding completed
+      this.tracking.track({
+        userId: user.id,
+        event: 'onboarding_completed',
+        context: {
+          profileType: result.profile_type,
+          programId: result.program_id
+        }
+      }).catch((err) => {
+        console.error('Failed to track onboarding completed:', err);
+      });
+
       return result;
     } catch (e) {
       return decideProgram(input); // Return result even if DB fails
@@ -131,6 +143,18 @@ export class HealthService {
     try {
       const user = await this.ensureUser(email);
       const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
+
+      // Telemetry: Track today dashboard view
+      this.tracking.track({
+        userId: user.id,
+        event: 'today_opened',
+        context: {
+          dayIndex: state?.currentDay || 1,
+          streak: state?.streak || 0
+        }
+      }).catch((err) => {
+        console.error('Failed to track today opened:', err);
+      });
 
       const behaviorStateObj = await this.behaviorService.getUserState(user.id);
 
@@ -457,6 +481,33 @@ export class HealthService {
     const state = await this.prisma.userState.findUnique({ where: { userId: user.id } });
     if (!state) return { ok: false };
 
+    // Duplicate Protection: check if log for this day already exists
+    const existingLog = await this.prisma.dailyLog.findFirst({
+      where: {
+        userId: user.id,
+        day: input.day,
+      }
+    });
+    if (existingLog) {
+      // Telemetry: Track duplicate log submission attempt
+      this.tracking.track({
+        userId: user.id,
+        event: 'duplicate_submission',
+        context: {
+          dayIndex: input.day,
+          duplicateDay: input.day
+        }
+      }).catch((err) => {
+        console.error('Failed to track duplicate submission:', err);
+      });
+
+      return {
+        ok: false,
+        error: 'DUPLICATE_SUBMISSION',
+        message: 'Daily log already submitted for this day'
+      };
+    }
+
     try {
       // Delegate to Behavioral Engine (The "Brain")
       const behaviorResult = await this.behaviorService.processDailyLog(user.id, {
@@ -501,6 +552,16 @@ export class HealthService {
         }
       });
 
+      // Sync UserBehaviorState dayIndex with legacy state
+      await this.prisma.userBehaviorState.update({
+        where: { userId: user.id },
+        data: {
+          dayIndex: behaviorResult.nextDay
+        }
+      }).catch((err) => {
+        console.error('Failed to sync UserBehaviorState dayIndex:', err);
+      });
+
       if (freezesToConsume > 0) {
         await this.prisma.user.update({
           where: { id: user.id },
@@ -516,6 +577,18 @@ export class HealthService {
         selectedRuleId: rawMsg.selectedRuleId,
         reason: rawMsg.reason
       };
+
+      // Telemetry: Track successful day log submission
+      this.tracking.track({
+        userId: user.id,
+        event: 'day_log_submitted',
+        context: {
+          dayIndex: input.day,
+          action_completed: input.action_completed
+        }
+      }).catch((err) => {
+        console.error('Failed to track day log submission:', err);
+      });
 
       return {
         ok: true,

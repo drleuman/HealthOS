@@ -138,28 +138,45 @@ export class MetricsService implements OnModuleInit {
 
         const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
-        // Count errors in last hour from SystemAlerts or Logs
-        // For now, let's use SystemAlerts table as a proxy for 'real' issues
-        const [criticalAlerts, totalAlerts] = await Promise.all([
-            (this.prisma as any).systemAlert.count({
-                where: { severity: 'critical', createdAt: { gte: hourAgo } }
-            }),
-            (this.prisma as any).systemAlert.count({
-                where: { createdAt: { gte: hourAgo } }
-            })
-        ]);
+        let criticalAlerts = 0;
+        let totalAlerts = 0;
+        let lastHourMetrics: any[] = [];
+        let criticalLastHour = 0;
 
-        // Fetch aggregated metrics for the last hour from the database
-        const lastHourMetrics = await (this.prisma as any).metricSnapshot.findMany({
-            where: {
-                createdAt: { gte: hourAgo },
-                window: '1m'
-            },
-            select: {
-                name: true,
-                value: true
-            }
-        });
+        try {
+            // Count errors in last hour from SystemAlerts or Logs
+            // For now, let's use SystemAlerts table as a proxy for 'real' issues
+            const [crit, tot, snapshots, critHour] = await Promise.all([
+                (this.prisma as any).systemAlert.count({
+                    where: { severity: 'critical', createdAt: { gte: hourAgo } }
+                }),
+                (this.prisma as any).systemAlert.count({
+                    where: { createdAt: { gte: hourAgo } }
+                }),
+                (this.prisma as any).metricSnapshot.findMany({
+                    where: {
+                        createdAt: { gte: hourAgo },
+                        window: '1m'
+                    },
+                    select: {
+                        name: true,
+                        value: true
+                    }
+                }),
+                (this.prisma as any).systemAlert.count({
+                    where: {
+                        severity: 'critical',
+                        createdAt: { gte: new Date(Date.now() - 60 * 60 * 1000) }
+                    }
+                })
+            ]);
+            criticalAlerts = crit;
+            totalAlerts = tot;
+            lastHourMetrics = snapshots;
+            criticalLastHour = critHour;
+        } catch (e: any) {
+            this.logger.error(`Database query failed in getSystemHealthMetrics (limited mode): ${e.message}`);
+        }
 
         const aggregatedLastHour = lastHourMetrics.reduce((acc: any, metric: any) => {
             acc[metric.name] = (acc[metric.name] || 0) + metric.value;
@@ -188,12 +205,7 @@ export class MetricsService implements OnModuleInit {
             errorsLastHour: last60.errors5xx,
             paywallHitsLastHour: last60.paywallHits,
             conversionsLastHour: last60.conversions,
-            criticalLastHour: await (this.prisma as any).systemAlert.count({
-                where: {
-                    severity: 'critical',
-                    createdAt: { gte: new Date(Date.now() - 60 * 60 * 1000) }
-                }
-            })
+            criticalLastHour: criticalLastHour
         };
     }
 

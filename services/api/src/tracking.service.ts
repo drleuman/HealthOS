@@ -78,6 +78,29 @@ export class TrackingService {
         private analytics: AnalyticsIntegrationService
     ) { }
 
+    private sanitizeContext(context?: Record<string, any>): Record<string, any> | undefined {
+        if (!context) return undefined;
+        
+        const sensitiveKeys = [
+            'comment', 'feedback', 'text', 'message', 'note', 'input', 'answers', 
+            'symptoms', 'caffeine_time', 'bedtime', 'dinner_time', 'sleep_issue_type', 
+            'primary_goal', 'self_report_effect', 'medical', 'clinical', 'description'
+        ];
+
+        const sanitized: Record<string, any> = {};
+        for (const [key, value] of Object.entries(context)) {
+            const lowerKey = key.toLowerCase();
+            if (sensitiveKeys.some(sk => lowerKey.includes(sk))) {
+                continue;
+            }
+            if (typeof value === 'string' && value.length > 100) {
+                continue;
+            }
+            sanitized[key] = value;
+        }
+        return sanitized;
+    }
+
     /**
      * Track a behavioral event
      * Non-blocking: queues event for async processing
@@ -90,6 +113,9 @@ export class TrackingService {
                 return;
             }
 
+            const sanitizedContext = this.sanitizeContext(event.context) || {};
+            const sanitizedMeta = this.sanitizeContext(event.meta) || {};
+
             // Store event in database
             await this.prisma.event.create({
                 data: {
@@ -97,8 +123,8 @@ export class TrackingService {
                     userId: event.userId,
                     sessionId: event.sessionId,
                     timestamp: event.timestamp || new Date(),
-                    context: event.context || {},
-                    meta: event.meta || {},
+                    context: sanitizedContext,
+                    meta: sanitizedMeta,
                 },
             });
 
@@ -126,8 +152,8 @@ export class TrackingService {
             // Mirror to PostHog
             if (event.userId) {
                 this.analytics.track(event.userId, event.event, {
-                    ...event.context,
-                    ...event.meta,
+                    ...sanitizedContext,
+                    ...sanitizedMeta,
                     $session_id: event.sessionId
                 }).catch(err => logger.error({ err }, 'PostHog mirroring failed'));
             }
@@ -152,14 +178,18 @@ export class TrackingService {
     async trackBatch(events: TrackingEvent[]): Promise<void> {
         try {
             await this.prisma.event.createMany({
-                data: events.map((event) => ({
-                    event: event.event,
-                    userId: event.userId,
-                    sessionId: event.sessionId,
-                    timestamp: event.timestamp || new Date(),
-                    context: event.context || {},
-                    meta: event.meta || {},
-                })),
+                data: events.map((event) => {
+                    const sanitizedContext = this.sanitizeContext(event.context) || {};
+                    const sanitizedMeta = this.sanitizeContext(event.meta) || {};
+                    return {
+                        event: event.event,
+                        userId: event.userId,
+                        sessionId: event.sessionId,
+                        timestamp: event.timestamp || new Date(),
+                        context: sanitizedContext,
+                        meta: sanitizedMeta,
+                    };
+                }),
                 skipDuplicates: true,
             });
 

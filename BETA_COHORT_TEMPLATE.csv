@@ -1,0 +1,5 @@
+email,role,cohort,status,invited_at,onboarded_at,notes
+beta_user1@healthos.app,user,alpha,invited,2026-05-19T10:00:00Z,,Initial testing cohort member
+beta_user2@healthos.app,user,alpha,active,2026-05-19T10:00:00Z,2026-05-19T10:15:00Z,Completed onboarding on day 0
+clinician_admin@healthos.app,admin,clinical,active,2026-05-19T09:00:00Z,2026-05-19T09:10:00Z,Clinical reviewer profile
+trial_user_expired@healthos.app,user,alpha_trial,expired,2026-05-10T08:00:00Z,2026-05-10T08:30:00Z,Verification user for paywall redirect testing

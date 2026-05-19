@@ -8,7 +8,11 @@
     "build:all": "pnpm -r build",
     "lint": "pnpm -r lint",
     "db:push": "pnpm --filter @healthos/api prisma:push",
-    "db:studio": "pnpm --filter @healthos/api prisma:studio"
+    "db:studio": "pnpm --filter @healthos/api prisma:studio",
+    "rc:build": "pnpm build:all",
+    "rc:smoke": "pnpm --filter @healthos/api run test:smoke",
+    "rc:seed": "pnpm --filter @healthos/api prisma db seed",
+    "rc:verify": "node scripts/rc-verify.mjs"
   },
   "devDependencies": {
     "next": "^14.2.10",

@@ -1,11 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { SkipThrottle } from './public.decorator';
+import { Public, SkipThrottle } from './public.decorator';
+import { ConfigService } from '@nestjs/config';
+import { MetricsService } from './metrics/metrics.service';
+import { Request } from 'express';
 
 @Controller()
 export class HealthController {
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private config: ConfigService,
+        private metricsService: MetricsService
+    ) { }
 
+    @Public()
     @SkipThrottle()
     @Get('health')
     async health() {
@@ -13,10 +21,11 @@ export class HealthController {
             status: 'ok',
             timestamp: new Date().toISOString(),
             uptime: process.uptime(),
-            memory: process.memoryUsage(),
+            version: '0.1.0'
         };
     }
 
+    @Public()
     @SkipThrottle()
     @Get('ready')
     async ready() {
@@ -37,11 +46,15 @@ export class HealthController {
         }
     }
 
+    @Public()
     @SkipThrottle()
     @Get('metrics')
-    async metrics() {
+    async metrics(@Req() req: Request) {
+        this.validateSecret(req.headers);
         const mem = process.memoryUsage();
+        const systemMetrics = await this.metricsService.getSystemHealthMetrics();
         return {
+            ...systemMetrics,
             uptime_seconds: process.uptime(),
             memory_heap_used_bytes: mem.heapUsed,
             memory_heap_total_bytes: mem.heapTotal,
@@ -50,4 +63,21 @@ export class HealthController {
             timestamp: new Date().toISOString(),
         };
     }
+
+    @Public()
+    @SkipThrottle()
+    @Get('internal/health-check')
+    async internalHealthCheck(@Req() req: Request) {
+        return this.metrics(req);
+    }
+
+    private validateSecret(headers: any) {
+        const secret = headers['x-internal-health-secret'] || headers['x-internal-secret'];
+        const configuredSecret = this.config.get('X_INTERNAL_SECRET') || this.config.get('INTERNAL_HEALTH_SECRET') || 'dev_secret';
+
+        if (!secret || secret !== configuredSecret) {
+            throw new UnauthorizedException('Invalid internal secret');
+        }
+    }
 }
+

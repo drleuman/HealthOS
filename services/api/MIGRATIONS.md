@@ -61,7 +61,7 @@ npx prisma migrate status
 ### 1. Backup database
 ```bash
 # On production server
-pg_dump -U healthos -d healthos > backup_$(date +%Y%m%d_%H%M%S).sql
+mysqldump -u healthos -p healthos > backup_$(date +%Y%m%d_%H%M%S).sql
 ```
 
 ### 2. Deploy migration
@@ -93,7 +93,7 @@ curl https://api.healthos.com/ready
 ### 4. Rollback (if needed)
 ```bash
 # Restore from backup
-psql -U healthos -d healthos < backup_YYYYMMDD_HHMMSS.sql
+mysql -u healthos -p healthos < backup_YYYYMMDD_HHMMSS.sql
 
 # Revert code
 git revert <commit-hash>
@@ -118,7 +118,7 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL}
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
 ```
 
@@ -137,7 +137,7 @@ docker-compose up -d api
 ```yaml
 - name: Run database migrations
   env:
-    DATABASE_URL: postgresql://healthos:test@localhost:5432/healthos_test
+    DATABASE_URL: mysql://healthos:test@localhost:3306/healthos_test
   run: pnpm --filter @healthos/api exec prisma db push
 ```
 
@@ -152,7 +152,7 @@ echo "🚀 Deploying to production..."
 
 # Backup database
 echo "📦 Backing up database..."
-docker-compose exec -T postgres pg_dump -U healthos healthos > backup_$(date +%Y%m%d_%H%M%S).sql
+docker-compose exec -T mysql mysqldump -u healthos -phealthos healthos > backup_$(date +%Y%m%d_%H%M%S).sql
 
 # Pull latest code
 echo "📥 Pulling latest code..."
@@ -179,14 +179,14 @@ echo "✅ Deployment complete!"
 ### 1. Always test migrations
 ```bash
 # Create test database
-createdb healthos_test
+mysqladmin -u root -p create healthos_test
 
 # Test migration
-DATABASE_URL=postgresql://user:pass@localhost:5432/healthos_test \
+DATABASE_URL=mysql://user:pass@localhost:3306/healthos_test \
   npx prisma migrate deploy
 
 # Verify
-DATABASE_URL=postgresql://user:pass@localhost:5432/healthos_test \
+DATABASE_URL=mysql://user:pass@localhost:3306/healthos_test \
   npx prisma migrate status
 ```
 
@@ -290,17 +290,17 @@ npx prisma migrate reset
 
 ### Development (.env)
 ```bash
-DATABASE_URL=postgresql://localhost:5432/healthos_dev
+DATABASE_URL=mysql://localhost:3306/healthos_dev
 ```
 
 ### Staging (.env.staging)
 ```bash
-DATABASE_URL=postgresql://staging-db:5432/healthos_staging
+DATABASE_URL=mysql://staging-db:3306/healthos_staging
 ```
 
 ### Production (.env.production)
 ```bash
-DATABASE_URL=postgresql://prod-db:5432/healthos_production
+DATABASE_URL=mysql://prod-db:3306/healthos_production
 ```
 
 ## Monitoring Migrations

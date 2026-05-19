@@ -163,7 +163,7 @@ npx ts-node src/security-audit.ts
 
 ### Required
 ```bash
-DATABASE_URL=postgresql://user:pass@localhost:5432/healthos
+DATABASE_URL=mysql://user:pass@localhost:3306/healthos
 API_JWT_SECRET=<minimum-32-character-secret>
 ```
 

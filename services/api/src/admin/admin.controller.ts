@@ -19,9 +19,9 @@ export class AdminController {
     ) { }
 
     @Get('overview')
-    getOverview(@Query('period') period: string) {
+    getOverview(@Req() req: any, @Query('period') period: string) {
         const periodDays = period === '30d' ? 30 : (period === '24h' ? 1 : 7);
-        return this.adminService.getOverview(periodDays);
+        return this.adminService.getOverview(req.user.id, periodDays);
     }
 
     @Get('users')

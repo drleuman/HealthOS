@@ -24,7 +24,16 @@ export class AdminService {
         private experimentService: ExperimentService
     ) { }
 
-    async getOverview(periodDays: number = 7) {
+    async getOverview(adminId: string, periodDays: number = 7) {
+        // Telemetry: Track admin overview opened
+        this.tracking.track({
+            event: 'admin_overview_opened',
+            userId: adminId,
+            context: { periodDays }
+        }).catch((err) => {
+            this.logger.error('Failed to track admin overview opened', err);
+        });
+
         const cacheKey = `overview_${periodDays}`;
         const cached = this.overviewCache[cacheKey];
         if (cached && (Date.now() - cached.timestamp < this.CACHE_TTL)) {
